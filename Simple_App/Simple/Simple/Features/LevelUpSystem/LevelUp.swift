@@ -8,30 +8,32 @@
 import Foundation
 class LevelUp {
     
+    //MARK: variables
     var level : Int?
-    
     var setProggress :  Float?
     var maximumProgress : Float?
     
-    
-    func isReadyToLevelUp(maxProgress: Float, currentProgress: Float)-> Bool {
+    //MARK: Bussiness Logic
+    func isReadyToLevelUp(maxProgress: Float, currentProgress: Float) -> Bool {
         return  currentProgress >= maxProgress ? true : false
     }
+    
     func processProgress(maxProgress: Float, currentProgress: Float, currentLevel: Int) {
         if isReadyToLevelUp(maxProgress: maxProgress, currentProgress: currentProgress) {
-            calculateMaxProgress(maxProgress: maxProgress)
-            levelUp(currentLevel: currentLevel)
+            maximumProgress = calculateMaxProgress(maxProgress: maxProgress)
+            level = levelUp(currentLevel: currentLevel)
             setProggress = calculateNewExperience(currentExperience: currentProgress, maxExperience: maxProgress)
         } else {
             
         }
     }
-    func calculateMaxProgress(maxProgress: Float)  {
-        maximumProgress = maxProgress + (maxProgress * 0.20)
+    
+    func calculateMaxProgress(maxProgress: Float)-> Float {
+        return maxProgress + (maxProgress * 0.20)
     }
     
-    func levelUp(currentLevel: Int){
-        level = currentLevel + 1
+    func levelUp(currentLevel: Int)-> Int {
+       return currentLevel + 1
     }
     
     func calculateNewExperience(currentExperience: Float, maxExperience: Float) -> Float {
@@ -42,8 +44,7 @@ class LevelUp {
         }
     }
     
-    func isBelowZero(currentExperience: Float, maxExperience: Float)-> Bool {
-        // 90 - 100 is more than 0
+    func isBelowZero(currentExperience: Float, maxExperience: Float) -> Bool {
         return currentExperience - maxExperience > 0
     }
 }
