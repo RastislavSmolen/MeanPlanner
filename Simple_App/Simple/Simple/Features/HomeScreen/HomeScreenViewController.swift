@@ -31,7 +31,7 @@ class HomeScreenViewController: UIViewController {
     var maxProggress: Float = 350
     var currentLevel: Int = 1
     
-    let levelUp = LvlUp()
+    let levelUp = LevelUp()
     //MARK: ViewDidLoad
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -157,7 +157,7 @@ extension HomeScreenViewController {
     }
     func calculateLevelProgress(experience: Float) {
         levelUp.processProgress(maxProgress: maxProggress, currentProgress: experience, currentLevel: currentLevel)
-        saveExperience(experienceToSave: levelUp.currentProgress ?? 0.0,currentLevel: levelUp.level ?? 0, maxProggress: levelUp.currentProgress ?? 0.0)
+        saveExperience(experienceToSave: levelUp.setProggress ?? 0.0,currentLevel: levelUp.level ?? 0, maxProggress: levelUp.setProggress ?? 0.0)
     }
     func proccesFethcingExperience() {
         currentLevel = fetchLevel()
