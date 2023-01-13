@@ -47,6 +47,10 @@ class LevelUp {
             maximumExperience = calculateMaxXP(maxXP: maxXP)
             level = levelUp(currentLevel: currentLevel)
             experience = calculateNewXP(currentXP: currentXP, maxXP: maxXP)
+            saveExperience(experienceToSave: experience ?? 0.0 , currentLevel: level ?? 0, maxXp: maxXP ?? 0.0)
+        } else {
+            experience = calculateNewXP(currentXP: currentXP, maxXP: maxXP)
+            saveExperience(experienceToSave: experience ?? 0.0 , currentLevel: level ?? 0, maxXp: maxXP ?? 0.0)
         }
     }
     func isReadyToLevelUp(maxProgress: Float, currentProgress: Float) -> Bool {
