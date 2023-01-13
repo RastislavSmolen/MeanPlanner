@@ -25,11 +25,9 @@ class AddGoalViewController : UIViewController {
     // MARK: - Constants
     let picker = UIPickerView()
     let toolBar = UIToolbar()
-    let pickerData = ["Art","Cleaning","Debt Management","Entertainment","Finance","Drink","Food","Household task","Health Management","Intelectual Improvement","Maternity","Reading","Relationship","Social","Skill","Time Management","Other"]
     
     // MARK: - Outlets
     @IBOutlet weak var taskNameTextField: UITextField!
-    @IBOutlet weak var categoryTextField: UITextField!
     @IBOutlet weak var detailsTextField: UITextField!
     
     @IBOutlet  var buttons: [UIButton]!
@@ -55,8 +53,8 @@ class AddGoalViewController : UIViewController {
     }
     
     @IBAction func createTaskButton(_ sender: Any) {
-        guard let taskName = taskNameTextField.text, let taskDetail = detailsTextField.text, let taskCategory = categoryTextField.text else { return }
-        saveToCoreData(name: taskName, category: taskCategory, detail: taskDetail, reward: Int(rewardSlider.value), color: colorToSave)
+        guard let taskName = taskNameTextField.text, let taskDetail = detailsTextField.text else { return }
+        saveToCoreData(name: taskName, detail: taskDetail, reward: Int(rewardSlider.value), color: colorToSave ?? "#32ADE6")
         delegate?.updateData()
         self.dismiss(animated: true)
     }
@@ -64,11 +62,7 @@ class AddGoalViewController : UIViewController {
     @IBAction func rewardSlider(_ sender: Any) {
         rewardSliderLabel.text = "\(Int((rewardSlider.value)))/100"
     }
-    @IBAction func categoryTexfieldDidBegin(_ sender: Any) {
-        let text = categoryTextField.text == "" ? pickerData[0] : pickerData[pickerRow]
-        categoryTextField.text = text
-        
-    }
+
     //MARK: - Main logic
     private func changeCollorOfPage(tag: Int) {
         switch tag {
@@ -97,7 +91,6 @@ extension AddGoalViewController  {
     
     func setup() {
         configureTextField()
-        configurePickerView()
         configureRewardSlider()
         colorView.backgroundColor = UIColor(hex: ColorPaint.cyan.description)
     }
@@ -110,7 +103,6 @@ extension AddGoalViewController : UITextFieldDelegate {
     
     private func configureTextField() {
         taskNameTextField.delegate = self
-        categoryTextField.delegate = self
         detailsTextField.delegate = self
         
     }
@@ -122,56 +114,11 @@ extension AddGoalViewController : UITextFieldDelegate {
     
 }
 
-// MARK: - Picker Setup
-extension AddGoalViewController : UIPickerViewDelegate, UIPickerViewDataSource {
-    
-    private func configurePickerView() {
-        
-        picker.delegate = self
-        picker.dataSource = self
-
-        toolBar.barStyle = UIBarStyle.default
-        toolBar.isTranslucent = true
-        toolBar.tintColor = UIColor(hex: ColorPaint.cyan.description)
-        toolBar.sizeToFit()
-        
-        let doneButton = UIBarButtonItem(title: "Done", style: UIBarButtonItem.Style.done, target: self, action: #selector(self.donePicker))
-        
-        toolBar.setItems([doneButton], animated: false)
-        
-        categoryTextField.inputAccessoryView = toolBar
-        categoryTextField.inputView = picker
-
-    }
-    
-    func numberOfComponents(in pickerView: UIPickerView) -> Int {
-        1
-    }
-    
-    func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
-        return pickerData.count
-    }
-    
-    func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
-        return pickerData[row]
-    }
-    
-    func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
-        pickerRow = row
-        categoryTextField.text = pickerData[row]
-    }
-    
-    @objc func donePicker() {
-        categoryTextField.resignFirstResponder()
-    }
-    
-}
-
 //MARK: - Slider Setup
 extension AddGoalViewController {
     private func configureRewardSlider() {
         rewardSlider.minimumValue = 0
-        rewardSlider.maximumValue = 1000
+        rewardSlider.maximumValue = 100 
         rewardSlider.value = 0
         rewardSlider.tintColor = UIColor(hex: ColorPaint.cyan.description)
         rewardSliderLabel.text = "\(Int((rewardSlider.value)))/100"
@@ -181,7 +128,7 @@ extension AddGoalViewController {
 //MARK: - CoreData
 extension AddGoalViewController {
     
-    func saveToCoreData(name: String,category: String, detail: String,reward: Int,color: String) {
+    func saveToCoreData(name: String, detail: String,reward: Int,color: String) {
       
       guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
     
@@ -191,7 +138,6 @@ extension AddGoalViewController {
       
         task.setValue(name, forKeyPath: "taskName")
         task.setValue(false, forKeyPath: "isFinnished")
-        task.setValue(category, forKeyPath: "categoryName")
         task.setValue(reward, forKeyPath: "reward")
         task.setValue(detail, forKeyPath: "taskDetails")
         task.setValue(color, forKey: "taskColor")
