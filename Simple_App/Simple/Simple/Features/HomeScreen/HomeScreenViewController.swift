@@ -26,7 +26,7 @@ class HomeScreenViewController: UIViewController {
     }
     var tasks: [NSManagedObject] = []
     var presistenContainer: NSPersistentContainer!
-    
+
 #warning("user default only for testing purposes")
     let userDefaults = UserDefaults.standard
     
@@ -42,30 +42,7 @@ class HomeScreenViewController: UIViewController {
         setup()
        
     }
-    
-    func createLayer() {
-        let layer = CAEmitterLayer()
-        layer.position = CGPointMake(view.center.x, view.center.y)
-        let colors : [UIColor] = [
-            .blue,.green,.yellow,.red,.cyan,.systemPink]
-        
-        let cells : [CAEmitterCell] = colors.compactMap {
-            let cell = CAEmitterCell()
-            cell.scale = 0.03
-            cell.birthRate = 1
-            cell.velocity = 150
-            cell.emissionRange = .pi * 2
-            cell.lifetime = 10
-            cell.color = $0.cgColor
-            cell.contents = UIImage(named: "image")!.cgImage
-            return cell
-        }
-        
-       
-        layer.emitterCells = cells
-        view.layer.addSublayer(layer)
-        
-    }
+
     func fetchCoreData() {
         guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
         let managedContext = appDelegate.persistentContainer.viewContext
@@ -166,14 +143,15 @@ extension HomeScreenViewController {
         let rewardXp =  Float(tasks[index.row].value(forKey: "reward")as! Int)
         let newXp = rewardXp + xp
         proccesXp(newXp: newXp)
-        setupView(level: level, xp: levelUp.fetchXP(), maxXp: maxXp)
+        setupView(level: levelUp.fetchLevel(), xp: levelUp.fetchXP(), maxXp: levelUp.fetchMaxXp())
         levelUp.loadXp()
     }
     
     private func handleMarkAsDone(index: IndexPath) {
         saveXp(index: index)
         deleteFromCoreData(indexPath: index)
-        createLayer()
+        guard let readyToPlaySound = levelUp.readyToPlaySound else { return }
+        readyToPlaySound ? levelUp.playSound(soundName: "fanfare") : levelUp.playSound(soundName: "success")
     }
 }
 // MARK: - Delegate
