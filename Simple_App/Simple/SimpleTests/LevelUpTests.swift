@@ -8,23 +8,23 @@
 import XCTest
 @testable import Simple
 
-class SimpleTests: XCTestCase {
-
+class LevelUpTests: XCTestCase {
+    
     let levelUp = LevelUp()
     
     override func setUpWithError() throws {
         // Put setup code here. This method is called before the invocation of each test method in the class.
     }
-
+    
     override func tearDownWithError() throws {
         // Put teardown code here. This method is called after the invocation of each test method in the class.
     }
-
+    
     func testExample() throws {
         // This is an example of a functional test case.
         // Use XCTAssert and related functions to verify your tests produce the correct results.
     }
-
+    
     func testPerformanceExample() throws {
         // This is an example of a performance test case.
         self.measure {
@@ -48,27 +48,27 @@ class SimpleTests: XCTestCase {
         XCTAssertEqual(isReady, true)
     }
     func testisBelowZeroFalse(){
-        let isBelowZero = levelUp.isBelowZero(currentExperience: 100, maxExperience: 100)
+        let isBelowZero = levelUp.isBelowZero(currentXP: 100, maxXP: 100)
         XCTAssertEqual(isBelowZero, false)
     }
     func testisBelowZeroTrue(){
-        let isBelowZero = levelUp.isBelowZero(currentExperience: 100, maxExperience: 90)
+        let isBelowZero = levelUp.isBelowZero(currentXP: 100, maxXP: 90)
         XCTAssertEqual(isBelowZero, true)
     }
     func testCalculateNewExperienceEqual(){
-        let proggress = levelUp.calculateNewExperience(currentExperience: 150, maxExperience: 100)
+        let proggress = levelUp.calculateNewXP(currentXP: 150, maxXP: 100)
         XCTAssertEqual(proggress, 50)
     }
     func testCalculateNewExperienceFailNotEqual(){
-        let proggress = levelUp.calculateNewExperience(currentExperience: 150, maxExperience: 100)
+        let proggress = levelUp.calculateNewXP(currentXP: 150, maxXP: 100)
         XCTAssertNotEqual(proggress, 25)
     }
     func testCalculateMaxProgressEqual(){
-        let maxProggress = levelUp.calculateMaxProgress(maxProgress: 100)
+        let maxProggress = levelUp.calculateMaxXP(maxXP: 100)
         XCTAssertEqual(maxProggress, 120)
     }
     func testCalculateMaxProggressNotEqual(){
-        let maxProggress = levelUp.calculateMaxProgress(maxProgress: 100)
+        let maxProggress = levelUp.calculateMaxXP(maxXP: 100)
         XCTAssertNotEqual(maxProggress, 100)
     }
     func testLevelUpEqual(){

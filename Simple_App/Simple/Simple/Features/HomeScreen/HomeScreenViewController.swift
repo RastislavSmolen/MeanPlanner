@@ -27,19 +27,21 @@ class HomeScreenViewController: UIViewController {
     var tasks: [NSManagedObject] = []
     var presistenContainer: NSPersistentContainer!
     
+#warning("user default only for testing purposes")
     let userDefaults = UserDefaults.standard
-    var maxProggress: Float = 350
-    var currentLevel: Int = 1
     
     let levelUp = LevelUp()
     //MARK: ViewDidLoad
     override func viewDidLoad() {
         super.viewDidLoad()
-        proccesFethcingExperience()
+        //        userDefaults.setValue(10, forKey: "experience")
+        //        userDefaults.setValue(1, forKey: "currentLevel")
+        //        userDefaults.setValue(100, forKey: "maxXp")
+        setupXp()
         fetchCoreData()
         setup()
     }
-  
+    
     func fetchCoreData() {
         guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
         let managedContext = appDelegate.persistentContainer.viewContext
@@ -120,72 +122,33 @@ extension HomeScreenViewController : UITableViewDelegate, UITableViewDataSource 
 }
 // MARK: Experience Logic
 extension HomeScreenViewController {
-    
-    func calculateExpertience(maxExperience: Float,adddedExperience: Float) -> Float {
-        // Fetch experience from user defaults
-        let currentExperience = fetchExperience()
-        // Calculate experience adding currentExperience from userDefaults with addedExperince from cell
-        let resultingExperience = currentExperience + adddedExperience
-        // Save resulting experience into User defaults
-        userDefaults.setValue(resultingExperience, forKey: "experience")
-        // Return result
-        return resultingExperience
-    }
-    
-    func convertedExperience(experience: Float,maxExperience: Float)-> Float {
-        // For correct display of the proggress view we have to divide N/M = R
-        let convertedExperience = experience / maxExperience
+    func setupXp() {
+        levelUp.loadXp()
+        guard let level = levelUp.level , let xp = levelUp.experience, let maxXp = levelUp.maximumExperience else { return }
+        setupView(level: level, xp: xp, maxXp: maxXp)
         
-        return convertedExperience
     }
-    
-    func saveExperience(experienceToSave: Float,currentLevel: Int, maxProggress: Float) {
-        userDefaults.setValue(experienceToSave, forKey: "experience")
-        userDefaults.setValue(currentLevel, forKey: "currentLevel")
-        userDefaults.setValue(maxProggress, forKey: "maxProggress")
-
+    func setupView(level: Int, xp: Float, maxXp: Float) {
+        proggresViewLabel.text = ("\(Int(xp)) / \(Int(maxXp))")
+        proggressView.setProgress(levelUp.convertedXP(xp: xp, maxXP: maxXp), animated: true)
+        levelLabel.text = ("\(level).lvl")
     }
-    
-    func fetchExperience() ->Float {
-        return userDefaults.float(forKey: "experience")
+    func proccesXp(newXp: Float) {
+        guard let level = levelUp.level, let maxXp = levelUp.maximumExperience else { return }
+        levelUp.processXP(maxXP: maxXp, currentXP: newXp, currentLevel: level)
     }
-    func fetchLevel() ->Int {
-        return userDefaults.integer(forKey: "currentLevel")
-    }
-    func fetchProggress() ->Float {
-        return userDefaults.float(forKey: "maxProggress")
-    }
-    func calculateLevelProgress(experience: Float) {
-        levelUp.processProgress(maxProgress: maxProggress, currentProgress: experience, currentLevel: currentLevel)
-        saveExperience(experienceToSave: levelUp.setProggress ?? 0.0,currentLevel: levelUp.level ?? 0, maxProggress: levelUp.setProggress ?? 0.0)
-    }
-    func proccesFethcingExperience() {
-        currentLevel = fetchLevel()
-        maxProggress = fetchProggress()
-        var experience = fetchExperience()
-        calculateLevelProgress(experience: experience)
-        experience = fetchExperience()
-        proggressView.setProgress(convertedExperience(experience: experience, maxExperience: maxProggress), animated: true)
-        proggresViewLabel.text = "\(Int(experience)) / \(Int(maxProggress))"
-        levelLabel.text = "\(levelUp.level ?? 0 ).LVL"
-    }
-    func processSavingExperience (index: IndexPath) {
-        //Value from list of experience
-        let addedExperience =  Float(tasks[index.row].value(forKey: "reward")as! Int)
-        //Calculate experience
-        let experience = calculateExpertience(maxExperience: maxProggress, adddedExperience: addedExperience)
-        //Set progress based on converted experience
-        proggressView.setProgress(convertedExperience(experience: experience, maxExperience: maxProggress), animated: true)
-        //Save experience to user defaults
-        saveExperience(experienceToSave: experience, currentLevel: currentLevel, maxProggress: maxProggress)
-        // Set label from results
-        proggresViewLabel.text = "\(Int(experience)) / \(Int(maxProggress))"
+    func saveXp(index: IndexPath) {
+        let rewardXp =  Float(tasks[index.row].value(forKey: "reward")as! Int)
+        let newXp = rewardXp + (levelUp.experience ?? 999999.9999)
+        proccesXp(newXp: newXp)
+        guard let level = levelUp.level , let xp = levelUp.experience, let maxXp = levelUp.maximumExperience else { return }
+        levelUp.saveExperience(experienceToSave: xp, currentLevel: level, maxXp: maxXp)
+        setupView(level: level, xp: xp, maxXp: maxXp)
     }
     
     private func handleMarkAsDone(index: IndexPath) {
-        processSavingExperience(index: index)
+        saveXp(index: index)
         deleteFromCoreData(indexPath: index)
-        proccesFethcingExperience()
     }
 }
 // MARK: - Delegate
