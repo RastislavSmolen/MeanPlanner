@@ -8,8 +8,6 @@
 import UIKit
 import CoreData
 
-
-
 class HomeScreenViewController: UIViewController {
     
     // MARK: - Outlets
@@ -26,12 +24,18 @@ class HomeScreenViewController: UIViewController {
     }
     var tasks: [NSManagedObject] = []
     var presistenContainer: NSPersistentContainer!
-
 #warning("user default only for testing purposes")
     let userDefaults = UserDefaults.standard
     
+    //MARK: Animation variables and constants
     let levelUp = LevelUp()
-    //MARK: ViewDidLoad
+    var displayLink: CADisplayLink?
+    let animationDuration: Double = 0.3
+    var animationStartDate = Date()
+    var oldXp = Float()
+    var elapsedTime = TimeInterval()
+    private var startTime = 0.0
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         //        userDefaults.setValue(10, forKey: "experience")
@@ -40,9 +44,8 @@ class HomeScreenViewController: UIViewController {
         setupXp()
         fetchCoreData()
         setup()
-       
     }
-
+    
     func fetchCoreData() {
         guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
         let managedContext = appDelegate.persistentContainer.viewContext
@@ -55,7 +58,6 @@ class HomeScreenViewController: UIViewController {
         }
         currentTasksTableView.reloadData()
     }
-    
 }
 
 extension HomeScreenViewController {
@@ -81,6 +83,40 @@ extension HomeScreenViewController {
     }
 }
 
+//MARK: - Animation
+extension HomeScreenViewController {
+    
+    func playAnimation() {
+        let now = Date()
+        elapsedTime = now.timeIntervalSince(animationStartDate)
+        
+        stopDisplayLink()
+        startTime = CACurrentMediaTime()
+        
+        displayLink = CADisplayLink(target: self, selector: #selector(runAnimation))
+        displayLink?.preferredFramesPerSecond = 0
+        displayLink?.add(to: .main, forMode: .default)
+    }
+    @objc func runAnimation() {
+        var elapsedTime = CACurrentMediaTime() - startTime
+        if elapsedTime > animationDuration {
+            stopDisplayLink()
+        } else {
+            let newXp = levelUp.fetchXP()
+            let maxValue = levelUp.fetchMaxXp()
+            let percentage = elapsedTime / animationDuration
+            let value = oldXp + Float(percentage) * (newXp - oldXp)
+            self.proggresViewLabel.text = ("\(Int(value)) / \(Int(maxValue))")
+           // proggressView.setProgress(value, animated: true)
+
+        }
+        
+    }
+    func stopDisplayLink() {
+        displayLink?.invalidate()
+        displayLink = nil
+    }
+}
 //MARK: - Table View setup
 extension HomeScreenViewController : UITableViewDelegate, UITableViewDataSource  {
     
@@ -142,6 +178,7 @@ extension HomeScreenViewController {
         guard let level = levelUp.level , let xp = levelUp.experience, let maxXp = levelUp.maximumExperience else { return }
         let rewardXp =  Float(tasks[index.row].value(forKey: "reward")as! Int)
         let newXp = rewardXp + xp
+        oldXp = xp
         proccesXp(newXp: newXp)
         setupView(level: levelUp.fetchLevel(), xp: levelUp.fetchXP(), maxXp: levelUp.fetchMaxXp())
         levelUp.loadXp()
@@ -151,7 +188,10 @@ extension HomeScreenViewController {
         saveXp(index: index)
         deleteFromCoreData(indexPath: index)
         guard let readyToPlaySound = levelUp.readyToPlaySound else { return }
-        readyToPlaySound ? levelUp.playSound(soundName: "fanfare") : levelUp.playSound(soundName: "success")
+        // readyToPlaySound ? levelUp.playSound(soundName: "fanfare") : levelUp.playSound(soundName: "success")
+        //   startDisplayLink(oldXp: Double(oldXp), newXp: Double(levelUp.fetchXP()), maxValue : Double(levelUp.fetchMaxXp()))
+        //  startDisplayLink(oldXp: Double, newXp: Double,maxValue: Double)
+        playAnimation()
     }
 }
 // MARK: - Delegate
