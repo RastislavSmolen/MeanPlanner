@@ -17,6 +17,11 @@ final class HomeScreenViewController: UIViewController {
     @IBOutlet weak var proggresViewLabel: UILabel!
     @IBOutlet weak var levelLabel: UILabel!
     @IBOutlet weak var detailTaskView: UIView!
+    @IBOutlet weak var detailTaskNameLabel: UILabel!
+    @IBOutlet weak var closeDetailViewButton: UIButton!
+    @IBOutlet weak var detailTaskXpLabel: UILabel!
+    @IBOutlet weak var infoDetailViewLabel: UILabel!
+    @IBOutlet weak var finishTaskView: UIButton!
     // MARK: - Variables
     @IBOutlet weak var closingButton: UIButton!
     var viewModel : HomeScreenViewModel!
@@ -38,7 +43,7 @@ final class HomeScreenViewController: UIViewController {
     var oldXp = Float()
     var elapsedTime = TimeInterval()
     private var startTime = 0.0
-    var wasTapped = Bool()
+    var index = IndexPath()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -48,12 +53,17 @@ final class HomeScreenViewController: UIViewController {
         setupXp()
         fetchCoreData()
         setupUI()
-        wasTapped = false
     }
     @IBAction func didTapClosingSection(_ sender: Any) {
         if !detailTaskView.isHidden {
             configureDetailView(isHidden: true)
         }
+    }
+    @IBAction func didTapCloseDetailViewButton(_ sender: Any) {
+        configureDetailView(isHidden: true)
+    }
+    @IBAction func didTapFinnishDetailViewButton(_ sender: Any) {
+        handleMarkAsDone(index: index)
     }
     func fetchCoreData() {
         guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
@@ -140,6 +150,20 @@ extension HomeScreenViewController : UITableViewDelegate, UITableViewDataSource 
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         configureDetailView(isHidden: false)
+        setupUIForDetailView(index: indexPath)
+        index = indexPath
+    }
+    func setupUIForDetailView(index: IndexPath) {
+        guard let colorHex = tasks[index.row].value(forKey: "taskColor") as? String,
+              let name = tasks[index.row].value(forKey: "taskName") as? String,
+              let reward = tasks[index.row].value(forKey: "reward")as? Int,
+              let info = tasks[index.row].value(forKey: "taskDetails") as? String
+        else {return}
+        
+        detailTaskView.backgroundColor = UIColor(hex: colorHex)
+        detailTaskXpLabel.text = "\(reward) xp "
+        detailTaskNameLabel.text = name
+        infoDetailViewLabel.text = info
     }
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         return 5
@@ -211,6 +235,7 @@ extension HomeScreenViewController {
         readyToLevelUp ? levelUp.playSound(soundName: "fanfare"): levelUp.playSound(soundName: "success")
         readyToLevelUp ? fireworkAnimation() : nil
         xpCounterAnimation()
+        configureDetailView(isHidden: true)
     }
 }
 // MARK: - Delegate
