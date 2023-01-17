@@ -9,9 +9,6 @@ import Foundation
 import UIKit
 import CoreData
 
-protocol Updator {
-  func updateData()
-}
 class AddGoalViewController : UIViewController {
     
     // MARK: - Variables
