@@ -17,7 +17,7 @@ class LevelUp {
     var maximumExperience : Float?
     var convertedExperience : Float?
     var player: AVAudioPlayer?
-    var readyToPlaySound : Bool?
+    var readyToLevelUp : Bool?
     //MARK: constants
     let userDefaults = UserDefaults.standard
     
@@ -51,11 +51,11 @@ class LevelUp {
             level = levelUp(currentLevel: currentLevel)
             experience = calculateNewXP(currentXP: currentXP, maxXP: maxXP)
             saveExperience(experienceToSave: experience ?? 0.0 , currentLevel: level ?? 0, maxXp: maximumExperience ?? 0.0)
-            readyToPlaySound = true
+            readyToLevelUp = true
         } else {
             experience = calculateNewXP(currentXP: currentXP, maxXP: maxXP)
             saveExperience(experienceToSave: experience ?? 0.0 , currentLevel: level ?? 0, maxXp: maxXP)
-            readyToPlaySound = false
+            readyToLevelUp = false
         }
     }
     func isReadyToLevelUp(maxProgress: Float, currentProgress: Float) -> Bool {
