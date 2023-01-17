@@ -16,8 +16,9 @@ final class HomeScreenViewController: UIViewController {
     @IBOutlet weak var currentTasksTableView: UITableView!
     @IBOutlet weak var proggresViewLabel: UILabel!
     @IBOutlet weak var levelLabel: UILabel!
-    
+    @IBOutlet weak var detailTaskView: UIView!
     // MARK: - Variables
+    @IBOutlet weak var closingButton: UIButton!
     var viewModel : HomeScreenViewModel!
     var isEmpty :  Bool {
         return tasks.count == 0 ? true : false
@@ -37,6 +38,7 @@ final class HomeScreenViewController: UIViewController {
     var oldXp = Float()
     var elapsedTime = TimeInterval()
     private var startTime = 0.0
+    var wasTapped = Bool()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -45,9 +47,14 @@ final class HomeScreenViewController: UIViewController {
         //        userDefaults.setValue(100, forKey: "maxXp")
         setupXp()
         fetchCoreData()
-        setup()
+        setupUI()
+        wasTapped = false
     }
-    
+    @IBAction func didTapClosingSection(_ sender: Any) {
+        if !detailTaskView.isHidden {
+            configureDetailView(isHidden: true)
+        }
+    }
     func fetchCoreData() {
         guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
         let managedContext = appDelegate.persistentContainer.viewContext
@@ -64,9 +71,9 @@ final class HomeScreenViewController: UIViewController {
 
 extension HomeScreenViewController {
     
-    func setup() {
+    func setupUI() {
         proggressView.transform = CGAffineTransform(scaleX: 1, y: 4)
-        
+        configureDetailView(isHidden: true)
         if #available(iOS 13.0, *) {
             let addMoreBarButton = UIBarButtonItem(image: .add , style: .plain, target: self, action: #selector(addGoalAction))
             addMoreBarButton.tintColor = .white
@@ -82,6 +89,10 @@ extension HomeScreenViewController {
     
     @objc func addGoalAction() {
         viewModel.navigateTo(delegate: self)
+    }
+    func configureDetailView(isHidden: Bool) {
+        detailTaskView.isHidden = isHidden
+        closingButton.isHidden = isHidden
     }
     
 }
@@ -127,6 +138,9 @@ extension HomeScreenViewController  {
 //MARK: - Table View setup
 extension HomeScreenViewController : UITableViewDelegate, UITableViewDataSource  {
     
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        configureDetailView(isHidden: false)
+    }
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         return 5
     }

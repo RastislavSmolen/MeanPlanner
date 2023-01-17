@@ -176,6 +176,19 @@
                                     </tableViewCell>
                                 </prototypes>
                             </tableView>
+                            <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="gMk-kY-1hr" userLabel="DetailTaskView">
+                                <rect key="frame" x="0.0" y="568" width="414" height="328"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <color key="backgroundColor" systemColor="systemRedColor"/>
+                            </view>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="pUH-Vf-GYe">
+                                <rect key="frame" x="0.0" y="0.0" width="414" height="316"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                                <connections>
+                                    <action selector="didTapClosingSection:" destination="BYZ-38-t0r" eventType="touchUpInside" id="mf5-pq-sX3"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                         <color key="backgroundColor" systemColor="secondarySystemBackgroundColor"/>
@@ -198,7 +211,9 @@
                         </constraints>
                     </view>
                     <connections>
+                        <outlet property="closingButton" destination="pUH-Vf-GYe" id="O8s-Jm-EmI"/>
                         <outlet property="currentTasksTableView" destination="mPc-eQ-RJq" id="j17-pI-7Q8"/>
+                        <outlet property="detailTaskView" destination="gMk-kY-1hr" id="v1h-uN-jmi"/>
                         <outlet property="levelLabel" destination="yMB-pu-xSm" id="dh1-Y8-vHo"/>
                         <outlet property="proggresViewLabel" destination="OQU-Gp-xam" id="h85-p4-4AB"/>
                         <outlet property="proggressView" destination="49a-Cs-k3k" id="SDc-PN-yD5"/>
