@@ -176,14 +176,21 @@ extension HomeScreenViewController : UITableViewDelegate, UITableViewDataSource 
     
     func tableView(_ tableView: UITableView,
                    leadingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
-        let action = UIContextualAction(style: .normal,
+        let done = UIContextualAction(style: .normal,
                                         title: "Done") { [weak self] (action, view, completionHandler) in
             self?.handleMarkAsDone(index: indexPath)
             completionHandler(true)
         }
         
-        action.backgroundColor = .systemBlue
-        return  isEmpty ? nil : UISwipeActionsConfiguration(actions: [action]) 
+        let trash = UIContextualAction(style: .destructive,
+                                       title: "Trash") { [weak self] (action, view, completionHandler) in
+            self?.handleMoveToTrash(index: indexPath)
+            completionHandler(true)
+        }
+        done.backgroundColor = .systemBlue
+        trash.backgroundColor = .systemRed
+        
+        return  isEmpty ? nil : UISwipeActionsConfiguration(actions: [done,trash])
         
     }
     
@@ -237,6 +244,9 @@ extension HomeScreenViewController {
         xpCounterAnimation()
         configureDetailView(isHidden: true)
     }
+        private func handleMoveToTrash(index: IndexPath) {
+           deleteFromCoreData(indexPath: index)
+        }
 }
 // MARK: - Delegate
 extension HomeScreenViewController: Updator {
