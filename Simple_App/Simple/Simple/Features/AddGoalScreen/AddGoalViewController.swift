@@ -37,6 +37,8 @@ class AddGoalViewController : UIViewController {
     @IBOutlet weak var hardButton: UIButton!
     @IBOutlet weak var xpLabel: UILabel!
     
+    
+    let availableTasks = AvailableTask()
     var startValue: Double {
         return Double.random(in: 0...200)
     }
@@ -51,7 +53,10 @@ class AddGoalViewController : UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setup()
-        
+        availableTasks.checkTaskAvailability(difficulty: .easy) ? isButtonEnabled(true, button: easyButton) : isButtonEnabled(false, button: easyButton)
+        availableTasks.checkTaskAvailability(difficulty: .normal) ? isButtonEnabled(true, button: normalButton) : isButtonEnabled(false, button: normalButton)
+        availableTasks.checkTaskAvailability(difficulty: .hard) ? isButtonEnabled(true, button: hardButton) : isButtonEnabled(false, button: hardButton)
+
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -65,14 +70,26 @@ class AddGoalViewController : UIViewController {
     @IBAction func easyTaskButtonAction(_ sender: Any) {
         generatedXp = Int.random(in: 0...50)
         xpCounterAnimation()
+        availableTasks.isAbleToAddAnotherTask(.easy, amountLeft: availableTasks.fetchAvailableTasks(difficulty: .easy)) ? isButtonEnabled(true, button: easyButton) : isButtonEnabled(false, button: easyButton)
+        isButtonEnabled(false, button: hardButton)
+        isButtonEnabled(false, button: normalButton)
+    }
+    func isButtonEnabled(_ bool: Bool, button: UIButton) {
+        button.isEnabled = bool
     }
     @IBAction func normalTaskButtonAction(_ sender: Any) {
         generatedXp = Int.random(in: 50...100)
         xpCounterAnimation()
+        availableTasks.isAbleToAddAnotherTask(.normal, amountLeft: availableTasks.fetchAvailableTasks(difficulty: .normal)) ? isButtonEnabled(true, button: normalButton) : isButtonEnabled(false, button: normalButton)
+        isButtonEnabled(false, button: easyButton)
+        isButtonEnabled(false, button: hardButton)
     }
     @IBAction func hardActionButton(_ sender: Any) {
         generatedXp = Int.random(in: 100...150)
         xpCounterAnimation()
+        availableTasks.isAbleToAddAnotherTask(.hard, amountLeft: availableTasks.fetchAvailableTasks(difficulty: .hard)) ? isButtonEnabled(true, button: hardButton) : isButtonEnabled(false, button: hardButton)
+        isButtonEnabled(false, button: easyButton)
+        isButtonEnabled(false, button: normalButton)
     }
     
     @IBAction func createTaskButton(_ sender: Any) {

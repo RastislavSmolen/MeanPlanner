@@ -22,6 +22,12 @@ final class HomeScreenViewController: UIViewController {
     @IBOutlet weak var detailTaskXpLabel: UILabel!
     @IBOutlet weak var infoDetailViewLabel: UILabel!
     @IBOutlet weak var finishTaskView: UIButton!
+    
+    @IBOutlet weak var totalTasksLabel: UILabel!
+    @IBOutlet weak var easyTaskLabel: UILabel!
+    @IBOutlet weak var normalTaskLabel: UILabel!
+    @IBOutlet weak var hardTaskLabel: UILabel!
+    
     // MARK: - Variables
     @IBOutlet weak var closingButton: UIButton!
     var viewModel : HomeScreenViewModel!
@@ -33,7 +39,8 @@ final class HomeScreenViewController: UIViewController {
 #warning("user default only for testing purposes")
     let userDefaults = UserDefaults.standard
     let levelUp = LevelUp()
-    
+    let availableTasks = AvailableTask()
+
     let firework = Firework()
     
     //MARK: Animation variables and constants
@@ -50,6 +57,11 @@ final class HomeScreenViewController: UIViewController {
         //        userDefaults.setValue(10, forKey: "experience")
         //        userDefaults.setValue(1, forKey: "currentLevel")
         //        userDefaults.setValue(100, forKey: "maxXp")
+//        availableTasks.saveTasks(difficulty: .easy, amountLeft: 3)
+//        availableTasks.saveTasks(difficulty: .normal, amountLeft: 2)
+//        availableTasks.saveTasks(difficulty: .hard, amountLeft: 1)
+        
+        availableTasks.fetchAllAlvailableTasks()
         setupXp()
         fetchCoreData()
         setupUI()
@@ -81,7 +93,19 @@ final class HomeScreenViewController: UIViewController {
 
 extension HomeScreenViewController {
     
+    func countAvalableTasks() -> String {
+        let easy = availableTasks.fetchAvailableTasks(difficulty: .easy)
+        let normal = availableTasks.fetchAvailableTasks(difficulty: .normal)
+        let hard = availableTasks.fetchAvailableTasks(difficulty: .hard)
+        let countOfTask = easy + normal + hard
+        return "\(countOfTask)"
+    }
+    
     func setupUI() {
+        totalTasksLabel.text = "Total tasks left: \(countAvalableTasks())"
+        easyTaskLabel.text = "Easy tasks left: \(availableTasks.easyTasks)"
+        normalTaskLabel.text = "Normal tasks left: \(availableTasks.normalTasks)"
+        hardTaskLabel.text = "Hard tasks left: \(availableTasks.hardTasks)"
         proggressView.transform = CGAffineTransform(scaleX: 1, y: 4)
         configureDetailView(isHidden: true)
         if #available(iOS 13.0, *) {
@@ -253,6 +277,13 @@ extension HomeScreenViewController: Updator {
     
      func updateData() {
         fetchCoreData()
+         totalTasksLabel.text = "Total tasks left: \(countAvalableTasks())"
+         updateViews(difficulty: .easy, view: easyTaskLabel, text: "Easy")
+         updateViews(difficulty: .normal, view: normalTaskLabel, text: "Normal")
+         updateViews(difficulty: .hard, view: hardTaskLabel, text: "Hard")
+    }
+    func updateViews(difficulty: Difficulty, view: UILabel,text: String) {
+        view.text = "\(text) tasks left: \(availableTasks.fetchAvailableTasks(difficulty: difficulty))"
     }
     
 }
