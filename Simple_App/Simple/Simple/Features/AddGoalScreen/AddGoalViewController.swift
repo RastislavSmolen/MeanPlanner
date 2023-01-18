@@ -30,14 +30,28 @@ class AddGoalViewController : UIViewController {
     @IBOutlet  var buttons: [UIButton]!
     @IBOutlet weak var createButton: UIButton!
     
-    @IBOutlet weak var rewardSlider: UISlider!
-    @IBOutlet weak var rewardSliderLabel: UILabel!
-    
     @IBOutlet weak var colorView: UIView!
+    
+    @IBOutlet weak var easyButton: UIButton!
+    @IBOutlet weak var normalButton: UIButton!
+    @IBOutlet weak var hardButton: UIButton!
+    @IBOutlet weak var xpLabel: UILabel!
+    
+    var startValue: Double {
+        return Double.random(in: 0...200)
+    }
+    let endValue: Double = 1000
+    var displayLink: CADisplayLink?
+    let animationDuration: Double = 1.5
+    var animationStartDate = Date()
+    var generatedXp = Int()
+    var elapsedTime = TimeInterval()
+    private var startTime = 0.0
     
     override func viewDidLoad() {
         super.viewDidLoad()
         setup()
+        
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -48,18 +62,26 @@ class AddGoalViewController : UIViewController {
     @IBAction func colorAction(_ sender: UIButton) {
         changeCollorOfPage(tag: sender.tag)
     }
+    @IBAction func easyTaskButtonAction(_ sender: Any) {
+        generatedXp = Int.random(in: 0...50)
+        xpCounterAnimation()
+    }
+    @IBAction func normalTaskButtonAction(_ sender: Any) {
+        generatedXp = Int.random(in: 50...100)
+        xpCounterAnimation()
+    }
+    @IBAction func hardActionButton(_ sender: Any) {
+        generatedXp = Int.random(in: 100...150)
+        xpCounterAnimation()
+    }
     
     @IBAction func createTaskButton(_ sender: Any) {
         guard let taskName = taskNameTextField.text, let taskDetail = detailsTextField.text else { return }
-        saveToCoreData(name: taskName, detail: taskDetail, reward: Int(rewardSlider.value), color: colorToSave ?? "#32ADE6")
+        saveToCoreData(name: taskName, detail: taskDetail, reward: generatedXp, color: colorToSave ?? "#32ADE6")
         delegate?.updateData()
         self.dismiss(animated: true)
     }
     
-    @IBAction func rewardSlider(_ sender: Any) {
-        rewardSliderLabel.text = "\(Int((rewardSlider.value)))/100"
-    }
-
     //MARK: - Main logic
     private func changeCollorOfPage(tag: Int) {
         switch tag {
@@ -76,19 +98,49 @@ class AddGoalViewController : UIViewController {
     
     private func color(_ color: UIColor!, hex: String) {
         colorView.backgroundColor = color
-        rewardSlider.tintColor =  color
         createButton.tintColor =  color
         toolBar.tintColor = color
         colorToSave = hex
     }
 }
-
+//MARK: - Animation Extention
+extension AddGoalViewController {
+    
+    @objc func runAnimation() {
+        let elapsedTime = CACurrentMediaTime() - startTime
+        if elapsedTime > animationDuration {
+            self.xpLabel.text = "\(generatedXp) xp"
+            stopDisplayLink()
+        } else {
+            let percentage = elapsedTime / animationDuration
+            let value = startValue + percentage * (Double(generatedXp) - startValue)
+            self.xpLabel.text = "\(Int(value)) xp"
+        }
+        
+    }
+    
+    func xpCounterAnimation() {
+        let now = Date()
+        elapsedTime = now.timeIntervalSince(animationStartDate)
+        
+        stopDisplayLink()
+        startTime = CACurrentMediaTime()
+        
+        displayLink = CADisplayLink(target: self, selector: #selector(runAnimation))
+        displayLink?.preferredFramesPerSecond = 0
+        displayLink?.add(to: .main, forMode: .default)
+    }
+    
+    func stopDisplayLink() {
+        displayLink?.invalidate()
+        displayLink = nil
+    }
+}
 // MARK: - Setup Extension
 extension AddGoalViewController  {
     
     func setup() {
         configureTextField()
-        configureRewardSlider()
         colorView.backgroundColor = UIColor(hex: ColorPaint.cyan.description)
     }
     
@@ -109,17 +161,6 @@ extension AddGoalViewController : UITextFieldDelegate {
         return true
     }
     
-}
-
-//MARK: - Slider Setup
-extension AddGoalViewController {
-    private func configureRewardSlider() {
-        rewardSlider.minimumValue = 0
-        rewardSlider.maximumValue = 100 
-        rewardSlider.value = 0
-        rewardSlider.tintColor = UIColor(hex: ColorPaint.cyan.description)
-        rewardSliderLabel.text = "\(Int((rewardSlider.value)))/100"
-    }
 }
 
 //MARK: - CoreData
