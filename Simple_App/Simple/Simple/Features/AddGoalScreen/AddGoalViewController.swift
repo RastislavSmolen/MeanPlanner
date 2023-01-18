@@ -27,7 +27,6 @@ class AddGoalViewController : UIViewController {
     @IBOutlet weak var taskNameTextField: UITextField!
     @IBOutlet weak var detailsTextField: UITextField!
     
-    @IBOutlet  var buttons: [UIButton]!
     @IBOutlet weak var createButton: UIButton!
     
     @IBOutlet weak var colorView: UIView!
@@ -62,9 +61,6 @@ class AddGoalViewController : UIViewController {
     }
     
     // MARK: - Storyboard Actions
-    @IBAction func colorAction(_ sender: UIButton) {
-        changeCollorOfPage(tag: sender.tag)
-    }
     @IBAction func easyTaskButtonAction(_ sender: Any) {
         handleButtonBehaviour(difficulty: .easy)
     }
@@ -98,18 +94,21 @@ class AddGoalViewController : UIViewController {
             isButtonEnabled(false, button: hardButton)
             isButtonEnabled(false, button: normalButton)
             difficultyToSave = "easy"
+            color(UIColor(hex: ColorPaint.green.description), hex: ColorPaint.green.description)
         case .normal:
             generatedXp = Int.random(in: 55...105)
             availableTasks.isAbleToAddAnotherTask(.normal, amountLeft: availableTasks.fetchAvailableTasks(difficulty: .normal)) ? isButtonEnabled(true, button: normalButton) : isButtonEnabled(false, button: normalButton)
             isButtonEnabled(false, button: easyButton)
             isButtonEnabled(false, button: hardButton)
             difficultyToSave = "normal"
+            color(UIColor(hex: ColorPaint.purple.description), hex: ColorPaint.purple.description)
         case .hard:
             generatedXp = Int.random(in: 105...155)
             availableTasks.isAbleToAddAnotherTask(.hard, amountLeft: availableTasks.fetchAvailableTasks(difficulty: .hard)) ? isButtonEnabled(true, button: hardButton) : isButtonEnabled(false, button: hardButton)
             isButtonEnabled(false, button: easyButton)
             isButtonEnabled(false, button: normalButton)
             difficultyToSave = "hard"
+            color(UIColor(hex: ColorPaint.red.description), hex: ColorPaint.red.description)
         }
         xpCounterAnimation()
 
@@ -117,21 +116,7 @@ class AddGoalViewController : UIViewController {
     
     func isButtonEnabled(_ bool: Bool, button: UIButton) {
         button.isEnabled = bool
-    }
-    
-    private func changeCollorOfPage(tag: Int) {
-        switch tag {
-        case 0 : color(UIColor(hex: ColorPaint.yellow.description), hex: ColorPaint.yellow.description)
-        case 1 : color(UIColor(hex: ColorPaint.teal.description), hex: ColorPaint.teal.description)
-        case 2 : color(UIColor(hex: ColorPaint.red.description), hex: ColorPaint.red.description)
-        case 3 : color(UIColor(hex: ColorPaint.purple.description), hex: ColorPaint.purple.description)
-        case 4 : color(UIColor(hex: ColorPaint.pink.description), hex: ColorPaint.pink.description)
-        case 5 : color(UIColor(hex: ColorPaint.green.description), hex: ColorPaint.green.description)
-        case 6 : color(UIColor(hex: ColorPaint.cyan.description), hex: ColorPaint.cyan.description)
-            default: print("Cant change color no tag attached to sender")
-        }
-    }
-    
+    }    
     private func color(_ color: UIColor!, hex: String) {
         colorView.backgroundColor = color
         createButton.tintColor =  color
