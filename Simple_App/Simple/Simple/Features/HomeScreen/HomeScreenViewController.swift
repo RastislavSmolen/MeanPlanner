@@ -54,14 +54,19 @@ final class HomeScreenViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        //        userDefaults.setValue(10, forKey: "experience")
-        //        userDefaults.setValue(1, forKey: "currentLevel")
-        //        userDefaults.setValue(100, forKey: "maxXp")
+        #warning("move userDefaults to levelUp")
+//                userDefaults.setValue(10, forKey: "experience")
+//                userDefaults.setValue(1, forKey: "currentLevel")
+//                userDefaults.setValue(100, forKey: "maxXp")
 //        availableTasks.saveTasks(difficulty: .easy, amountLeft: 3)
 //        availableTasks.saveTasks(difficulty: .normal, amountLeft: 2)
 //        availableTasks.saveTasks(difficulty: .hard, amountLeft: 1)
-        
+//
+//        availableTasks.setMaxAmountForTasks(difficulty: .easy ,maxAmount: 3)
+//        availableTasks.setMaxAmountForTasks(difficulty: .normal ,maxAmount: 2)
+//        availableTasks.setMaxAmountForTasks(difficulty: .hard ,maxAmount: 1)
         availableTasks.fetchAllAlvailableTasks()
+        availableTasks.fetchAllMaxTasks()
         setupXp()
         fetchCoreData()
         setupUI()
@@ -122,7 +127,7 @@ extension HomeScreenViewController {
     }
     
     @objc func addGoalAction() {
-        viewModel.navigateTo(delegate: self)
+        availableTasks.areTasksEmpty() ? nil : viewModel.navigateTo(delegate: self)
     }
     func configureDetailView(isHidden: Bool) {
         detailTaskView.isHidden = isHidden
@@ -261,6 +266,7 @@ extension HomeScreenViewController {
     }
     private func handleMarkAsDone(index: IndexPath) {
         saveXp(index: index)
+        filterForDifficulty(index: index)
         deleteFromCoreData(indexPath: index)
         guard let readyToLevelUp = levelUp.readyToLevelUp else { return }
         readyToLevelUp ? levelUp.playSound(soundName: "fanfare"): levelUp.playSound(soundName: "success")
@@ -271,6 +277,22 @@ extension HomeScreenViewController {
         private func handleMoveToTrash(index: IndexPath) {
            deleteFromCoreData(indexPath: index)
         }
+    func filterForDifficulty(index: IndexPath) {
+        switch tasks[index.row].value(forKey: "difficulty") as? String {
+        case "easy": availableTasks.taskWasFinnished(difficulty: .easy)
+            updateViews(difficulty: .easy, view: easyTaskLabel, text: "Easy")
+
+        case "normal": availableTasks.taskWasFinnished(difficulty: .normal)
+            updateViews(difficulty: .normal, view: normalTaskLabel, text: "Normal")
+
+        case "hard": availableTasks.taskWasFinnished(difficulty: .hard)
+            updateViews(difficulty: .hard, view: hardTaskLabel, text: "Hard")
+
+            default: print("Task does not exits, check saveCoreData()")
+        }
+        totalTasksLabel.text = "Total tasks left: \(countAvalableTasks())"
+
+    }
 }
 // MARK: - Delegate
 extension HomeScreenViewController: Updator {
@@ -281,6 +303,7 @@ extension HomeScreenViewController: Updator {
          updateViews(difficulty: .easy, view: easyTaskLabel, text: "Easy")
          updateViews(difficulty: .normal, view: normalTaskLabel, text: "Normal")
          updateViews(difficulty: .hard, view: hardTaskLabel, text: "Hard")
+         
     }
     func updateViews(difficulty: Difficulty, view: UILabel,text: String) {
         view.text = "\(text) tasks left: \(availableTasks.fetchAvailableTasks(difficulty: difficulty))"

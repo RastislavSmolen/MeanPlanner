@@ -48,6 +48,7 @@ class AddGoalViewController : UIViewController {
     var animationStartDate = Date()
     var generatedXp = Int()
     var elapsedTime = TimeInterval()
+    var difficulty = String()
     private var startTime = 0.0
     
     override func viewDidLoad() {
@@ -68,33 +69,36 @@ class AddGoalViewController : UIViewController {
         changeCollorOfPage(tag: sender.tag)
     }
     @IBAction func easyTaskButtonAction(_ sender: Any) {
-        generatedXp = Int.random(in: 0...50)
+        generatedXp = Int.random(in: 5...55)
         xpCounterAnimation()
         availableTasks.isAbleToAddAnotherTask(.easy, amountLeft: availableTasks.fetchAvailableTasks(difficulty: .easy)) ? isButtonEnabled(true, button: easyButton) : isButtonEnabled(false, button: easyButton)
         isButtonEnabled(false, button: hardButton)
         isButtonEnabled(false, button: normalButton)
+        difficulty = "easy"
     }
     func isButtonEnabled(_ bool: Bool, button: UIButton) {
         button.isEnabled = bool
     }
     @IBAction func normalTaskButtonAction(_ sender: Any) {
-        generatedXp = Int.random(in: 50...100)
+        generatedXp = Int.random(in: 55...105)
         xpCounterAnimation()
         availableTasks.isAbleToAddAnotherTask(.normal, amountLeft: availableTasks.fetchAvailableTasks(difficulty: .normal)) ? isButtonEnabled(true, button: normalButton) : isButtonEnabled(false, button: normalButton)
         isButtonEnabled(false, button: easyButton)
         isButtonEnabled(false, button: hardButton)
+        difficulty = "normal"
     }
     @IBAction func hardActionButton(_ sender: Any) {
-        generatedXp = Int.random(in: 100...150)
+        generatedXp = Int.random(in: 105...155)
         xpCounterAnimation()
         availableTasks.isAbleToAddAnotherTask(.hard, amountLeft: availableTasks.fetchAvailableTasks(difficulty: .hard)) ? isButtonEnabled(true, button: hardButton) : isButtonEnabled(false, button: hardButton)
         isButtonEnabled(false, button: easyButton)
         isButtonEnabled(false, button: normalButton)
+        difficulty = "hard"
     }
     
     @IBAction func createTaskButton(_ sender: Any) {
         guard let taskName = taskNameTextField.text, let taskDetail = detailsTextField.text else { return }
-        saveToCoreData(name: taskName, detail: taskDetail, reward: generatedXp, color: colorToSave ?? "#32ADE6")
+        saveToCoreData(name: taskName, detail: taskDetail, reward: generatedXp, color: colorToSave ?? "#32ADE6", difficulty: difficulty)
         delegate?.updateData()
         self.dismiss(animated: true)
     }
@@ -183,7 +187,7 @@ extension AddGoalViewController : UITextFieldDelegate {
 //MARK: - CoreData
 extension AddGoalViewController {
     
-    func saveToCoreData(name: String, detail: String,reward: Int,color: String) {
+    func saveToCoreData(name: String, detail: String,reward: Int,color: String,difficulty: String) {
       
       guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
     
@@ -196,6 +200,7 @@ extension AddGoalViewController {
         task.setValue(reward, forKeyPath: "reward")
         task.setValue(detail, forKeyPath: "taskDetails")
         task.setValue(color, forKey: "taskColor")
+        task.setValue(difficulty, forKey: "difficulty")
 
       do {
         try managedContext.save()
