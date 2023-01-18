@@ -48,16 +48,13 @@ class AddGoalViewController : UIViewController {
     var animationStartDate = Date()
     var generatedXp = Int()
     var elapsedTime = TimeInterval()
-    var difficulty = String()
+    var difficultyToSave = String()
     private var startTime = 0.0
     
     override func viewDidLoad() {
         super.viewDidLoad()
         setup()
-        availableTasks.checkTaskAvailability(difficulty: .easy) ? isButtonEnabled(true, button: easyButton) : isButtonEnabled(false, button: easyButton)
-        availableTasks.checkTaskAvailability(difficulty: .normal) ? isButtonEnabled(true, button: normalButton) : isButtonEnabled(false, button: normalButton)
-        availableTasks.checkTaskAvailability(difficulty: .hard) ? isButtonEnabled(true, button: hardButton) : isButtonEnabled(false, button: hardButton)
-
+        checkTaskAvailibility()
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -69,41 +66,59 @@ class AddGoalViewController : UIViewController {
         changeCollorOfPage(tag: sender.tag)
     }
     @IBAction func easyTaskButtonAction(_ sender: Any) {
-        generatedXp = Int.random(in: 5...55)
-        xpCounterAnimation()
-        availableTasks.isAbleToAddAnotherTask(.easy, amountLeft: availableTasks.fetchAvailableTasks(difficulty: .easy)) ? isButtonEnabled(true, button: easyButton) : isButtonEnabled(false, button: easyButton)
-        isButtonEnabled(false, button: hardButton)
-        isButtonEnabled(false, button: normalButton)
-        difficulty = "easy"
+        handleButtonBehaviour(difficulty: .easy)
     }
-    func isButtonEnabled(_ bool: Bool, button: UIButton) {
-        button.isEnabled = bool
-    }
+ 
     @IBAction func normalTaskButtonAction(_ sender: Any) {
-        generatedXp = Int.random(in: 55...105)
-        xpCounterAnimation()
-        availableTasks.isAbleToAddAnotherTask(.normal, amountLeft: availableTasks.fetchAvailableTasks(difficulty: .normal)) ? isButtonEnabled(true, button: normalButton) : isButtonEnabled(false, button: normalButton)
-        isButtonEnabled(false, button: easyButton)
-        isButtonEnabled(false, button: hardButton)
-        difficulty = "normal"
+        handleButtonBehaviour(difficulty: .normal)
     }
     @IBAction func hardActionButton(_ sender: Any) {
-        generatedXp = Int.random(in: 105...155)
-        xpCounterAnimation()
-        availableTasks.isAbleToAddAnotherTask(.hard, amountLeft: availableTasks.fetchAvailableTasks(difficulty: .hard)) ? isButtonEnabled(true, button: hardButton) : isButtonEnabled(false, button: hardButton)
-        isButtonEnabled(false, button: easyButton)
-        isButtonEnabled(false, button: normalButton)
-        difficulty = "hard"
+        handleButtonBehaviour(difficulty: .hard)
     }
     
     @IBAction func createTaskButton(_ sender: Any) {
         guard let taskName = taskNameTextField.text, let taskDetail = detailsTextField.text else { return }
-        saveToCoreData(name: taskName, detail: taskDetail, reward: generatedXp, color: colorToSave ?? "#32ADE6", difficulty: difficulty)
+        saveToCoreData(name: taskName, detail: taskDetail, reward: generatedXp, color: colorToSave ?? "#32ADE6", difficulty: difficultyToSave)
         delegate?.updateData()
         self.dismiss(animated: true)
     }
     
     //MARK: - Main logic
+    func checkTaskAvailibility() {
+        availableTasks.checkTaskAvailability(difficulty: .easy) ? isButtonEnabled(true, button: easyButton) : isButtonEnabled(false, button: easyButton)
+        availableTasks.checkTaskAvailability(difficulty: .normal) ? isButtonEnabled(true, button: normalButton) : isButtonEnabled(false, button: normalButton)
+        availableTasks.checkTaskAvailability(difficulty: .hard) ? isButtonEnabled(true, button: hardButton) : isButtonEnabled(false, button: hardButton)
+    }
+    
+    func handleButtonBehaviour(difficulty: Difficulty) {
+        switch difficulty {
+        case .easy:
+            generatedXp = Int.random(in: 5...55)
+            availableTasks.isAbleToAddAnotherTask(.easy, amountLeft: availableTasks.fetchAvailableTasks(difficulty: .easy)) ? isButtonEnabled(true, button: easyButton) : isButtonEnabled(false, button: easyButton)
+            isButtonEnabled(false, button: hardButton)
+            isButtonEnabled(false, button: normalButton)
+            difficultyToSave = "easy"
+        case .normal:
+            generatedXp = Int.random(in: 55...105)
+            availableTasks.isAbleToAddAnotherTask(.normal, amountLeft: availableTasks.fetchAvailableTasks(difficulty: .normal)) ? isButtonEnabled(true, button: normalButton) : isButtonEnabled(false, button: normalButton)
+            isButtonEnabled(false, button: easyButton)
+            isButtonEnabled(false, button: hardButton)
+            difficultyToSave = "normal"
+        case .hard:
+            generatedXp = Int.random(in: 105...155)
+            availableTasks.isAbleToAddAnotherTask(.hard, amountLeft: availableTasks.fetchAvailableTasks(difficulty: .hard)) ? isButtonEnabled(true, button: hardButton) : isButtonEnabled(false, button: hardButton)
+            isButtonEnabled(false, button: easyButton)
+            isButtonEnabled(false, button: normalButton)
+            difficultyToSave = "hard"
+        }
+        xpCounterAnimation()
+
+    }
+    
+    func isButtonEnabled(_ bool: Bool, button: UIButton) {
+        button.isEnabled = bool
+    }
+    
     private func changeCollorOfPage(tag: Int) {
         switch tag {
         case 0 : color(UIColor(hex: ColorPaint.yellow.description), hex: ColorPaint.yellow.description)

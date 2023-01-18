@@ -89,9 +89,7 @@ class AvailableTask {
     func areTasksEmpty() -> Bool {
         return fetchAvailableTasks(difficulty: .easy) == 0 && fetchAvailableTasks(difficulty: .normal) == 0 && fetchAvailableTasks(difficulty: .hard) == 0 ? true : false
     }
-//    func canAddTasks() -> Bool {
-//        return fetchAvailableTasks(difficulty: .easy) <= fetchMaxAmoutForTasks(difficulty: .easy) && fetchAvailableTasks(difficulty: .normal) == 0 && fetchAvailableTasks(difficulty: .hard) == 0 ? true : false
-//    }
+
     func canAddTasks(difficulty: Difficulty) -> Bool {
         switch difficulty {
         case .easy: return fetchAvailableTasks(difficulty: .easy) <= fetchMaxAmoutForTasks(difficulty: .easy)
@@ -113,6 +111,7 @@ class AvailableTask {
             count += 1
             saveTasks(difficulty: difficulty, amountLeft: count)
         } else {
+            #warning("TODO: add alertViewController")
             print("cant add another task")
         }
     }
