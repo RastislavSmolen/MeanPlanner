@@ -24,7 +24,7 @@ class SkillTreeViewController : UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        saveSkillToCoreData(skillName: "Archery", skillLevel: 1, skillXP: 100.00, skillMaxXP: 1000.00)
+      //  saveSkillToCoreData(skillName: "Archery", skillLevel: 1, skillXP: 100.00, skillMaxXP: 1000.00)
         fetchSkillFromCoreData()
         viewModel = SkillTreeViewModel()
         tableView.delegate = self

@@ -52,6 +52,7 @@ class LevelUp {
             experience = calculateNewXP(currentXP: currentXP, maxXP: maxXP)
             saveExperience(experienceToSave: experience ?? 0.0 , currentLevel: level ?? 0, maxXp: maximumExperience ?? 0.0)
             readyToLevelUp = true
+            isReadyForMajorLevelUp(level: level ?? 0) ? majorProggression(level: level ?? 0) : nil
         } else {
             experience = calculateNewXP(currentXP: currentXP, maxXP: maxXP)
             saveExperience(experienceToSave: experience ?? 0.0 , currentLevel: level ?? 0, maxXp: maxXP)
@@ -67,6 +68,13 @@ class LevelUp {
     
     func levelUp(currentLevel: Int)-> Int {
         return currentLevel + 1
+    }
+    func majorProggression(level: Int) {
+        #warning("add here a logic for leveling up")
+        print("new skill point added")
+    }
+    func isReadyForMajorLevelUp(level: Int) -> Bool {
+        return level % 5 == 0 ? true : false
     }
     func calculateNewXP(currentXP: Float, maxXP: Float) -> Float {
         if isBelowZero(currentXP: currentXP, maxXP: maxXP) {

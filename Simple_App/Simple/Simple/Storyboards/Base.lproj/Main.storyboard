@@ -449,6 +449,7 @@
                                             </constraints>
                                         </tableViewCellContentView>
                                         <connections>
+                                            <outlet property="proggressionView" destination="MIs-ye-3Al" id="Rvm-PC-CuP"/>
                                             <outlet property="skillExperience" destination="PgH-Fk-bli" id="JVN-Vk-Bjx"/>
                                             <outlet property="skillLevelLabel" destination="XgG-Jq-rN5" id="DTl-eS-okB"/>
                                             <outlet property="skillName" destination="gcj-m0-672" id="AMl-NX-keC"/>

@@ -14,7 +14,8 @@ class SkillCell: UITableViewCell {
     @IBOutlet weak var skillExperience: UILabel!
     @IBOutlet weak var skillName: UILabel!
     @IBOutlet weak var skillLevelLabel: UILabel!
-    
+    @IBOutlet weak var proggressionView: UIProgressView!
+    let levelUp = LevelUp()
     override func layoutSubviews() {
         super.layoutSubviews()
     }
@@ -37,8 +38,11 @@ class SkillCell: UITableViewCell {
         
         let skillXP = Int(experience)
         let skillMaxXP = Int(maxSkillExperience)
+        let proggression = levelUp.convertedXP(xp: Float(skillXP), maxXP: Float(skillMaxXP))
         skillName.text = name
         skillExperience.text = "\(skillXP) / \(skillMaxXP)"
         skillLevelLabel.text = "\(level)"
+        proggressionView.progress = proggression
+        
     }
 }
