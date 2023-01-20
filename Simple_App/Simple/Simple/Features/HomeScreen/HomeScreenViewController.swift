@@ -29,9 +29,17 @@ final class HomeScreenViewController: UIViewController {
     @IBOutlet weak var normalTaskLabel: UILabel!
     @IBOutlet weak var hardTaskLabel: UILabel!
     
+    @IBOutlet weak var skillPointButton: UIButton!
     // MARK: - Variables
     @IBOutlet weak var closingButton: UIButton!
-    var viewModel : HomeScreenViewModel!
+    //MARK: - Models
+    var viewModel: HomeScreenViewModel!
+    let levelUp = LevelUp()
+    let availableTasks = AvailableTask()
+    let firework = Firework()
+    let skillPoints = SkillPoints()
+
+    
     var isEmpty :  Bool {
         return tasks.count == 0 ? true : false
     }
@@ -40,10 +48,6 @@ final class HomeScreenViewController: UIViewController {
 #warning("user default only for testing purposes")
 #warning("move all user defaults to same place for better management")
     let userDefaults = UserDefaults.standard
-    let levelUp = LevelUp()
-    let availableTasks = AvailableTask()
-
-    let firework = Firework()
     
     //MARK: Animation variables and constants
     var displayLink: CADisplayLink?
@@ -66,6 +70,9 @@ final class HomeScreenViewController: UIViewController {
 //        availableTasks.setMaxAmountForTasks(difficulty: .easy ,maxAmount: 3)
 //        availableTasks.setMaxAmountForTasks(difficulty: .normal ,maxAmount: 2)
 //        availableTasks.setMaxAmountForTasks(difficulty: .hard ,maxAmount: 1)
+        skillPoints.saveSkillPoints(point: 10)
+        let skill = skillPoints.fetchSkillPoints()
+        skillPointButton.titleLabel?.text = "Skill Points: \(skill)"
         availableTasks.fetchAllAlvailableTasks()
         availableTasks.fetchAllMaxTasks()
         setupXp()
@@ -85,6 +92,9 @@ final class HomeScreenViewController: UIViewController {
     }
     @IBAction func didTapFinnishDetailViewButton(_ sender: Any) {
         handleMarkAsDone(index: index)
+    }
+    @IBAction func skillPointButtonAction(_ sender: Any) {
+        viewModel.navigateToSkillTreeViewController(delegate: self)
     }
     func fetchCoreData() {
         guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
@@ -125,7 +135,7 @@ extension HomeScreenViewController {
     }
     
     func addGoalAction() {
-        availableTasks.areTasksEmpty() ? nil : viewModel.navigateTo(delegate: self)
+        availableTasks.areTasksEmpty() ? nil : viewModel.navigateToAddTaskViewController(delegate: self)
     }
     func configureDetailView(isHidden: Bool) {
         detailTaskView.isHidden = isHidden

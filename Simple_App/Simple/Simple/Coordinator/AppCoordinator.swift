@@ -91,18 +91,30 @@ extension AppCoordinator {
         // Dissmiss it.
         navigationController.dismiss(animated: true)
     }
-    func navigateTest(delegate: TestViewController) {
+    func navigateToSkillTree(delegate: HomeScreenViewController) {
         // Instantiate LoginViewController
-        let testViewController = storyboard.instantiateViewController(withIdentifier: "HomeScreenViewController") as! TestViewController
+        let skillTreeViewController = storyboard.instantiateViewController(withIdentifier: "SkillTreeViewController") as! SkillTreeViewController
         // Instantiate LoginViewModel
-        let testViewModel = TestViewModel.init()
+        let skillTreeViewModel = SkillTreeViewModel.init()
         // Set the Coordinator to the ViewModel
-        testViewModel.coordinator = self
+        skillTreeViewModel.coordinator = self
         // Set the ViewModel to ViewController
-        testViewController.viewModel = testViewModel
+        skillTreeViewController.viewModel = skillTreeViewModel
         // Push it.
        // testViewController.delegate = delegate
-        
-        navigationController.present(testViewController, animated: true)
+        navigationController.present(skillTreeViewController, animated: true)
+    }
+    func dissmissSkillTreeViewController() {
+        // Instantiate LoginViewController
+        let skillTreeViewController = storyboard.instantiateViewController(withIdentifier: "SkillTreeVieController") as! SkillTreeViewController
+        // Instantiate LoginViewModel
+        let skillTreeViewModel = SkillTreeViewModel.init()
+        // Set the Coordinator to the ViewModel
+        skillTreeViewModel.coordinator = self
+        // Set the ViewModel to ViewController
+        skillTreeViewController.viewModel = skillTreeViewModel
+        // Push it.
+       // testViewController.delegate = delegate
+        navigationController.dismiss(animated: true)
     }
 }

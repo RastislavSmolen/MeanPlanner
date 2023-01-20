@@ -9,9 +9,12 @@ import Foundation
 
 class HomeScreenViewModel {
     
-    weak var coordinator : AppCoordinator!
+    weak var coordinator: AppCoordinator!
     
-    func navigateTo(delegate : HomeScreenViewController) {
+    func navigateToAddTaskViewController(delegate: HomeScreenViewController) {
         coordinator?.navigateToAddGoalViewController(delegate: delegate)
+    }
+    func navigateToSkillTreeViewController(delegate: HomeScreenViewController) {
+        coordinator.navigateToSkillTree(delegate: delegate)
     }
 }
