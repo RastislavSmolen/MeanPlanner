@@ -39,19 +39,19 @@ extension AppCoordinator {
         // Push it.
         navigationController.pushViewController(homeViewController, animated: true)
     }
-//
-//    func navigateToAddGoalViewController () {
-//        // Instantiate LoginViewController
-//        let addGoalViewController = storyboard.instantiateViewController(withIdentifier: "AddGoalViewController") as! AddGoalViewController
-//        // Instantiate LoginViewModel
-//        let addGoalViewModel = AddGoalViewModel.init()
-//        // Set the Coordinator to the ViewModel
-//        addGoalViewModel.coordinator = self
-//        // Set the ViewModel to ViewController
-//        addGoalViewController.viewModel = addGoalViewModel
-//        // Push it.
-//        navigationController.pushViewController(addGoalViewController, animated: true)
-//    }
+
+    func navigateToAddGoalViewController () {
+        // Instantiate LoginViewController
+        let addGoalViewController = storyboard.instantiateViewController(withIdentifier: "AddGoalViewController") as! AddGoalViewController
+        // Instantiate LoginViewModel
+        let addGoalViewModel = AddGoalViewModel.init()
+        // Set the Coordinator to the ViewModel
+        addGoalViewModel.coordinator = self
+        // Set the ViewModel to ViewController
+        addGoalViewController.viewModel = addGoalViewModel
+        // Push it.
+        navigationController.pushViewController(addGoalViewController, animated: true)
+    }
     func navigateToHomeScreenPage() {
         // Instantiate LoginViewController
         let homeViewController = storyboard.instantiateViewController(withIdentifier: "HomeScreenViewController") as! HomeScreenViewController
@@ -90,5 +90,19 @@ extension AppCoordinator {
         addGoalViewController.viewModel = addGoalViewModel
         // Dissmiss it.
         navigationController.dismiss(animated: true)
+    }
+    func navigateTest(delegate: TestViewController) {
+        // Instantiate LoginViewController
+        let testViewController = storyboard.instantiateViewController(withIdentifier: "HomeScreenViewController") as! TestViewController
+        // Instantiate LoginViewModel
+        let testViewModel = TestViewModel.init()
+        // Set the Coordinator to the ViewModel
+        testViewModel.coordinator = self
+        // Set the ViewModel to ViewController
+        testViewController.viewModel = testViewModel
+        // Push it.
+       // testViewController.delegate = delegate
+        
+        navigationController.present(testViewController, animated: true)
     }
 }
