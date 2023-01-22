@@ -36,6 +36,7 @@ class AddGoalViewController : UIViewController {
     @IBOutlet weak var hardButton: UIButton!
     @IBOutlet weak var xpLabel: UILabel!
     
+    @IBOutlet weak var skillNameLabel: UILabel!
     
     let availableTasks = AvailableTask()
     var startValue: Double {
@@ -48,14 +49,27 @@ class AddGoalViewController : UIViewController {
     var generatedXp = Int()
     var elapsedTime = TimeInterval()
     var difficultyToSave = String()
+    var skillName = String()
     private var startTime = 0.0
     
     override func viewDidLoad() {
         super.viewDidLoad()
         setup()
         checkTaskAvailibility()
+        let skill = skillName == "" ? "" : skillName
+        skillNameLabel.text = skill
+    }
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        let skill = skillName == "" ? "" : skillName
+        skillNameLabel.text = skill
     }
     // MARK: - Storyboard Actions
+    @IBAction func chooseSkillAction(_ sender: Any) {
+     
+            viewModel.navigateToSkillTree(delegate: self)
+  
+    }
     @IBAction func easyTaskButtonAction(_ sender: Any) {
         handleButtonBehaviour(difficulty: .easy)
     }
@@ -69,9 +83,9 @@ class AddGoalViewController : UIViewController {
     
     @IBAction func createTaskButton(_ sender: Any) {
         guard let taskName = taskNameTextField.text, let taskDetail = detailsTextField.text else { return }
-        saveToCoreData(name: taskName, detail: taskDetail, reward: generatedXp, color: colorToSave ?? "#32ADE6", difficulty: difficultyToSave)
+        saveTaskToCoreData(name: taskName, detail: taskDetail, reward: generatedXp, color: colorToSave ?? "#32ADE6", difficulty: difficultyToSave, skillName: skillName)
         delegate?.updateData()
-        self.dismiss(animated: true)
+        self.navigationController?.popViewController(animated: true)
     }
     
     //MARK: - Main logic
@@ -161,6 +175,14 @@ extension AddGoalViewController  {
     }
     
 }
+extension AddGoalViewController: CoreDataPasser {
+    func passData(data: NSManagedObject) {
+        guard let skill = data.value(forKey: "skillName") as? String else { return }
+        skillName = skill
+        skillNameLabel.text = skillName
+    }
+    
+}
 
 // MARK: - Texfield Setup
 extension AddGoalViewController : UITextFieldDelegate {
@@ -182,9 +204,9 @@ extension AddGoalViewController : UITextFieldDelegate {
 //MARK: - CoreData
 extension AddGoalViewController {
     
-    func saveToCoreData(name: String, detail: String,reward: Int,color: String,difficulty: String) {
+    func saveTaskToCoreData(name: String, detail: String,reward: Int,color: String,difficulty: String,skillName: String?) {
       
-      guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
+      guard let appDelegate = UIApplication.shared.delegate as? AppDelegate, let skillName = skillName else { return }
     
       let managedContext = appDelegate.persistentContainer.viewContext
       let entity = NSEntityDescription.entity(forEntityName: "Task",in: managedContext)!
@@ -196,6 +218,7 @@ extension AddGoalViewController {
         task.setValue(detail, forKeyPath: "taskDetails")
         task.setValue(color, forKey: "taskColor")
         task.setValue(difficulty, forKey: "difficulty")
+        task.setValue(skillName, forKey: "skillName")
 
       do {
         try managedContext.save()
@@ -204,4 +227,5 @@ extension AddGoalViewController {
         print("Could not save. \(error), \(error.userInfo)")
       }
     }
+    
 }

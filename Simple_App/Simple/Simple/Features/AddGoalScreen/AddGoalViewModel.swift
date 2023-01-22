@@ -14,6 +14,13 @@ class AddGoalViewModel {
     func navigateToHome() {
         coordinator?.navigateToHomeScreenPage()
     }
+    func navigateToSkillTree(delegate: AddGoalViewController){
+        coordinator?.toSkillTreeFromAddGoal(delegate: delegate)
+    }
+    func dissmissAddGoal() {
+        coordinator?.dissmisAddGoalViewController() 
+    }
+    
     
    public func performAction (result: String ) {
         

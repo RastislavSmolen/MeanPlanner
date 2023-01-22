@@ -9,10 +9,14 @@ import Foundation
 import UIKit
 import CoreData
 
+protocol CoreDataPasser{
+    func passData(data: NSManagedObject)
+}
 class SkillTreeViewController : UIViewController {
     
     var viewModel : SkillTreeViewModel!
-    
+    var delegate: Updator?
+    var coreDataDelegate: CoreDataPasser?
     var isEmpty :  Bool {
         return skills.count == 0 ? true : false
     }
@@ -55,6 +59,14 @@ class SkillTreeViewController : UIViewController {
 }
 extension SkillTreeViewController : UITableViewDelegate, UITableViewDataSource  {
     
+     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+
+     
+             coreDataDelegate?.passData(data: skills[indexPath.row])
+             self.dismiss(animated: true)
+           
+                //index = indexPath
+    }
     
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         return 5
@@ -78,9 +90,6 @@ extension SkillTreeViewController : UITableViewDelegate, UITableViewDataSource  
         
         return cell
         
-    }
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        index = indexPath
     }
 
     func tableView(_ tableView: UITableView,

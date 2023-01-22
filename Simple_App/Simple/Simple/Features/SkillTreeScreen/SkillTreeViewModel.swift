@@ -15,6 +15,9 @@ class SkillTreeViewModel {
     func navigateToCreateSkill(delegate: SkillTreeViewController) {
         coordinator?.navigateToCreateSkill(delegate: delegate)
     }
+    func navigateToAddGoal(delegate: SkillTreeViewController) {
+        coordinator?.toAddGoal(delegate: delegate)
+    }
    public func performAction (result: String ) {
         
     }

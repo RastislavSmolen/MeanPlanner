@@ -77,7 +77,7 @@ extension AppCoordinator {
         // Push it.
         addGoalViewController.delegate = delegate
         
-        navigationController.present(addGoalViewController, animated: true)
+        navigationController.pushViewController(addGoalViewController, animated: true)
     }
     func dissmisAddGoalViewController() {
         // Instantiate LoginViewController
@@ -156,6 +156,36 @@ extension AppCoordinator {
         createSkillViewController.delegate = delegate
         
         navigationController.present(createSkillViewController, animated: true)
+    }
+    func toSkillTreeFromAddGoal(delegate: AddGoalViewController) {
+        // Instantiate LoginViewController
+        let skillTreeViewController = storyboard.instantiateViewController(withIdentifier: "SkillTreeViewController") as! SkillTreeViewController
+        // Instantiate LoginViewModel
+        let skillTreeViewModel = SkillTreeViewModel.init()
+        // Set the Coordinator to the ViewModel
+        skillTreeViewModel.coordinator = self
+        // Set the ViewModel to ViewController
+        skillTreeViewController.viewModel = skillTreeViewModel
+        // Push it.
+        skillTreeViewController.coreDataDelegate = delegate
+        
+        navigationController.present(skillTreeViewController, animated: true)
+        
+    }
+    func toAddGoal(delegate: SkillTreeViewController) {
+        // Instantiate LoginViewController
+        let addGoalViewController = storyboard.instantiateViewController(withIdentifier: "AddGoalViewController") as! AddGoalViewController
+        // Instantiate LoginViewModel
+        let addGoalViewModel = AddGoalViewModel.init()
+        // Set the Coordinator to the ViewModel
+        addGoalViewModel.coordinator = self
+        // Set the ViewModel to ViewController
+        addGoalViewController.viewModel = addGoalViewModel
+        // Push it.
+         addGoalViewController.delegate = delegate
+        
+        navigationController.present(addGoalViewController, animated: true)
+        
     }
 //    func dissmissCreateSkillViewController() {
 //        // Instantiate LoginViewController

@@ -10,7 +10,7 @@ class CreateSkillViewModel {
     
     weak var coordinator :  AppCoordinator!
     
-//    func navigateToCreateSkillViewController() {
+//    func navigateToAddGoal() {
 //        coordinator?.navigateToCreateSkill()
 //    }
 //    
