@@ -12,7 +12,9 @@ class SkillTreeViewModel {
     func navigateToHome() {
         coordinator?.navigateToHomeScreenPage()
     }
-    
+    func navigateToCreateSkill(delegate: SkillTreeViewController) {
+        coordinator?.navigateToCreateSkill(delegate: delegate)
+    }
    public func performAction (result: String ) {
         
     }

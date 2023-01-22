@@ -20,17 +20,22 @@ class SkillTreeViewController : UIViewController {
     var skills: [NSManagedObject] = []
     var presistenContainer: NSPersistentContainer!
     
+    var index = IndexPath()
+    
     @IBOutlet weak var tableView: UITableView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
       //  saveSkillToCoreData(skillName: "Archery", skillLevel: 1, skillXP: 100.00, skillMaxXP: 1000.00)
         fetchSkillFromCoreData()
-        viewModel = SkillTreeViewModel()
+      //  viewModel = SkillTreeViewModel()
         tableView.delegate = self
         tableView.dataSource = self
     }
     
+    @IBAction func addSkillButtonAction(_ sender: Any) {
+        viewModel?.navigateToCreateSkill(delegate: self)
+    }
     // tableView
     // add Cells
     // if no cells then tableView is empty
@@ -69,12 +74,34 @@ extension SkillTreeViewController : UITableViewDelegate, UITableViewDataSource  
         
         guard let cell = tableView.dequeueReusableCell(withIdentifier: "SkillCell") as? SkillCell else { return UITableViewCell()}
         
-        isEmpty ? cell.configureEmptyCell() : cell.configureTaskCell(skill: skills[indexPath.row])
+        isEmpty ? cell.configureEmptyCell() : cell.configureSkillCell(skill: skills[indexPath.row])
         
         return cell
         
     }
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        index = indexPath
+    }
+
+    func tableView(_ tableView: UITableView,
+                   leadingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
+
+        let trash = UIContextualAction(style: .destructive,
+                                       title: "Trash") { [weak self] (action, view, completionHandler) in
+            self?.handleMoveToTrash(index: indexPath)
+            completionHandler(true)
+        }
+        trash.backgroundColor = .systemRed
+        
+        return  isEmpty ? nil : UISwipeActionsConfiguration(actions: [trash])
+        
+    }
+    
+    private func handleMoveToTrash(index: IndexPath) {
+        deleteSkillFromCoreData(indexPath: index)
+    }
 }
+//MARK: - CoreData
 extension  SkillTreeViewController {
     
     func fetchSkillFromCoreData() {
@@ -115,18 +142,27 @@ extension  SkillTreeViewController {
         
         let managedContext = appDelegate.persistentContainer.viewContext
         let entity = NSEntityDescription.entity(forEntityName: "Skill",in: managedContext)!
-        let task = NSManagedObject(entity: entity, insertInto: managedContext)
+        let skill = NSManagedObject(entity: entity, insertInto: managedContext)
         
-        task.setValue(skillName, forKeyPath: "skillName")
-        task.setValue(skillLevel, forKeyPath: "skillLevel")
-        task.setValue(skillXP, forKeyPath: "skillCurrentXP")
-        task.setValue(skillMaxXP, forKeyPath: "skillMaxXP")
+        skill.setValue(skillName, forKeyPath: "skillName")
+        skill.setValue(skillLevel, forKeyPath: "skillLevel")
+        skill.setValue(skillXP, forKeyPath: "skillCurrentXP")
+        skill.setValue(skillMaxXP, forKeyPath: "skillMaxXP")
         
         do {
             try managedContext.save()
-            skills.append(task)
+            skills.append(skill)
         } catch let error as NSError {
             print("Could not save. \(error), \(error.userInfo)")
         }
     }
+}
+extension SkillTreeViewController: Updator {
+    
+     func updateData() {
+         fetchSkillFromCoreData()
+         tableView.reloadData()
+       
+    }
+
 }

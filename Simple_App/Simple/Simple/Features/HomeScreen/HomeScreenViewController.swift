@@ -62,22 +62,28 @@ final class HomeScreenViewController: UIViewController {
     private var startTime = 0.0
     var index = IndexPath()
     
+    let notification = Notification.Name("Leaving.Shop")
+
     override func viewDidLoad() {
         super.viewDidLoad()
-//                userDefaults.setValue(10, forKey: "experience")
-//                userDefaults.setValue(1, forKey: "currentLevel")
-//                userDefaults.setValue(100, forKey: "maxXp")
-//        availableTasks.saveTasks(difficulty: .easy, amountLeft: 3)
-//        availableTasks.saveTasks(difficulty: .normal, amountLeft: 2)
-//        availableTasks.saveTasks(difficulty: .hard, amountLeft: 1)
-//
-//        availableTasks.setMaxAmountForTasks(difficulty: .easy ,maxAmount: 3)
-//        availableTasks.setMaxAmountForTasks(difficulty: .normal ,maxAmount: 2)
-//        availableTasks.setMaxAmountForTasks(difficulty: .hard ,maxAmount: 1)
-        addObserver()
-        #warning("button is not updating")
+        userDefaults.setValue(10, forKey: "experience")
+        userDefaults.setValue(1, forKey: "currentLevel")
+        userDefaults.setValue(100, forKey: "maxXp")
+        
+        availableTasks.saveTasks(difficulty: .easy, amountLeft: 3)
+        availableTasks.saveTasks(difficulty: .normal, amountLeft: 2)
+        availableTasks.saveTasks(difficulty: .hard, amountLeft: 1)
+
+        availableTasks.setMaxAmountForTasks(difficulty: .easy ,maxAmount: 3)
+        availableTasks.setMaxAmountForTasks(difficulty: .normal ,maxAmount: 2)
+        availableTasks.setMaxAmountForTasks(difficulty: .hard ,maxAmount: 1)
         skillPoints.saveSkillPoints(point: 0)
-        coins.saveCoins(coins: 600)
+        coins.saveCoins(coins: 0 )
+        
+        addObserver()
+  
+        
+        
         let skill = skillPoints.fetchSkillPoints()
         skillPointButton.setTitle("Skill Points: \(skill)", for: .normal)
         let coins =  coins.fetchCoins()
@@ -88,8 +94,7 @@ final class HomeScreenViewController: UIViewController {
         fetchCoreData()
         setupUI()
     }
-    let notificationName = "uptade.home"
-    let notification = Notification.Name("test")
+    
     func addObserver(){
         NotificationCenter.default.addObserver(forName: notification, object: nil, queue: .main) { [weak self]  notification in
             guard let balance = self?.coins.fetchCoins(),let skill = self?.skillPoints.fetchSkillPoints() else { return }
@@ -98,6 +103,7 @@ final class HomeScreenViewController: UIViewController {
 
         }
     }
+
     @IBAction func didTapClosingSection(_ sender: Any) {
         if !detailTaskView.isHidden {
             configureDetailView(isHidden: true)
@@ -303,6 +309,7 @@ extension HomeScreenViewController {
         readyToLevelUp ? fireworkAnimation() : nil
         xpCounterAnimation()
         configureDetailView(isHidden: true)
+        balance.text = "Balance: \(coins.fetchCoins())"
     }
         private func handleMoveToTrash(index: IndexPath) {
            filterForDifficulty(index: index)

@@ -18,7 +18,6 @@ class ShopViewController: UIViewController {
     @IBOutlet weak var skillItemCost: UILabel!
     
     var delegate: ShopDelegate?
-    var updateClosure: (() -> Void)?
 
     var viewModel: ShopViewModel!
     let coins = Coins()
@@ -35,8 +34,8 @@ class ShopViewController: UIViewController {
     }
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-        NotificationCenter.default.post(name: Notification.Name("test"), object: nil)
-        updateClosure?()
+        #warning("remove notification center and move it with delegate")
+        NotificationCenter.default.post(name: Notification.Name("Leaving.Shop"), object: nil)
     }
     @IBAction func skillItemButton(_ sender: Any) {
         coins.buy(cost: 549, item: .skill)

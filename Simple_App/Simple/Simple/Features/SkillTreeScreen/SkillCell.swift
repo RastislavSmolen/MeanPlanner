@@ -21,15 +21,21 @@ class SkillCell: UITableViewCell {
     }
     
     func configureEmptyCell() {
-        skillName.text = "No skill availabe to preview"
+        skillLevelLabel.text = "No Skills available.Please create new skill"
         skillProggresionView.backgroundColor = .lightGray
-        skillLevelLabel.isHidden = true
-        skillLevelLabel.isHidden = true
+        skillName.isHidden = true
+        proggressionView.isHidden = true
+        skillExperience.isHidden = true
         isUserInteractionEnabled = false
     }
     
-    func configureTaskCell(skill: NSManagedObject?) {
+    func configureSkillCell(skill: NSManagedObject?) {
         
+        skillProggresionView.backgroundColor = .white
+        skillName.isHidden = false
+        proggressionView.isHidden = false
+        skillExperience.isHidden = false
+        isUserInteractionEnabled = true
         guard let name = skill?.value(forKey: "skillName") as? String,
               let experience = skill?.value(forKey: "skillCurrentXP") as? Float,
               let maxSkillExperience = skill?.value(forKey: "skillMaxXP") as? Float,

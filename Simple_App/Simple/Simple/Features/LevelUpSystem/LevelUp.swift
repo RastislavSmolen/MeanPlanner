@@ -21,6 +21,8 @@ class LevelUp {
     //MARK: constants
     let userDefaults = UserDefaults.standard
     
+    let coins = Coins()
+    
     //MARK: Bussiness Logic
     func convertedXP(xp: Float,maxXP: Float)-> Float {
         return xp / maxXP
@@ -67,6 +69,7 @@ class LevelUp {
     }
     
     func levelUp(currentLevel: Int)-> Int {
+        
         return currentLevel + 1
     }
     func majorProggression(level: Int) {
@@ -74,6 +77,7 @@ class LevelUp {
         print("new skill point added")
     }
     func isReadyForMajorLevelUp(level: Int) -> Bool {
+        coins.addCoins(amount: 1000)
         return level % 5 == 0 ? true : false
     }
     func calculateNewXP(currentXP: Float, maxXP: Float) -> Float {

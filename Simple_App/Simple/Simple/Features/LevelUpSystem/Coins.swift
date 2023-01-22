@@ -28,6 +28,10 @@ class Coins {
             print("not able to buy, not enoug coins")
         }
     }
+    func addCoins(amount: Int) {
+        let coins =  fetchCoins()
+        saveCoins(coins: coins + amount)
+    }
     func takeTheItem(item: Item) {
         switch item {
         case .skill: skillPoints.addSkillPoint(skill: 1)

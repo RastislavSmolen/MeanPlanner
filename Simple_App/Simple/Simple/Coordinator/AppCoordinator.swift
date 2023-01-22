@@ -143,4 +143,31 @@ extension AppCoordinator {
        // testViewController.delegate = delegate
         navigationController.dismiss(animated: true)
     }
+    func navigateToCreateSkill(delegate: SkillTreeViewController) {
+        // Instantiate LoginViewController
+        let createSkillViewController = storyboard.instantiateViewController(withIdentifier: "CreateSkillViewController") as! CreateSkillViewController
+        // Instantiate LoginViewModel
+        let createSkillViewModel = CreateSkillViewModel.init()
+        // Set the Coordinator to the ViewModel
+        createSkillViewModel.coordinator = self
+        // Set the ViewModel to ViewController
+        createSkillViewController.viewModel = createSkillViewModel
+        // Push it.
+        createSkillViewController.delegate = delegate
+        
+        navigationController.present(createSkillViewController, animated: true)
+    }
+//    func dissmissCreateSkillViewController() {
+//        // Instantiate LoginViewController
+//        let shopViewController = storyboard.instantiateViewController(withIdentifier: "ShopViewController") as! ShopViewController
+//        // Instantiate LoginViewModel
+//        let shopViewModel = ShopViewModel.init()
+//        // Set the Coordinator to the ViewModel
+//        shopViewModel.coordinator = self
+//        // Set the ViewModel to ViewController
+//        shopViewController.viewModel = shopViewModel
+//        // Push it.
+//       // testViewController.delegate = delegate
+//        navigationController.dismiss(animated: true)
+//    }
 }
