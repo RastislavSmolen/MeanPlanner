@@ -23,12 +23,15 @@ final class HomeScreenViewController: UIViewController {
     @IBOutlet weak var infoDetailViewLabel: UILabel!
     @IBOutlet weak var finishTaskView: UIButton!
     
+    @IBOutlet weak var balance: UILabel!
+    @IBOutlet weak var shopButton: UIButton!
     @IBOutlet weak var addViewButton: KButton!
     @IBOutlet weak var totalTasksLabel: UILabel!
     @IBOutlet weak var easyTaskLabel: UILabel!
     @IBOutlet weak var normalTaskLabel: UILabel!
     @IBOutlet weak var hardTaskLabel: UILabel!
     
+    @IBOutlet weak var balanceLabel: UILabel!
     @IBOutlet weak var skillPointButton: UIButton!
     // MARK: - Variables
     @IBOutlet weak var closingButton: UIButton!
@@ -38,6 +41,7 @@ final class HomeScreenViewController: UIViewController {
     let availableTasks = AvailableTask()
     let firework = Firework()
     let skillPoints = SkillPoints()
+    let coins = Coins()
 
     
     var isEmpty :  Bool {
@@ -70,14 +74,29 @@ final class HomeScreenViewController: UIViewController {
 //        availableTasks.setMaxAmountForTasks(difficulty: .easy ,maxAmount: 3)
 //        availableTasks.setMaxAmountForTasks(difficulty: .normal ,maxAmount: 2)
 //        availableTasks.setMaxAmountForTasks(difficulty: .hard ,maxAmount: 1)
-        skillPoints.saveSkillPoints(point: 10)
+        addObserver()
+        #warning("button is not updating")
+        skillPoints.saveSkillPoints(point: 0)
+        coins.saveCoins(coins: 600)
         let skill = skillPoints.fetchSkillPoints()
-        skillPointButton.titleLabel?.text = "Skill Points: \(skill)"
+        skillPointButton.setTitle("Skill Points: \(skill)", for: .normal)
+        let coins =  coins.fetchCoins()
+        balance.text = "Balance: \(coins)"
         availableTasks.fetchAllAlvailableTasks()
         availableTasks.fetchAllMaxTasks()
         setupXp()
         fetchCoreData()
         setupUI()
+    }
+    let notificationName = "uptade.home"
+    let notification = Notification.Name("test")
+    func addObserver(){
+        NotificationCenter.default.addObserver(forName: notification, object: nil, queue: .main) { [weak self]  notification in
+            guard let balance = self?.coins.fetchCoins(),let skill = self?.skillPoints.fetchSkillPoints() else { return }
+            self?.balance.text = "Balance: \(balance)"
+            self?.skillPointButton.setTitle("Skill Points: \(skill)", for: .normal)
+
+        }
     }
     @IBAction func didTapClosingSection(_ sender: Any) {
         if !detailTaskView.isHidden {
@@ -95,6 +114,9 @@ final class HomeScreenViewController: UIViewController {
     }
     @IBAction func skillPointButtonAction(_ sender: Any) {
         viewModel.navigateToSkillTreeViewController(delegate: self)
+    }
+    @IBAction func shopButtonAction(_ sender: Any) {
+        viewModel.navigateToShopViewController(delegate: self)
     }
     func fetchCoreData() {
         guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
@@ -304,7 +326,7 @@ extension HomeScreenViewController {
     }
 }
 // MARK: - Delegate
-extension HomeScreenViewController: Updator {
+extension HomeScreenViewController: Updator{
     
      func updateData() {
         fetchCoreData()
@@ -312,7 +334,6 @@ extension HomeScreenViewController: Updator {
          updateViews(difficulty: .easy, view: easyTaskLabel, text: "Easy")
          updateViews(difficulty: .normal, view: normalTaskLabel, text: "Normal")
          updateViews(difficulty: .hard, view: hardTaskLabel, text: "Hard")
-         
     }
     func updateViews(difficulty: Difficulty, view: UILabel,text: String) {
         view.text = "\(text): \(availableTasks.fetchAvailableTasks(difficulty: difficulty))"

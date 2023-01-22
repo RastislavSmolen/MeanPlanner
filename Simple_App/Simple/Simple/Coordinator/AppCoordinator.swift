@@ -102,7 +102,7 @@ extension AppCoordinator {
         skillTreeViewController.viewModel = skillTreeViewModel
         // Push it.
        // testViewController.delegate = delegate
-        navigationController.present(skillTreeViewController, animated: true)
+        navigationController.pushViewController(skillTreeViewController, animated: true)
     }
     func dissmissSkillTreeViewController() {
         // Instantiate LoginViewController
@@ -113,6 +113,32 @@ extension AppCoordinator {
         skillTreeViewModel.coordinator = self
         // Set the ViewModel to ViewController
         skillTreeViewController.viewModel = skillTreeViewModel
+        // Push it.
+       // testViewController.delegate = delegate
+        navigationController.dismiss(animated: true)
+    }
+    func navigateToShop(delegate: HomeScreenViewController) {
+        // Instantiate LoginViewController
+        let shopViewController = storyboard.instantiateViewController(withIdentifier: "ShopViewController") as! ShopViewController
+        // Instantiate LoginViewModel
+        let shopViewModel = ShopViewModel.init()
+        // Set the Coordinator to the ViewModel
+        shopViewModel.coordinator = self
+        // Set the ViewModel to ViewController
+        shopViewController.viewModel = shopViewModel
+        // Push it.
+       // testViewController.delegate = delegate
+        navigationController.present(shopViewController, animated: true)
+    }
+    func dissmissShopViewController() {
+        // Instantiate LoginViewController
+        let shopViewController = storyboard.instantiateViewController(withIdentifier: "ShopViewController") as! ShopViewController
+        // Instantiate LoginViewModel
+        let shopViewModel = ShopViewModel.init()
+        // Set the Coordinator to the ViewModel
+        shopViewModel.coordinator = self
+        // Set the ViewModel to ViewController
+        shopViewController.viewModel = shopViewModel
         // Push it.
        // testViewController.delegate = delegate
         navigationController.dismiss(animated: true)

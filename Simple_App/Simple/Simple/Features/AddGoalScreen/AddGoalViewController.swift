@@ -55,11 +55,6 @@ class AddGoalViewController : UIViewController {
         setup()
         checkTaskAvailibility()
     }
-    
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
-    }
-    
     // MARK: - Storyboard Actions
     @IBAction func easyTaskButtonAction(_ sender: Any) {
         handleButtonBehaviour(difficulty: .easy)

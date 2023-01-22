@@ -17,4 +17,7 @@ class HomeScreenViewModel {
     func navigateToSkillTreeViewController(delegate: HomeScreenViewController) {
         coordinator.navigateToSkillTree(delegate: delegate)
     }
+    func navigateToShopViewController(delegate: HomeScreenViewController) {
+        coordinator.navigateToShop(delegate: delegate)
+    }
 }

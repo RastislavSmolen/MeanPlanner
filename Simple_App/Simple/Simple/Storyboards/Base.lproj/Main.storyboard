@@ -4,6 +4,7 @@
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21505"/>
+        <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -470,6 +471,66 @@
             </objects>
             <point key="canvasLocation" x="224.63768115942031" y="119.86607142857142"/>
         </scene>
+        <!--Shop View Controller-->
+        <scene sceneID="27V-QE-UGE">
+            <objects>
+                <viewController storyboardIdentifier="ShopViewController" id="zZy-kC-jyl" customClass="ShopViewController" customModule="Simple" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="BWG-eb-M6j">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="OVc-1P-eXX" userLabel="Skill">
+                                <rect key="frame" x="51" y="111" width="134" height="128"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <subviews>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Skill" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="fUu-XR-BSi">
+                                        <rect key="frame" x="52" y="8" width="31" height="21"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                        <nil key="textColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="You will gain 1 skill point" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="0MC-Tg-xhZ">
+                                        <rect key="frame" x="4" y="37" width="127" height="14"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="11"/>
+                                        <nil key="textColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="rol-XN-XgW">
+                                        <rect key="frame" x="41" y="85" width="54" height="35"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <color key="backgroundColor" name="AccentColor"/>
+                                        <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <state key="normal" title="Button"/>
+                                        <buttonConfiguration key="configuration" style="plain" title="Buy"/>
+                                        <connections>
+                                            <action selector="skillItemButton:" destination="zZy-kC-jyl" eventType="touchUpInside" id="eed-pR-XDp"/>
+                                        </connections>
+                                    </button>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="549 coins" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="9qv-BU-tfL">
+                                        <rect key="frame" x="29" y="59" width="76" height="21"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                        <nil key="textColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                </subviews>
+                                <color key="backgroundColor" systemColor="systemGrayColor"/>
+                            </view>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="Cf6-Fs-HLx"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                    </view>
+                    <connections>
+                        <outlet property="skillItemCost" destination="9qv-BU-tfL" id="O9j-94-Os7"/>
+                        <outlet property="skillItemDescription" destination="0MC-Tg-xhZ" id="knh-vl-iwU"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="JTs-eh-Wgc" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="927.536231884058" y="119.86607142857142"/>
+        </scene>
         <!--Home Screen View Controller-->
         <scene sceneID="DpN-7n-mgd">
             <objects>
@@ -492,7 +553,7 @@
                                         <rect key="frame" x="238" y="135" width="40" height="40"/>
                                         <subviews>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" usesAttributedText="YES" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="uJ7-81-kJn">
-                                                <rect key="frame" x="13" y="8.5" width="14.5" height="23.5"/>
+                                                <rect key="frame" x="12.5" y="8.5" width="15" height="23"/>
                                                 <attributedString key="attributedText">
                                                     <fragment content="1 ">
                                                         <attributes>
@@ -523,11 +584,26 @@
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <color key="backgroundColor" systemColor="systemGray2Color"/>
                                         <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
-                                        <state key="normal" title="Skill Points: 10">
-                                            <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                        </state>
+                                        <state key="normal" title="Skill Points: 10"/>
                                         <connections>
                                             <action selector="skillPointButtonAction:" destination="YUX-QH-WKV" eventType="touchUpInside" id="fU8-2K-PUj"/>
+                                        </connections>
+                                    </button>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Balance : 100000" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="exH-Kr-4Hl">
+                                        <rect key="frame" x="16" y="142" width="106" height="16"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="13"/>
+                                        <nil key="textColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="0f4-3L-W0i">
+                                        <rect key="frame" x="336" y="91" width="30" height="27"/>
+                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                                        <state key="normal" image="basket" catalog="system"/>
+                                        <connections>
+                                            <action selector="shopButtonAction:" destination="YUX-QH-WKV" eventType="touchUpInside" id="xxY-Zp-Gdb"/>
                                         </connections>
                                     </button>
                                 </subviews>
@@ -536,8 +612,10 @@
                                     <constraint firstItem="ZWm-Gn-BFA" firstAttribute="leading" secondItem="Ogs-gK-zEF" secondAttribute="leading" constant="148" id="7Ee-nC-WHq"/>
                                     <constraint firstItem="GGH-bV-2au" firstAttribute="top" secondItem="Ogs-gK-zEF" secondAttribute="top" constant="135" id="8hc-7C-Jwz"/>
                                     <constraint firstAttribute="bottom" secondItem="GGH-bV-2au" secondAttribute="bottom" constant="33" id="NRM-gh-KLz"/>
+                                    <constraint firstAttribute="trailing" secondItem="0f4-3L-W0i" secondAttribute="trailing" constant="48" id="VSC-QQ-rM4"/>
                                     <constraint firstAttribute="height" constant="208" id="c5T-9y-3kL"/>
                                     <constraint firstItem="ZWm-Gn-BFA" firstAttribute="top" secondItem="Ogs-gK-zEF" secondAttribute="top" constant="56" id="h0b-y3-XJn"/>
+                                    <constraint firstItem="0f4-3L-W0i" firstAttribute="top" secondItem="Ogs-gK-zEF" secondAttribute="top" constant="91" id="p4M-gd-sQS"/>
                                     <constraint firstItem="GGH-bV-2au" firstAttribute="leading" secondItem="Ogs-gK-zEF" secondAttribute="leading" constant="238" id="wZC-Gz-MOA"/>
                                     <constraint firstItem="GGH-bV-2au" firstAttribute="bottom" secondItem="ZWm-Gn-BFA" secondAttribute="bottom" id="zw3-L1-KuW"/>
                                 </constraints>
@@ -825,6 +903,8 @@
                     </view>
                     <connections>
                         <outlet property="addViewButton" destination="uvv-hY-VUv" id="sIh-Eg-rdW"/>
+                        <outlet property="balance" destination="exH-Kr-4Hl" id="WMo-zb-fCR"/>
+                        <outlet property="balanceLabel" destination="exH-Kr-4Hl" id="RHm-8w-lX2"/>
                         <outlet property="closeDetailViewButton" destination="9Wu-YG-0jO" id="s0T-lJ-r33"/>
                         <outlet property="closingButton" destination="ed1-Yc-JyY" id="Prm-RW-AWd"/>
                         <outlet property="currentTasksTableView" destination="iEU-cB-aLo" id="tEC-aU-Mfc"/>
@@ -839,6 +919,7 @@
                         <outlet property="normalTaskLabel" destination="cle-uP-IYH" id="ooe-jp-3Ks"/>
                         <outlet property="proggresViewLabel" destination="c96-UB-vIj" id="6xQ-tt-7fS"/>
                         <outlet property="proggressView" destination="DOk-aa-6Xd" id="xxP-gv-hP6"/>
+                        <outlet property="shopButton" destination="0f4-3L-W0i" id="dkZ-VH-Igd"/>
                         <outlet property="skillPointButton" destination="cPz-hU-AgW" id="Np1-lN-Jct"/>
                         <outlet property="totalTasksLabel" destination="Xsx-Jd-eZH" id="MXC-qK-1EC"/>
                         <outlet property="userImageView" destination="ZWm-Gn-BFA" id="6j4-vI-06Q"/>
@@ -859,8 +940,12 @@
         <image name="ImageDropShadow" width="138" height="139"/>
         <image name="LevelBallImage" width="33" height="32"/>
         <image name="NavigationBar" width="1002" height="284"/>
+        <image name="basket" catalog="system" width="128" height="108"/>
         <image name="plus" catalog="system" width="128" height="113"/>
         <image name="userImage" width="840" height="880"/>
+        <namedColor name="AccentColor">
+            <color red="0.0" green="0.46000000000000002" blue="0.89000000000000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
         <systemColor name="secondarySystemBackgroundColor">
             <color red="0.94901960784313721" green="0.94901960784313721" blue="0.96862745098039216" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
@@ -872,6 +957,9 @@
         </systemColor>
         <systemColor name="systemGray2Color">
             <color red="0.68235294117647061" green="0.68235294117647061" blue="0.69803921568627447" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </systemColor>
+        <systemColor name="systemGrayColor">
+            <color red="0.55686274509803924" green="0.55686274509803924" blue="0.57647058823529407" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
         <systemColor name="systemGreenColor">
             <color red="0.20392156862745098" green="0.7803921568627451" blue="0.34901960784313724" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
