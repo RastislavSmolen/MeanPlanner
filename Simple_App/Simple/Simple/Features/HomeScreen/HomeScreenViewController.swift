@@ -43,14 +43,13 @@ final class HomeScreenViewController: UIViewController {
     let firework = Firework()
     let skillPoints = SkillPoints()
     let coins = Coins()
-
+    let coreData = CoreDataSystem()
     
     var isEmpty :  Bool {
         return tasks.count == 0 ? true : false
     }
     var tasks: [NSManagedObject] = []
     var skills: [NSManagedObject] = []
-    var presistenContainer: NSPersistentContainer!
 #warning("user default only for testing purposes")
 #warning("move all user defaults to same place for better management")
     let userDefaults = UserDefaults.standard
@@ -65,47 +64,23 @@ final class HomeScreenViewController: UIViewController {
     var index = IndexPath()
     
     let notification = Notification.Name("Leaving.Shop")
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        userDefaults.setValue(10, forKey: "experience")
-        userDefaults.setValue(1, forKey: "currentLevel")
-        userDefaults.setValue(100, forKey: "maxXp")
-        
-        availableTasks.saveTasks(difficulty: .easy, amountLeft: 3)
-        availableTasks.saveTasks(difficulty: .normal, amountLeft: 2)
-        availableTasks.saveTasks(difficulty: .hard, amountLeft: 1)
-
-        availableTasks.setMaxAmountForTasks(difficulty: .easy ,maxAmount: 3)
-        availableTasks.setMaxAmountForTasks(difficulty: .normal ,maxAmount: 2)
-        availableTasks.setMaxAmountForTasks(difficulty: .hard ,maxAmount: 1)
-        skillPoints.saveSkillPoints(point: 0)
-        coins.saveCoins(coins: 0 )
-        
+        resetEverything()
         addObserver()
-  
-        
-        
-        let skill = skillPoints.fetchSkillPoints()
-        skillPointButton.setTitle("Skill Points: \(skill)", for: .normal)
-        let coins =  coins.fetchCoins()
-        balance.text = "Balance: \(coins)"
-        availableTasks.fetchAllAlvailableTasks()
-        availableTasks.fetchAllMaxTasks()
         setupXp()
-        fetchCoreData()
+        fetchDesiredStack(stack: .Task)
         setupUI()
     }
-    
     func addObserver(){
         NotificationCenter.default.addObserver(forName: notification, object: nil, queue: .main) { [weak self]  notification in
             guard let balance = self?.coins.fetchCoins(),let skill = self?.skillPoints.fetchSkillPoints() else { return }
             self?.balance.text = "Balance: \(balance)"
             self?.skillPointButton.setTitle("Skill Points: \(skill)", for: .normal)
-
         }
     }
-
+//MARK: - IBActions
     @IBAction func didTapClosingSection(_ sender: Any) {
         if !detailTaskView.isHidden {
             configureDetailView(isHidden: true)
@@ -126,20 +101,9 @@ final class HomeScreenViewController: UIViewController {
     @IBAction func shopButtonAction(_ sender: Any) {
         viewModel.navigateToShopViewController(delegate: self)
     }
-    func fetchCoreData() {
-        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
-        let managedContext = appDelegate.persistentContainer.viewContext
-        let fetchRequest1 = NSFetchRequest<NSManagedObject>(entityName: "Task")
-        do {
-            tasks = try managedContext.fetch(fetchRequest1)
-        } catch let error as NSError {
-            print("Could not fetch. \(error), \(error.userInfo)")
-            
-        }
-        currentTasksTableView.reloadData()
-    }
 }
 
+//MARK: SETUP
 extension HomeScreenViewController {
     
     func countAvalableTasks() -> String {
@@ -149,14 +113,18 @@ extension HomeScreenViewController {
         let countOfTask = easy + normal + hard
         return "\(countOfTask)"
     }
-
+    
     func setupUI() {
+        availableTasks.fetchAllAlvailableTasks()
+        availableTasks.fetchAllMaxTasks()
+        skillPointButton.setTitle("Skill Points: \(skillPoints.fetchSkillPoints())", for: .normal)
+        balance.text = "Balance: \(coins.fetchCoins())"
         totalTasksLabel.text = "Total: \(countAvalableTasks())"
         easyTaskLabel.text = "Easy: \(availableTasks.easyTasks)"
         normalTaskLabel.text = "Normal: \(availableTasks.normalTasks)"
         hardTaskLabel.text = "Hard: \(availableTasks.hardTasks)"
         proggressView.transform = CGAffineTransform(scaleX: 1, y: 2)
-    
+        
         configureDetailView(isHidden: true)
         
         userImageView.layer.cornerRadius = 100
@@ -173,7 +141,39 @@ extension HomeScreenViewController {
     }
     
 }
-
+// MARK: - RESETER
+extension HomeScreenViewController {
+    func resetEverything(){
+        userDefaults.setValue(10, forKey: "experience")
+        userDefaults.setValue(1, forKey: "currentLevel")
+        userDefaults.setValue(100, forKey: "maxXp")
+        
+        availableTasks.saveTasks(difficulty: .easy, amountLeft: 3)
+        availableTasks.saveTasks(difficulty: .normal, amountLeft: 2)
+        availableTasks.saveTasks(difficulty: .hard, amountLeft: 1)
+        
+        availableTasks.setMaxAmountForTasks(difficulty: .easy ,maxAmount: 3)
+        availableTasks.setMaxAmountForTasks(difficulty: .normal ,maxAmount: 2)
+        availableTasks.setMaxAmountForTasks(difficulty: .hard ,maxAmount: 1)
+        skillPoints.saveSkillPoints(point: 0)
+        coins.saveCoins(coins: 0 )
+    }
+}
+// MARK: - CORE DATA
+extension HomeScreenViewController: CoreDataFetcher {
+    
+    func fetchDesiredStack(stack: CoreDataEntity){
+        switch stack {
+        case .Task: tasks = coreData.fetchCoreData(entityName: .Task)
+        case .Skill: skills = coreData.fetchCoreData(entityName: .Skill)
+        }
+        currentTasksTableView.reloadData()
+    }
+    func deleteDesiredStack(indexPath: IndexPath, entityName: CoreDataEntity, dataStack: [NSManagedObject]){
+        tasks = coreData.deleteFromCoreData(indexPath: indexPath, entityName: entityName, dataStack: dataStack)
+        currentTasksTableView.reloadData()
+    }
+}
 //MARK: - Animation
 extension HomeScreenViewController  {
     
@@ -244,7 +244,7 @@ extension HomeScreenViewController : UITableViewDelegate, UITableViewDataSource 
     func tableView(_ tableView: UITableView,
                    leadingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
         let done = UIContextualAction(style: .normal,
-                                        title: "Done") { [weak self] (action, view, completionHandler) in
+                                      title: "Done") { [weak self] (action, view, completionHandler) in
             self?.handleMarkAsDone(index: indexPath)
             completionHandler(true)
         }
@@ -284,15 +284,18 @@ extension HomeScreenViewController {
         setupView(level: level, xp: xp, maxXp: maxXp)
         
     }
+    
     func setupView(level: Int, xp: Float, maxXp: Float) {
         proggresViewLabel.text = ("\(Int(xp)) / \(Int(maxXp))")
         proggressView.setProgress(levelUp.convertedXP(xp: xp, maxXP: maxXp), animated: true)
         levelLabel.text = ("\(level)")
     }
+    
     func proccesXp(newXp: Float) {
         guard let level = levelUp.level, let maxXp = levelUp.maximumExperience else { return }
         levelUp.processXP(maxXP: maxXp, currentXP: newXp, currentLevel: level)
     }
+    
     func saveXp(index: IndexPath) {
         guard let xp = levelUp.experience else { return }
         let rewardXp =  Float(tasks[index.row].value(forKey: "reward")as! Int)
@@ -302,54 +305,55 @@ extension HomeScreenViewController {
         setupView(level: levelUp.fetchLevel(), xp: levelUp.fetchXP(), maxXp: levelUp.fetchMaxXp())
         levelUp.loadXp()
     }
+    
     private func handleMarkAsDone(index: IndexPath) {
         saveXp(index: index)
         filterForDifficulty(index: index)
         findSkill(index: index)
-        deleteFromCoreData(indexPath: index)
+        deleteDesiredStack(indexPath: index, entityName: .Task, dataStack: tasks)
         guard let readyToLevelUp = levelUp.readyToLevelUp else { return }
-//        readyToLevelUp ? levelUp.playSound(soundName: "fanfare"): levelUp.playSound(soundName: "success")
-//        readyToLevelUp ? fireworkAnimation() : nil
+        readyToLevelUp ? levelUp.playSound(soundName: "fanfare"): levelUp.playSound(soundName: "success")
+        readyToLevelUp ? fireworkAnimation() : nil
         xpCounterAnimation()
         configureDetailView(isHidden: true)
         balance.text = "Balance: \(coins.fetchCoins())"
         skillPointButton.setTitle("Skill points: \(skillPoints.fetchSkillPoints())", for: .normal)
     }
-        private func handleMoveToTrash(index: IndexPath) {
-           filterForDifficulty(index: index)
-           deleteFromCoreData(indexPath: index)
-        }
+    
+    private func handleMoveToTrash(index: IndexPath) {
+        filterForDifficulty(index: index)
+        deleteDesiredStack(indexPath: index, entityName: .Task, dataStack: tasks)
+    }
+    
     func filterForDifficulty(index: IndexPath) {
         switch tasks[index.row].value(forKey: "difficulty") as? String {
         case "easy": availableTasks.taskWasFinnished(difficulty: .easy)
             updateViews(difficulty: .easy, view: easyTaskLabel, text: "Easy")
-
+            
         case "normal": availableTasks.taskWasFinnished(difficulty: .normal)
             updateViews(difficulty: .normal, view: normalTaskLabel, text: "Normal")
-
+            
         case "hard": availableTasks.taskWasFinnished(difficulty: .hard)
             updateViews(difficulty: .hard, view: hardTaskLabel, text: "Hard")
-
-            default: print("Task does not exits, check saveCoreData()")
+            
+        default: print("Task does not exits, check saveCoreData()")
         }
         totalTasksLabel.text = "Total: \(countAvalableTasks())"
     }
+    
     func findSkill(index: IndexPath?) {
         guard let index = index else { return }
-        if index.row == 0 {
-            return
-        } else {
-            guard let skillIndex = tasks[index.row].value(forKey: "indexPath") as? Int,let xp = tasks[index.row].value(forKey: "reward") as? Float else { return }
-            fetchSkillFromCoreData()
-            
-            let skillPosition = skills[skillIndex]
-            guard let skillName = skillPosition.value(forKey: "skillName") as? String, let skillXp = skillPosition.value(forKey: "skillCurrentXP") as? Float, let skillMaxXp = skillPosition.value(forKey: "skillMaxXP") as? Float, let skillLevel =  skillPosition.value(forKey: "skillLevel") as? Int else { return }
-            let xpToProccess = xp + skillXp
-            levelUpSkill.processXP(skillName: skillName ,maxXP: skillMaxXp, currentXP: xpToProccess, currentLevel: skillLevel,index: skillIndex)
-            print(skillName, skillMaxXp , xpToProccess , skillLevel )
-        }
         
+        guard let skillIndex = tasks[index.row].value(forKey: "indexPath") as? Int,let xp = tasks[index.row].value(forKey: "reward") as? Float else { return }
+        fetchDesiredStack(stack: .Skill)
+        
+        let skillPosition = skills[skillIndex]
+        guard let skillName = skillPosition.value(forKey: "skillName") as? String, let skillXp = skillPosition.value(forKey: "skillCurrentXP") as? Float, let skillMaxXp = skillPosition.value(forKey: "skillMaxXP") as? Float, let skillLevel =  skillPosition.value(forKey: "skillLevel") as? Int else { return }
+        let xpToProccess = xp + skillXp
+        levelUpSkill.processXP(skillName: skillName ,maxXP: skillMaxXp, currentXP: xpToProccess, currentLevel: skillLevel,index: skillIndex)
+        print(skillName, skillMaxXp, xpToProccess, skillLevel)
     }
+    
     func fetchSkillFromCoreData() {
         guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
         let managedContext = appDelegate.persistentContainer.viewContext
@@ -358,48 +362,22 @@ extension HomeScreenViewController {
             skills = try managedContext.fetch(fetchRequest)
         } catch let error as NSError {
             print("Could not fetch. \(error), \(error.userInfo)")
-            
         }
     }
-    
 }
 // MARK: - Delegate
-extension HomeScreenViewController: Updator{
+extension HomeScreenViewController: Updator {
     
-     func updateData() {
-        fetchCoreData()
-         totalTasksLabel.text = "Total: \(countAvalableTasks())"
-         updateViews(difficulty: .easy, view: easyTaskLabel, text: "Easy")
-         updateViews(difficulty: .normal, view: normalTaskLabel, text: "Normal")
-         updateViews(difficulty: .hard, view: hardTaskLabel, text: "Hard")
-         skillPointButton.setTitle("Skill points: \(skillPoints.fetchSkillPoints())", for: .normal)
+    func updateData() {
+        fetchDesiredStack(stack: .Task)
+        totalTasksLabel.text = "Total: \(countAvalableTasks())"
+        updateViews(difficulty: .easy, view: easyTaskLabel, text: "Easy")
+        updateViews(difficulty: .normal, view: normalTaskLabel, text: "Normal")
+        updateViews(difficulty: .hard, view: hardTaskLabel, text: "Hard")
+        skillPointButton.setTitle("Skill points: \(skillPoints.fetchSkillPoints())", for: .normal)
     }
     func updateViews(difficulty: Difficulty, view: UILabel,text: String) {
         view.text = "\(text): \(availableTasks.fetchAvailableTasks(difficulty: difficulty))"
     }
     
 }
-
-//MARK: - CORE DATA
-extension  HomeScreenViewController {
-    
-    func deleteFromCoreData(indexPath: IndexPath) {
-        
-        let task = tasks[indexPath.row]
-        
-        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
-        
-        let managedContext = appDelegate.persistentContainer.viewContext
-        managedContext.delete(task)
-        tasks.remove(at: indexPath.row)
-        
-        do {
-            try managedContext.save()
-            tasks.append(task)
-        } catch let error as NSError {
-            print("Could not delete. \(error), \(error.userInfo)")
-        }
-        fetchCoreData()
-    }
-}
-

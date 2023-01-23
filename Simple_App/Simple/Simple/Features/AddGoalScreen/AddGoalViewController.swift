@@ -51,6 +51,7 @@ class AddGoalViewController : UIViewController {
     var difficultyToSave = String()
     var skillName = String()
     var skillIndex = Int()
+    let coreData = CoreDataSystem()
     private var startTime = 0.0
     
     override func viewDidLoad() {
@@ -84,12 +85,15 @@ class AddGoalViewController : UIViewController {
     
     @IBAction func createTaskButton(_ sender: Any) {
         guard let taskName = taskNameTextField.text, let taskDetail = detailsTextField.text else { return }
-        saveTaskToCoreData(name: taskName, detail: taskDetail, reward: generatedXp, color: colorToSave ?? "#32ADE6", difficulty: difficultyToSave, skillName: skillName)
+        coreData.saveTaskToCoreData(name: taskName, detail: taskDetail, reward: generatedXp, color: colorToSave ?? "#32ADE6", difficulty: difficultyToSave, skillName: skillName,skillIndex: skillIndex)
         delegate?.updateData()
         self.navigationController?.popViewController(animated: true)
     }
     
-    //MARK: - Main logic
+
+}
+//MARK: - Difficulty
+extension AddGoalViewController {
     func checkTaskAvailibility() {
         availableTasks.checkTaskAvailability(difficulty: .easy) ? isButtonEnabled(true, button: easyButton) : isButtonEnabled(false, button: easyButton)
         availableTasks.checkTaskAvailability(difficulty: .normal) ? isButtonEnabled(true, button: normalButton) : isButtonEnabled(false, button: normalButton)
@@ -126,7 +130,7 @@ class AddGoalViewController : UIViewController {
     
     func isButtonEnabled(_ bool: Bool, button: UIButton) {
         button.isEnabled = bool
-    }    
+    }
     private func color(_ color: UIColor!, hex: String) {
         colorView.backgroundColor = color
         createButton.tintColor =  color
@@ -176,6 +180,7 @@ extension AddGoalViewController  {
     }
     
 }
+//MARK: CORE DATA
 extension AddGoalViewController: CoreDataPasser {
     func passData(data: NSManagedObject,indexPath: IndexPath) {
         guard let skill = data.value(forKey: "skillName") as? String else { return }
@@ -185,7 +190,6 @@ extension AddGoalViewController: CoreDataPasser {
     }
     
 }
-
 // MARK: - Texfield Setup
 extension AddGoalViewController : UITextFieldDelegate {
     
@@ -199,36 +203,6 @@ extension AddGoalViewController : UITextFieldDelegate {
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         textField.resignFirstResponder()
         return true
-    }
-    
-}
-
-//MARK: - CoreData
-extension AddGoalViewController {
-    
-    func saveTaskToCoreData(name: String, detail: String,reward: Int,color: String,difficulty: String,skillName: String?) {
-      
-      guard let appDelegate = UIApplication.shared.delegate as? AppDelegate, let skillName = skillName else { return }
-    
-      let managedContext = appDelegate.persistentContainer.viewContext
-      let entity = NSEntityDescription.entity(forEntityName: "Task",in: managedContext)!
-      let task = NSManagedObject(entity: entity, insertInto: managedContext)
-      
-        task.setValue(name, forKeyPath: "taskName")
-        task.setValue(false, forKeyPath: "isFinnished")
-        task.setValue(reward, forKeyPath: "reward")
-        task.setValue(detail, forKeyPath: "taskDetails")
-        task.setValue(color, forKey: "taskColor")
-        task.setValue(difficulty, forKey: "difficulty")
-        task.setValue(skillName, forKey: "skillName")
-        task.setValue(skillIndex, forKey: "indexPath")
-
-      do {
-        try managedContext.save()
-        tasks.append(task)
-      } catch let error as NSError {
-        print("Could not save. \(error), \(error.userInfo)")
-      }
     }
     
 }

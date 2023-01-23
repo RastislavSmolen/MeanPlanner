@@ -50,6 +50,7 @@ class SkillTreeViewController : UIViewController {
         viewModel?.navigateToCreateSkill(delegate: self)
     }
 }
+//MARK: - Table View
 extension SkillTreeViewController : UITableViewDelegate, UITableViewDataSource  {
     
      func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
@@ -159,6 +160,7 @@ extension  SkillTreeViewController {
         }
     }
 }
+
 extension SkillTreeViewController: Updator {
     
      func updateData() {

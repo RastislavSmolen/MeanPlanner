@@ -33,6 +33,7 @@ class LevelUpSkill {
     var skills: [NSManagedObject] = []
     let coins = Coins()
     let index = IndexPath()
+    let coreData = CoreDataSystem()
     
     //MARK: Bussiness Logic
     func convertedXP(xp: Float,maxXP: Float)-> Float {
@@ -45,13 +46,12 @@ class LevelUpSkill {
             level = levelUp(currentLevel: currentLevel)
             experience = calculateNewXP(currentXP: currentXP, maxXP: maxXP)
             readyToLevelUp = true
-            isReadyForMajorLevelUp(level: level ?? 0) ? majorProggression(level: level ?? 0) : nil
-            updateCoreDataOfSkill(skillName: skillName, skillLevel: level ?? 0, skillXP: experience ?? 0.0, skillMaxXP: maximumExperience ?? 0.0, index: index)
+            updateCoreData(skillName: skillName, skillLevel: level ?? 0, skillXP: experience ?? 0.0, skillMaxXP: maximumExperience ?? 0.0, index: index)
         } else {
             experience = calculateNewXP(currentXP: currentXP, maxXP: maxXP)
-            updateCoreDataOfSkill(skillName: skillName, skillLevel: currentLevel , skillXP: experience ?? 0.0 , skillMaxXP: maxXP , index: index)
+            updateCoreData(skillName: skillName, skillLevel: currentLevel , skillXP: experience ?? 0.0 , skillMaxXP: maxXP , index: index)
             readyToLevelUp = false
-
+            
         }
     }
     func isReadyToLevelUp(maxProgress: Float, currentProgress: Float) -> Bool {
@@ -64,10 +64,6 @@ class LevelUpSkill {
     func levelUp(currentLevel: Int)-> Int {
         
         return currentLevel + 1
-    }
-    func majorProggression(level: Int) {
-        #warning("add here a logic for leveling up")
-        print("new skill point added")
     }
     func isReadyForMajorLevelUp(level: Int) -> Bool {
         coins.addCoins(amount: 1000)
@@ -83,34 +79,11 @@ class LevelUpSkill {
     func isBelowZero(currentXP: Float, maxXP: Float) -> Bool {
         return currentXP - maxXP > 0
     }
-    
-    func updateCoreDataOfSkill(skillName: String, skillLevel: Int,skillXP: Float, skillMaxXP: Float,index: Int) {
-        
-        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
-        
-        let managedContext = appDelegate.persistentContainer.viewContext
-        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "Skill")
-        
-      
-        do {
-            let results = try managedContext.fetch(fetchRequest) as? [NSManagedObject]
-            guard let results = results else { return }
-            results[index].setValue(skillName, forKeyPath: "skillName")
-            results[index].setValue(skillLevel, forKeyPath: "skillLevel")
-            results[index].setValue(skillXP, forKeyPath: "skillCurrentXP")
-            results[index].setValue(skillMaxXP, forKeyPath: "skillMaxXP")
-           
-        } catch {
-            print("Fetch Failed: \(error)")
-        }
-
-        do {
-            try managedContext.save()
-           }
-        catch {
-                print("Saving Core Data Failed: \(error)")
-            }
-        }
+}
+//MARK: - CORE DATA
+extension LevelUpSkill {
+    func updateCoreData(skillName: String, skillLevel: Int, skillXP: Float, skillMaxXP: Float, index: Int){
+        coreData.updateCoreDataOfSkill(skillName: skillName, skillLevel: skillLevel, skillXP: skillXP, skillMaxXP: skillMaxXP, index: index)
     }
-
+}
 

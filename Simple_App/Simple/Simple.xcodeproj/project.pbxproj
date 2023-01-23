@@ -22,6 +22,7 @@
 		9119C575297D8B1A00CC5AD5 /* CreateSkillViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9119C574297D8B1A00CC5AD5 /* CreateSkillViewController.swift */; };
 		9119C577297D8B3D00CC5AD5 /* CreateSkillViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9119C576297D8B3D00CC5AD5 /* CreateSkillViewModel.swift */; };
 		9119C579297EABE800CC5AD5 /* LevelUpSkill.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9119C578297EABE800CC5AD5 /* LevelUpSkill.swift */; };
+		9119C57B297EBCF900CC5AD5 /* CoreDataSystem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9119C57A297EBCF900CC5AD5 /* CoreDataSystem.swift */; };
 		911EFB32297AF192004E40B2 /* ShopScreenViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 911EFB31297AF192004E40B2 /* ShopScreenViewController.swift */; };
 		911EFB34297AF1A1004E40B2 /* ShopViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 911EFB33297AF1A1004E40B2 /* ShopViewModel.swift */; };
 		9131FEEE29707A3F00DF140F /* HomeScreenViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9131FEED29707A3F00DF140F /* HomeScreenViewControllerTests.swift */; };
@@ -87,6 +88,7 @@
 		9119C574297D8B1A00CC5AD5 /* CreateSkillViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateSkillViewController.swift; sourceTree = "<group>"; };
 		9119C576297D8B3D00CC5AD5 /* CreateSkillViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateSkillViewModel.swift; sourceTree = "<group>"; };
 		9119C578297EABE800CC5AD5 /* LevelUpSkill.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LevelUpSkill.swift; sourceTree = "<group>"; };
+		9119C57A297EBCF900CC5AD5 /* CoreDataSystem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataSystem.swift; sourceTree = "<group>"; };
 		911EFB31297AF192004E40B2 /* ShopScreenViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShopScreenViewController.swift; sourceTree = "<group>"; };
 		911EFB33297AF1A1004E40B2 /* ShopViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShopViewModel.swift; sourceTree = "<group>"; };
 		9131FEED29707A3F00DF140F /* HomeScreenViewControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeScreenViewControllerTests.swift; sourceTree = "<group>"; };
@@ -213,6 +215,14 @@
 			path = CreateSkillScreen;
 			sourceTree = "<group>";
 		};
+		9119C57C297EBD0000CC5AD5 /* CoreDataSystems */ = {
+			isa = PBXGroup;
+			children = (
+				9119C57A297EBCF900CC5AD5 /* CoreDataSystem.swift */,
+			);
+			path = CoreDataSystems;
+			sourceTree = "<group>";
+		};
 		911EFB30297AF17E004E40B2 /* ShopScreen */ = {
 			isa = PBXGroup;
 			children = (
@@ -329,6 +339,7 @@
 		91FF10A728A1A0F8006339AC /* Features */ = {
 			isa = PBXGroup;
 			children = (
+				9119C57C297EBD0000CC5AD5 /* CoreDataSystems */,
 				9119C573297D8B0200CC5AD5 /* CreateSkillScreen */,
 				911EFB30297AF17E004E40B2 /* ShopScreen */,
 				91D4ABCD297ABD2C00424531 /* SkillTreeScreen */,
@@ -527,6 +538,7 @@
 			files = (
 				91BC9CFE28A3AC4300E6EE26 /* AddGoalViewController.swift in Sources */,
 				9193FC9528E86B3F00D651E9 /* LevelUp.swift in Sources */,
+				9119C57B297EBCF900CC5AD5 /* CoreDataSystem.swift in Sources */,
 				91D4ABCF297ABD4100424531 /* SkillTreeViewController.swift in Sources */,
 				91BC9D0028A3B51A00E6EE26 /* AddGoalViewModel.swift in Sources */,
 				9119C570297AFF1F00CC5AD5 /* Coins.swift in Sources */,
