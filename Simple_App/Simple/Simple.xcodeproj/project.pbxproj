@@ -23,6 +23,7 @@
 		9119C577297D8B3D00CC5AD5 /* CreateSkillViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9119C576297D8B3D00CC5AD5 /* CreateSkillViewModel.swift */; };
 		9119C579297EABE800CC5AD5 /* LevelUpSkill.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9119C578297EABE800CC5AD5 /* LevelUpSkill.swift */; };
 		9119C57B297EBCF900CC5AD5 /* CoreDataSystem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9119C57A297EBCF900CC5AD5 /* CoreDataSystem.swift */; };
+		9119C57E297EDF8B00CC5AD5 /* GlobalLevelUpSystem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9119C57D297EDF8A00CC5AD5 /* GlobalLevelUpSystem.swift */; };
 		911EFB32297AF192004E40B2 /* ShopScreenViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 911EFB31297AF192004E40B2 /* ShopScreenViewController.swift */; };
 		911EFB34297AF1A1004E40B2 /* ShopViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 911EFB33297AF1A1004E40B2 /* ShopViewModel.swift */; };
 		9131FEEE29707A3F00DF140F /* HomeScreenViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9131FEED29707A3F00DF140F /* HomeScreenViewControllerTests.swift */; };
@@ -89,6 +90,7 @@
 		9119C576297D8B3D00CC5AD5 /* CreateSkillViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateSkillViewModel.swift; sourceTree = "<group>"; };
 		9119C578297EABE800CC5AD5 /* LevelUpSkill.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LevelUpSkill.swift; sourceTree = "<group>"; };
 		9119C57A297EBCF900CC5AD5 /* CoreDataSystem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataSystem.swift; sourceTree = "<group>"; };
+		9119C57D297EDF8A00CC5AD5 /* GlobalLevelUpSystem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlobalLevelUpSystem.swift; sourceTree = "<group>"; };
 		911EFB31297AF192004E40B2 /* ShopScreenViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShopScreenViewController.swift; sourceTree = "<group>"; };
 		911EFB33297AF1A1004E40B2 /* ShopViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShopViewModel.swift; sourceTree = "<group>"; };
 		9131FEED29707A3F00DF140F /* HomeScreenViewControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeScreenViewControllerTests.swift; sourceTree = "<group>"; };
@@ -275,6 +277,7 @@
 				9119C56F297AFF1F00CC5AD5 /* Coins.swift */,
 				9119C571297B011100CC5AD5 /* Item.swift */,
 				9119C578297EABE800CC5AD5 /* LevelUpSkill.swift */,
+				9119C57D297EDF8A00CC5AD5 /* GlobalLevelUpSystem.swift */,
 			);
 			path = LevelUpSystem;
 			sourceTree = "<group>";
@@ -543,6 +546,7 @@
 				91BC9D0028A3B51A00E6EE26 /* AddGoalViewModel.swift in Sources */,
 				9119C570297AFF1F00CC5AD5 /* Coins.swift in Sources */,
 				9119C579297EABE800CC5AD5 /* LevelUpSkill.swift in Sources */,
+				9119C57E297EDF8B00CC5AD5 /* GlobalLevelUpSystem.swift in Sources */,
 				6363A4CF289EC00300DA2356 /* HomeScreenViewController.swift in Sources */,
 				91D4ABC9297AA95F00424531 /* RoudedView.swift in Sources */,
 				91D4ABCC297AB81B00424531 /* SkillPoints.swift in Sources */,

@@ -185,8 +185,8 @@ extension HomeScreenViewController  {
         if elapsedTime > animationDuration {
             stopDisplayLink()
         } else {
-            let newXp = levelUp.fetchXP()
-            let maxValue = levelUp.fetchMaxXp()
+           guard let newXp = levelUp.fetchUserData(kind: .float, forkey: .experience) as? Float,
+                 let maxValue = levelUp.fetchUserData(kind: .float, forkey: .maxXp) as? Float else { return }
             let percentage = elapsedTime / animationDuration
             let value = oldXp + Float(percentage) * (newXp - oldXp)
             self.proggresViewLabel.text = ("\(Int(value)) / \(Int(maxValue))")
@@ -296,13 +296,21 @@ extension HomeScreenViewController {
         levelUp.processXP(maxXP: maxXp, currentXP: newXp, currentLevel: level)
     }
     
-    func saveXp(index: IndexPath) {
+    func saveXp(index: IndexPath) {        
         guard let xp = levelUp.experience else { return }
+        
         let rewardXp =  Float(tasks[index.row].value(forKey: "reward")as! Int)
         let newXp = rewardXp + xp
+        
         oldXp = xp
         proccesXp(newXp: newXp)
-        setupView(level: levelUp.fetchLevel(), xp: levelUp.fetchXP(), maxXp: levelUp.fetchMaxXp())
+        
+        guard let experience = levelUp.fetchUserData(kind: .float, forkey: .experience) as? Float,
+              let maxXp = levelUp.fetchUserData(kind: .float, forkey: .maxXp) as? Float,
+              let level = levelUp.fetchUserData(kind: .integer, forkey: .currentLevel) as? Int
+        else { return }
+        
+        setupView(level: level, xp: experience, maxXp: maxXp)
         levelUp.loadXp()
     }
     

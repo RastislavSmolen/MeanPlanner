@@ -8,7 +8,7 @@
 import Foundation
 import AVFoundation
 
-class LevelUp {
+class LevelUp: GlobalLevelUpSystem {
     
     //MARK: variables
 #warning("we can move all of these to user defaults for better usage")
@@ -20,7 +20,7 @@ class LevelUp {
     var readyToLevelUp : Bool?
     let skillPoint = SkillPoints()
     //MARK: constants
-    let userDefaults = UserDefaults.standard
+    //let userDefaults = UserDefaults.standard
     
     let coins = Coins()
     
@@ -34,18 +34,9 @@ class LevelUp {
         userDefaults.setValue(maxXp, forKey: "maxXp")
     }
     func loadXp() {
-        level = fetchLevel()
-        experience = fetchXP()
-        maximumExperience = fetchMaxXp()
-    }
-    func fetchXP() ->Float {
-        return userDefaults.float(forKey: "experience")
-    }
-    func fetchLevel() ->Int {
-        return userDefaults.integer(forKey: "currentLevel")
-    }
-    func fetchMaxXp() ->Float {
-        return userDefaults.float(forKey: "maxXp")
+        level = fetchUserData(kind: .integer, forkey: .currentLevel) as? Int
+        experience = fetchUserData(kind: .float, forkey: .experience) as? Float
+        maximumExperience = fetchUserData(kind: .float, forkey: .maxXp) as? Float
     }
     
     func processXP(maxXP: Float, currentXP: Float, currentLevel: Int) {
