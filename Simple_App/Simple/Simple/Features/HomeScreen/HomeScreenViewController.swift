@@ -77,8 +77,8 @@ final class HomeScreenViewController: UIViewController {
         availableTasks.setMaxAmountForTasks(difficulty: .easy ,maxAmount: 3)
         availableTasks.setMaxAmountForTasks(difficulty: .normal ,maxAmount: 2)
         availableTasks.setMaxAmountForTasks(difficulty: .hard ,maxAmount: 1)
-        skillPoints.saveSkillPoints(point: 0)
-        coins.saveCoins(coins: 0 )
+        skillPoints.saveSkillPoints(point: 1)
+        coins.saveCoins(coins: 1000 )
         
         addObserver()
   
@@ -341,6 +341,7 @@ extension HomeScreenViewController: Updator{
          updateViews(difficulty: .easy, view: easyTaskLabel, text: "Easy")
          updateViews(difficulty: .normal, view: normalTaskLabel, text: "Normal")
          updateViews(difficulty: .hard, view: hardTaskLabel, text: "Hard")
+         skillPointButton.setTitle("Skill points: \(skillPoints.fetchSkillPoints())", for: .normal)
     }
     func updateViews(difficulty: Difficulty, view: UILabel,text: String) {
         view.text = "\(text): \(availableTasks.fetchAvailableTasks(difficulty: difficulty))"

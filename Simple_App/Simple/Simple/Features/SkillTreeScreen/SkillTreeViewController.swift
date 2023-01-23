@@ -14,12 +14,15 @@ protocol CoreDataPasser{
 }
 class SkillTreeViewController : UIViewController {
     
+    @IBOutlet weak var skillPointAvailableLabel: UILabel!
     var viewModel : SkillTreeViewModel!
     var delegate: Updator?
     var coreDataDelegate: CoreDataPasser?
+    let skillPoint = SkillPoints()
     var isEmpty :  Bool {
         return skills.count == 0 ? true : false
     }
+    @IBOutlet weak var addSkillButton: UIButton!
     
     var skills: [NSManagedObject] = []
     var presistenContainer: NSPersistentContainer!
@@ -30,32 +33,22 @@ class SkillTreeViewController : UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-      //  saveSkillToCoreData(skillName: "Archery", skillLevel: 1, skillXP: 100.00, skillMaxXP: 1000.00)
+        skillPointAvailableLabel.text = "Skill points: \(skillPoint.fetchSkillPoints())"
+        skillPoint.isSkillPointAvailable() ? hideButton(true): hideButton(false)
         fetchSkillFromCoreData()
-      //  viewModel = SkillTreeViewModel()
         tableView.delegate = self
         tableView.dataSource = self
     }
-    
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        delegate?.updateData()
+    }
+    func hideButton(_ bool: Bool) {
+        addSkillButton.isEnabled = bool
+    }
     @IBAction func addSkillButtonAction(_ sender: Any) {
         viewModel?.navigateToCreateSkill(delegate: self)
     }
-    // tableView
-    // add Cells
-    // if no cells then tableView is empty
-    // limit how many skill can be added
-    // add button to the cell
-    // when button tapped then add skill
-    // if skillPoints are empty dont enable the button
-    
-    // cell
-    // level of the skill
-    // experience of the skill
-    // button to level up the skill
-    // delete skill
-    // skill proggress view
-    
-    // back button when tapped it will go to the home view controller and it will remove skillpoint if used any
 }
 extension SkillTreeViewController : UITableViewDelegate, UITableViewDataSource  {
     
@@ -169,6 +162,8 @@ extension  SkillTreeViewController {
 extension SkillTreeViewController: Updator {
     
      func updateData() {
+         skillPoint.isSkillPointAvailable() ? hideButton(true): hideButton(false)
+         skillPointAvailableLabel.text = "Skill points:\(skillPoint.fetchSkillPoints())"
          fetchSkillFromCoreData()
          tableView.reloadData()
        

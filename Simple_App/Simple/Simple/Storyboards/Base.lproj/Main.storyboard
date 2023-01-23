@@ -260,7 +260,7 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" usesAttributedText="YES" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="R6h-bQ-p41">
-                                <rect key="frame" x="175" y="476" width="62" height="28"/>
+                                <rect key="frame" x="175" y="431" width="62" height="28"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="62" id="zBn-pF-CGU"/>
                                 </constraints>
@@ -275,7 +275,7 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" usesAttributedText="YES" borderStyle="roundedRect" placeholder="Describe task max 150 char." minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="1f8-4I-5of">
-                                <rect key="frame" x="20" y="512" width="374" height="100"/>
+                                <rect key="frame" x="20" y="467" width="374" height="100"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="100" id="UPa-Fo-D4M"/>
                                 </constraints>
@@ -342,6 +342,29 @@
                                 </attributedString>
                                 <nil key="highlightedColor"/>
                             </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Assing To Skill" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="UJJ-yU-cSy">
+                                <rect key="frame" x="20" y="575" width="109" height="21"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="IHm-2t-2zb">
+                                <rect key="frame" x="141" y="568" width="118" height="35"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <state key="normal" title="Button"/>
+                                <buttonConfiguration key="configuration" style="plain" title="Choose Skill"/>
+                                <connections>
+                                    <action selector="chooseSkillAction:" destination="osr-wz-iKj" eventType="touchUpInside" id="7kX-tI-f9f"/>
+                                </connections>
+                            </button>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Skill Chosen" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="EpO-cD-N8g">
+                                <rect key="frame" x="292" y="575" width="94" height="21"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="8SU-Xm-vsD"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
@@ -350,12 +373,12 @@
                             <constraint firstItem="8SU-Xm-vsD" firstAttribute="trailing" secondItem="1Jh-bo-hqf" secondAttribute="trailing" constant="84" id="1Wt-fx-EeK"/>
                             <constraint firstItem="8SU-Xm-vsD" firstAttribute="trailing" secondItem="ypL-ld-U59" secondAttribute="trailing" constant="44" id="7dC-xI-zHl"/>
                             <constraint firstItem="pH3-yR-DAw" firstAttribute="leading" secondItem="8SU-Xm-vsD" secondAttribute="leading" constant="34" id="AVq-qs-oDJ"/>
-                            <constraint firstItem="1Jh-bo-hqf" firstAttribute="top" secondItem="1f8-4I-5of" secondAttribute="bottom" constant="126" id="BkF-5n-07b"/>
+                            <constraint firstItem="1Jh-bo-hqf" firstAttribute="top" secondItem="1f8-4I-5of" secondAttribute="bottom" constant="171" id="BkF-5n-07b"/>
                             <constraint firstItem="s54-Fu-WSA" firstAttribute="leading" secondItem="8SU-Xm-vsD" secondAttribute="leading" constant="101" id="CHs-5v-WZS"/>
                             <constraint firstItem="TTL-d8-5fP" firstAttribute="centerX" secondItem="8SU-Xm-vsD" secondAttribute="centerX" id="FbT-eq-ZJf"/>
                             <constraint firstItem="8SU-Xm-vsD" firstAttribute="trailing" secondItem="3GY-Wp-XIl" secondAttribute="trailing" constant="189.5" id="HKp-bw-8J1"/>
                             <constraint firstItem="1f8-4I-5of" firstAttribute="leading" secondItem="8SU-Xm-vsD" secondAttribute="leading" constant="20" id="HR8-VW-OaT"/>
-                            <constraint firstItem="1f8-4I-5of" firstAttribute="top" secondItem="pH3-yR-DAw" secondAttribute="bottom" constant="160" id="HSu-V2-kNo"/>
+                            <constraint firstItem="1f8-4I-5of" firstAttribute="top" secondItem="pH3-yR-DAw" secondAttribute="bottom" constant="115" id="HSu-V2-kNo"/>
                             <constraint firstItem="Yzu-og-jQP" firstAttribute="top" secondItem="8nJ-U5-MiU" secondAttribute="top" id="Lpa-9h-sBp"/>
                             <constraint firstItem="Yzu-og-jQP" firstAttribute="leading" secondItem="8SU-Xm-vsD" secondAttribute="leading" id="PTO-lO-haH"/>
                             <constraint firstItem="GTX-lz-Vrn" firstAttribute="leading" secondItem="8SU-Xm-vsD" secondAttribute="leading" constant="20" id="R2F-bn-9Hf"/>
@@ -366,8 +389,8 @@
                             <constraint firstItem="1f8-4I-5of" firstAttribute="top" secondItem="R6h-bQ-p41" secondAttribute="bottom" constant="8" symbolic="YES" id="bKM-qs-Ot8"/>
                             <constraint firstItem="Yzu-og-jQP" firstAttribute="trailing" secondItem="8SU-Xm-vsD" secondAttribute="trailing" id="d0S-vT-q4w"/>
                             <constraint firstItem="3GY-Wp-XIl" firstAttribute="top" secondItem="7Od-gq-vtH" secondAttribute="bottom" constant="42" id="dI7-y3-xku"/>
-                            <constraint firstItem="8SU-Xm-vsD" firstAttribute="bottom" secondItem="1f8-4I-5of" secondAttribute="bottom" constant="250" id="dNU-14-qge"/>
-                            <constraint firstItem="R6h-bQ-p41" firstAttribute="top" secondItem="3GY-Wp-XIl" secondAttribute="bottom" constant="58" id="fdP-ge-f3g"/>
+                            <constraint firstItem="8SU-Xm-vsD" firstAttribute="bottom" secondItem="1f8-4I-5of" secondAttribute="bottom" constant="295" id="dNU-14-qge"/>
+                            <constraint firstItem="R6h-bQ-p41" firstAttribute="top" secondItem="3GY-Wp-XIl" secondAttribute="bottom" constant="13" id="fdP-ge-f3g"/>
                             <constraint firstItem="8SU-Xm-vsD" firstAttribute="bottom" secondItem="1Jh-bo-hqf" secondAttribute="bottom" constant="23" id="fqj-cp-3G0"/>
                             <constraint firstItem="7Od-gq-vtH" firstAttribute="top" secondItem="s54-Fu-WSA" secondAttribute="bottom" constant="21" id="hsa-3u-n7d"/>
                             <constraint firstItem="1Jh-bo-hqf" firstAttribute="leading" secondItem="8SU-Xm-vsD" secondAttribute="leading" constant="84" id="oNB-PH-4Ax"/>
@@ -385,6 +408,7 @@
                         <outlet property="easyButton" destination="pH3-yR-DAw" id="wcr-Wd-haS"/>
                         <outlet property="hardButton" destination="ypL-ld-U59" id="I1K-mF-74B"/>
                         <outlet property="normalButton" destination="7Od-gq-vtH" id="ukT-UC-o7t"/>
+                        <outlet property="skillNameLabel" destination="EpO-cD-N8g" id="ABA-dL-6ts"/>
                         <outlet property="taskNameTextField" destination="GTX-lz-Vrn" id="LIH-EW-nE0"/>
                         <outlet property="xpLabel" destination="3GY-Wp-XIl" id="dvB-9y-9lw"/>
                     </connections>
@@ -468,11 +492,20 @@
                                     <action selector="addSkillButtonAction:" destination="TfT-Uz-KBW" eventType="touchUpInside" id="CKd-E9-pE5"/>
                                 </connections>
                             </button>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Skill Points : 0" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="t4a-uK-ZIQ">
+                                <rect key="frame" x="136" y="78" width="106" height="21"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="uDl-WU-3eI"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                     </view>
                     <connections>
+                        <outlet property="addSkillButton" destination="nn7-o5-6O8" id="feG-Q2-X96"/>
+                        <outlet property="skillPointAvailableLabel" destination="t4a-uK-ZIQ" id="iS7-bW-ruR"/>
                         <outlet property="tableView" destination="ziD-Bu-lbI" id="TLw-hQ-KBR"/>
                     </connections>
                 </viewController>
@@ -502,9 +535,6 @@
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits"/>
-                                <connections>
-                                    <action selector="skillNameTextField:" destination="t0r-RY-BDa" eventType="editingDidEnd" id="LGn-Kb-iI9"/>
-                                </connections>
                             </textField>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Name Your New Skill" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="KKx-45-bjc">
                                 <rect key="frame" x="20" y="124" width="158" height="21"/>

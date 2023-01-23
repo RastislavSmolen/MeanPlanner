@@ -101,7 +101,8 @@ extension AppCoordinator {
         // Set the ViewModel to ViewController
         skillTreeViewController.viewModel = skillTreeViewModel
         // Push it.
-       // testViewController.delegate = delegate
+        skillTreeViewController.delegate = delegate
+        
         navigationController.pushViewController(skillTreeViewController, animated: true)
     }
     func dissmissSkillTreeViewController() {

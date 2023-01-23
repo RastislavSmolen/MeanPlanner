@@ -18,20 +18,20 @@ class CreateSkillViewController : UIViewController {
     let skillLevel = 1
     let skillXp = 0
     let skillMaxXp = 100
+    let skillPoint = SkillPoints()
     
     @IBOutlet weak var skillNameTextField: UITextField!
     
     override func  viewDidLoad() {
         super.viewDidLoad()
     }
+
     @IBAction func createSkillButtonAction(_ sender: Any) {
         guard let skillName = skillNameTextField.text else { return }
         saveSkillToCoreData(skillName: skillName, skillLevel: skillLevel, skillXP: skillXp, skillMaxXP: skillMaxXp)
+        skillPoint.spendSkillPoint()
         delegate?.updateData()
         self.dismiss(animated: true)
-    }
-    
-    @IBAction func skillNameTextField(_ sender: Any) {
     }
     
     func saveSkillToCoreData(skillName: String, skillLevel: Int,skillXP: Int, skillMaxXP: Int) {
