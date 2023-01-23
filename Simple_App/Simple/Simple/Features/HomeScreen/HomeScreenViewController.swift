@@ -38,6 +38,7 @@ final class HomeScreenViewController: UIViewController {
     //MARK: - Models
     var viewModel: HomeScreenViewModel!
     let levelUp = LevelUp()
+    let levelUpSkill = LevelUpSkill()
     let availableTasks = AvailableTask()
     let firework = Firework()
     let skillPoints = SkillPoints()
@@ -48,6 +49,7 @@ final class HomeScreenViewController: UIViewController {
         return tasks.count == 0 ? true : false
     }
     var tasks: [NSManagedObject] = []
+    var skills: [NSManagedObject] = []
     var presistenContainer: NSPersistentContainer!
 #warning("user default only for testing purposes")
 #warning("move all user defaults to same place for better management")
@@ -77,8 +79,8 @@ final class HomeScreenViewController: UIViewController {
         availableTasks.setMaxAmountForTasks(difficulty: .easy ,maxAmount: 3)
         availableTasks.setMaxAmountForTasks(difficulty: .normal ,maxAmount: 2)
         availableTasks.setMaxAmountForTasks(difficulty: .hard ,maxAmount: 1)
-        skillPoints.saveSkillPoints(point: 1)
-        coins.saveCoins(coins: 1000 )
+        skillPoints.saveSkillPoints(point: 0)
+        coins.saveCoins(coins: 0 )
         
         addObserver()
   
@@ -303,13 +305,15 @@ extension HomeScreenViewController {
     private func handleMarkAsDone(index: IndexPath) {
         saveXp(index: index)
         filterForDifficulty(index: index)
+        findSkill(index: index)
         deleteFromCoreData(indexPath: index)
         guard let readyToLevelUp = levelUp.readyToLevelUp else { return }
-        readyToLevelUp ? levelUp.playSound(soundName: "fanfare"): levelUp.playSound(soundName: "success")
-        readyToLevelUp ? fireworkAnimation() : nil
+//        readyToLevelUp ? levelUp.playSound(soundName: "fanfare"): levelUp.playSound(soundName: "success")
+//        readyToLevelUp ? fireworkAnimation() : nil
         xpCounterAnimation()
         configureDetailView(isHidden: true)
         balance.text = "Balance: \(coins.fetchCoins())"
+        skillPointButton.setTitle("Skill points: \(skillPoints.fetchSkillPoints())", for: .normal)
     }
         private func handleMoveToTrash(index: IndexPath) {
            filterForDifficulty(index: index)
@@ -329,8 +333,35 @@ extension HomeScreenViewController {
             default: print("Task does not exits, check saveCoreData()")
         }
         totalTasksLabel.text = "Total: \(countAvalableTasks())"
-
     }
+    func findSkill(index: IndexPath?) {
+        guard let index = index else { return }
+        if index.row == 0 {
+            return
+        } else {
+            guard let skillIndex = tasks[index.row].value(forKey: "indexPath") as? Int,let xp = tasks[index.row].value(forKey: "reward") as? Float else { return }
+            fetchSkillFromCoreData()
+            
+            let skillPosition = skills[skillIndex]
+            guard let skillName = skillPosition.value(forKey: "skillName") as? String, let skillXp = skillPosition.value(forKey: "skillCurrentXP") as? Float, let skillMaxXp = skillPosition.value(forKey: "skillMaxXP") as? Float, let skillLevel =  skillPosition.value(forKey: "skillLevel") as? Int else { return }
+            let xpToProccess = xp + skillXp
+            levelUpSkill.processXP(skillName: skillName ,maxXP: skillMaxXp, currentXP: xpToProccess, currentLevel: skillLevel,index: skillIndex)
+            print(skillName, skillMaxXp , xpToProccess , skillLevel )
+        }
+        
+    }
+    func fetchSkillFromCoreData() {
+        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
+        let managedContext = appDelegate.persistentContainer.viewContext
+        let fetchRequest = NSFetchRequest<NSManagedObject>(entityName: "Skill")
+        do {
+            skills = try managedContext.fetch(fetchRequest)
+        } catch let error as NSError {
+            print("Could not fetch. \(error), \(error.userInfo)")
+            
+        }
+    }
+    
 }
 // MARK: - Delegate
 extension HomeScreenViewController: Updator{

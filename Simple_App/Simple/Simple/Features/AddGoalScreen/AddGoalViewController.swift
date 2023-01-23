@@ -50,6 +50,7 @@ class AddGoalViewController : UIViewController {
     var elapsedTime = TimeInterval()
     var difficultyToSave = String()
     var skillName = String()
+    var skillIndex = Int()
     private var startTime = 0.0
     
     override func viewDidLoad() {
@@ -176,10 +177,11 @@ extension AddGoalViewController  {
     
 }
 extension AddGoalViewController: CoreDataPasser {
-    func passData(data: NSManagedObject) {
+    func passData(data: NSManagedObject,indexPath: IndexPath) {
         guard let skill = data.value(forKey: "skillName") as? String else { return }
         skillName = skill
         skillNameLabel.text = skillName
+        skillIndex = indexPath.row
     }
     
 }
@@ -219,6 +221,7 @@ extension AddGoalViewController {
         task.setValue(color, forKey: "taskColor")
         task.setValue(difficulty, forKey: "difficulty")
         task.setValue(skillName, forKey: "skillName")
+        task.setValue(skillIndex, forKey: "indexPath")
 
       do {
         try managedContext.save()

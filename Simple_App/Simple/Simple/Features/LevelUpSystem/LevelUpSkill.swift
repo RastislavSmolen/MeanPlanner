@@ -1,4 +1,12 @@
 //
+//  LevelUpSkill.swift
+//  Simple
+//
+//  Created by Rastislav Smolen on 23/01/2023.
+//
+
+import Foundation
+//
 //  LevelUp.swift
 //  Simple
 //
@@ -7,8 +15,10 @@
 
 import Foundation
 import AVFoundation
+import CoreData
+import UIKit
 
-class LevelUp {
+class LevelUpSkill {
     
     //MARK: variables
 #warning("we can move all of these to user defaults for better usage")
@@ -18,48 +28,30 @@ class LevelUp {
     var convertedExperience : Float?
     var player: AVAudioPlayer?
     var readyToLevelUp : Bool?
-    let skillPoint = SkillPoints()
     //MARK: constants
     let userDefaults = UserDefaults.standard
-    
+    var skills: [NSManagedObject] = []
     let coins = Coins()
+    let index = IndexPath()
     
     //MARK: Bussiness Logic
     func convertedXP(xp: Float,maxXP: Float)-> Float {
         return xp / maxXP
     }
-    func saveExperience(experienceToSave: Float,currentLevel: Int, maxXp: Float) {
-        userDefaults.setValue(experienceToSave, forKey: "experience")
-        userDefaults.setValue(currentLevel, forKey: "currentLevel")
-        userDefaults.setValue(maxXp, forKey: "maxXp")
-    }
-    func loadXp() {
-        level = fetchLevel()
-        experience = fetchXP()
-        maximumExperience = fetchMaxXp()
-    }
-    func fetchXP() ->Float {
-        return userDefaults.float(forKey: "experience")
-    }
-    func fetchLevel() ->Int {
-        return userDefaults.integer(forKey: "currentLevel")
-    }
-    func fetchMaxXp() ->Float {
-        return userDefaults.float(forKey: "maxXp")
-    }
     
-    func processXP(maxXP: Float, currentXP: Float, currentLevel: Int) {
+    func processXP(skillName: String, maxXP: Float, currentXP: Float, currentLevel: Int,index: Int) {
         if isReadyToLevelUp(maxProgress: maxXP, currentProgress: currentXP) {
             maximumExperience = calculateMaxXP(maxXP: maxXP)
             level = levelUp(currentLevel: currentLevel)
             experience = calculateNewXP(currentXP: currentXP, maxXP: maxXP)
-            saveExperience(experienceToSave: experience ?? 0.0 , currentLevel: level ?? 0, maxXp: maximumExperience ?? 0.0)
             readyToLevelUp = true
             isReadyForMajorLevelUp(level: level ?? 0) ? majorProggression(level: level ?? 0) : nil
+            updateCoreDataOfSkill(skillName: skillName, skillLevel: level ?? 0, skillXP: experience ?? 0.0, skillMaxXP: maximumExperience ?? 0.0, index: index)
         } else {
             experience = calculateNewXP(currentXP: currentXP, maxXP: maxXP)
-            saveExperience(experienceToSave: experience ?? 0.0 , currentLevel: level ?? 0, maxXp: maxXP)
+            updateCoreDataOfSkill(skillName: skillName, skillLevel: currentLevel , skillXP: experience ?? 0.0 , skillMaxXP: maxXP , index: index)
             readyToLevelUp = false
+
         }
     }
     func isReadyToLevelUp(maxProgress: Float, currentProgress: Float) -> Bool {
@@ -75,10 +67,10 @@ class LevelUp {
     }
     func majorProggression(level: Int) {
         #warning("add here a logic for leveling up")
-        skillPoint.addSkillPoint(skill: 1)
+        print("new skill point added")
     }
     func isReadyForMajorLevelUp(level: Int) -> Bool {
-        coins.addCoins(amount: 100)
+        coins.addCoins(amount: 1000)
         return level % 5 == 0 ? true : false
     }
     func calculateNewXP(currentXP: Float, maxXP: Float) -> Float {
@@ -92,26 +84,33 @@ class LevelUp {
         return currentXP - maxXP > 0
     }
     
-    func playSound(soundName:String) {
-        guard let url = Bundle.main.url(forResource: soundName, withExtension: "mp3") else { return }
+    func updateCoreDataOfSkill(skillName: String, skillLevel: Int,skillXP: Float, skillMaxXP: Float,index: Int) {
+        
+        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
+        
+        let managedContext = appDelegate.persistentContainer.viewContext
+        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "Skill")
+        
+      
+        do {
+            let results = try managedContext.fetch(fetchRequest) as? [NSManagedObject]
+            guard let results = results else { return }
+            results[index].setValue(skillName, forKeyPath: "skillName")
+            results[index].setValue(skillLevel, forKeyPath: "skillLevel")
+            results[index].setValue(skillXP, forKeyPath: "skillCurrentXP")
+            results[index].setValue(skillMaxXP, forKeyPath: "skillMaxXP")
+           
+        } catch {
+            print("Fetch Failed: \(error)")
+        }
 
         do {
-            try AVAudioSession.sharedInstance().setCategory(.playback, mode: .default)
-            try AVAudioSession.sharedInstance().setActive(true)
-
-            /* The following line is required for the player to work on iOS 11. Change the file type accordingly*/
-            player = try AVAudioPlayer(contentsOf: url, fileTypeHint: AVFileType.mp3.rawValue)
-
-            /* iOS 10 and earlier require the following line:
-            player = try AVAudioPlayer(contentsOf: url, fileTypeHint: AVFileTypeMPEGLayer3) */
-
-            guard let player = player else { return }
-
-            player.play()
-
-        } catch let error {
-            print(error.localizedDescription)
+            try managedContext.save()
+           }
+        catch {
+                print("Saving Core Data Failed: \(error)")
+            }
         }
     }
-}
+
 

@@ -10,7 +10,7 @@ import UIKit
 import CoreData
 
 protocol CoreDataPasser{
-    func passData(data: NSManagedObject)
+    func passData(data: NSManagedObject,indexPath: IndexPath)
 }
 class SkillTreeViewController : UIViewController {
     
@@ -55,7 +55,7 @@ extension SkillTreeViewController : UITableViewDelegate, UITableViewDataSource  
      func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
 
      
-             coreDataDelegate?.passData(data: skills[indexPath.row])
+             coreDataDelegate?.passData(data: skills[indexPath.row],indexPath: indexPath)
              self.dismiss(animated: true)
            
                 //index = indexPath
