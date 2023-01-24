@@ -8,6 +8,10 @@
 import UIKit
 import CoreData
 
+enum State {
+    case isBlocked
+    case isUnblocked
+}
 final class HomeScreenViewController: UIViewController {
     
     // MARK: - Outlets
@@ -23,6 +27,7 @@ final class HomeScreenViewController: UIViewController {
     @IBOutlet weak var infoDetailViewLabel: UILabel!
     @IBOutlet weak var finishTaskView: UIButton!
     
+    @IBOutlet weak var addTaskButton: KButton!
     @IBOutlet weak var balance: UILabel!
     @IBOutlet weak var shopButton: UIButton!
     @IBOutlet weak var addViewButton: KButton!
@@ -31,6 +36,7 @@ final class HomeScreenViewController: UIViewController {
     @IBOutlet weak var normalTaskLabel: UILabel!
     @IBOutlet weak var hardTaskLabel: UILabel!
     
+
     @IBOutlet weak var balanceLabel: UILabel!
     @IBOutlet weak var skillPointButton: UIButton!
     // MARK: - Variables
@@ -44,6 +50,7 @@ final class HomeScreenViewController: UIViewController {
     let skillPoints = SkillPoints()
     let coins = Coins()
     let coreData = CoreDataSystem()
+    let todaysDate = NSDate()
     
     var isEmpty :  Bool {
         return tasks.count == 0 ? true : false
@@ -64,6 +71,7 @@ final class HomeScreenViewController: UIViewController {
     var index = IndexPath()
     
     let notification = Notification.Name("Leaving.Shop")
+
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -72,6 +80,8 @@ final class HomeScreenViewController: UIViewController {
         setupXp()
         fetchDesiredStack(stack: .Task)
         setupUI()
+      
+       
     }
     func addObserver(){
         NotificationCenter.default.addObserver(forName: notification, object: nil, queue: .main) { [weak self]  notification in
@@ -85,6 +95,25 @@ final class HomeScreenViewController: UIViewController {
         if !detailTaskView.isHidden {
             configureDetailView(isHidden: true)
         }
+    }
+    func blockAddTaskButton() {
+        if let waitingDate:NSDate = UserDefaults.standard.value(forKey: "waitingDate") as? NSDate {
+                if (todaysDate.compare(waitingDate as Date) == ComparisonResult.orderedDescending) {
+                    addTaskButton.isEnabled = true
+                }
+                else {
+                    addTaskButton.isEnabled = false
+                }
+            }
+    }
+    func set24HrTimer() {
+        let currentDate = NSDate()
+        let newDate = NSDate(timeInterval: 60, since: currentDate as Date)
+
+        UserDefaults.standard.setValue(newDate, forKey: "waitingDate")
+        print("24 hours started")
+
+        addTaskButton.isEnabled = false
     }
     @IBAction func addTaskAction(_ sender: Any) {
         addGoalAction()
@@ -155,7 +184,7 @@ extension HomeScreenViewController {
         availableTasks.setMaxAmountForTasks(difficulty: .easy ,maxAmount: 3)
         availableTasks.setMaxAmountForTasks(difficulty: .normal ,maxAmount: 2)
         availableTasks.setMaxAmountForTasks(difficulty: .hard ,maxAmount: 1)
-        skillPoints.saveSkillPoints(point: 0)
+        skillPoints.saveSkillPoints(point: 10)
         coins.saveCoins(coins: 0 )
     }
 }
@@ -296,7 +325,7 @@ extension HomeScreenViewController {
         levelUp.processXP(maxXP: maxXp, currentXP: newXp, currentLevel: level)
     }
     
-    func saveXp(index: IndexPath) {        
+    func saveXp(index: IndexPath) {
         guard let xp = levelUp.experience else { return }
         
         let rewardXp =  Float(tasks[index.row].value(forKey: "reward")as! Int)
@@ -317,11 +346,12 @@ extension HomeScreenViewController {
     private func handleMarkAsDone(index: IndexPath) {
         saveXp(index: index)
         filterForDifficulty(index: index)
+        #warning("Bug here, it will always pick 1 cell if not specified otherwise")
         findSkill(index: index)
         deleteDesiredStack(indexPath: index, entityName: .Task, dataStack: tasks)
         guard let readyToLevelUp = levelUp.readyToLevelUp else { return }
-        readyToLevelUp ? levelUp.playSound(soundName: "fanfare"): levelUp.playSound(soundName: "success")
-        readyToLevelUp ? fireworkAnimation() : nil
+//        readyToLevelUp ? levelUp.playSound(soundName: "fanfare"): levelUp.playSound(soundName: "success")
+//        readyToLevelUp ? fireworkAnimation() : nil
         xpCounterAnimation()
         configureDetailView(isHidden: true)
         balance.text = "Balance: \(coins.fetchCoins())"
@@ -383,6 +413,32 @@ extension HomeScreenViewController: Updator {
         updateViews(difficulty: .normal, view: normalTaskLabel, text: "Normal")
         updateViews(difficulty: .hard, view: hardTaskLabel, text: "Hard")
         skillPointButton.setTitle("Skill points: \(skillPoints.fetchSkillPoints())", for: .normal)
+        addTaskButton.isEnabled = availableTasks.areTasksEmpty() ? false : true
+
+        availableTasks.areTasksEmpty() ? setTimer() : nil
+    }
+    func setTimer() {
+         testNotification()
+         Timer.scheduledTimer(timeInterval: 5.0, target: self, selector: #selector(fireTimer), userInfo: nil, repeats: true)
+    }
+    @objc func fireTimer() {
+        addTaskButton.isEnabled = true
+    }
+    func testNotification(){
+          let center = UNUserNotificationCenter.current()
+          let content = UNMutableNotificationContent()
+          content.title = "Notifiaction on a certain date"
+          content.body = "This is a local notification on certain date"
+          content.sound = .default
+          content.userInfo = ["value": "Data with local notification"]
+          let fireDate = Calendar.current.dateComponents([.day, .month, .year, .hour, .minute, .second], from: Date().addingTimeInterval(5))
+          let trigger = UNCalendarNotificationTrigger(dateMatching: fireDate, repeats: false)
+          let request = UNNotificationRequest(identifier: "reminder", content: content, trigger: trigger)
+          center.add(request) { (error) in
+              if error != nil {
+                  print("Error = \(error?.localizedDescription ?? "error local notification")")
+              }
+          }
     }
     func updateViews(difficulty: Difficulty, view: UILabel,text: String) {
         view.text = "\(text): \(availableTasks.fetchAvailableTasks(difficulty: difficulty))"
