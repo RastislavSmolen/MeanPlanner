@@ -57,7 +57,6 @@ class AddGoalViewController : UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setup()
-        checkTaskAvailibility()
         let skill = skillName == "" ? "" : skillName
         skillNameLabel.text = skill
     }
@@ -94,31 +93,26 @@ class AddGoalViewController : UIViewController {
 }
 //MARK: - Difficulty
 extension AddGoalViewController {
-    func checkTaskAvailibility() {
-        availableTasks.checkTaskAvailability(difficulty: .easy) ? isButtonEnabled(true, button: easyButton) : isButtonEnabled(false, button: easyButton)
-        availableTasks.checkTaskAvailability(difficulty: .normal) ? isButtonEnabled(true, button: normalButton) : isButtonEnabled(false, button: normalButton)
-        availableTasks.checkTaskAvailability(difficulty: .hard) ? isButtonEnabled(true, button: hardButton) : isButtonEnabled(false, button: hardButton)
-    }
-    
+
     func handleButtonBehaviour(difficulty: Difficulty) {
         switch difficulty {
         case .easy:
             generatedXp = Int.random(in: 5...55)
-            availableTasks.isAbleToAddAnotherTask(.easy, amountLeft: availableTasks.fetchAvailableTasks(difficulty: .easy)) ? isButtonEnabled(true, button: easyButton) : isButtonEnabled(false, button: easyButton)
+            availableTasks.taskWasAdded(kind: .easy)
             isButtonEnabled(false, button: hardButton)
             isButtonEnabled(false, button: normalButton)
             difficultyToSave = "easy"
             color(UIColor(hex: ColorPaint.green.description), hex: ColorPaint.green.description)
         case .normal:
             generatedXp = Int.random(in: 55...105)
-            availableTasks.isAbleToAddAnotherTask(.normal, amountLeft: availableTasks.fetchAvailableTasks(difficulty: .normal)) ? isButtonEnabled(true, button: normalButton) : isButtonEnabled(false, button: normalButton)
+            availableTasks.taskWasAdded(kind: .normal)
             isButtonEnabled(false, button: easyButton)
             isButtonEnabled(false, button: hardButton)
             difficultyToSave = "normal"
             color(UIColor(hex: ColorPaint.purple.description), hex: ColorPaint.purple.description)
         case .hard:
             generatedXp = Int.random(in: 105...155)
-            availableTasks.isAbleToAddAnotherTask(.hard, amountLeft: availableTasks.fetchAvailableTasks(difficulty: .hard)) ? isButtonEnabled(true, button: hardButton) : isButtonEnabled(false, button: hardButton)
+            availableTasks.taskWasAdded(kind: .hard)
             isButtonEnabled(false, button: easyButton)
             isButtonEnabled(false, button: normalButton)
             difficultyToSave = "hard"

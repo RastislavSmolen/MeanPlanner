@@ -193,24 +193,12 @@ final class HomeScreenViewController: UIViewController {
 
 //MARK: SETUP
 extension HomeScreenViewController {
-    
-    func countAvalableTasks() -> String {
-        let easy = availableTasks.fetchAvailableTasks(difficulty: .easy)
-        let normal = availableTasks.fetchAvailableTasks(difficulty: .normal)
-        let hard = availableTasks.fetchAvailableTasks(difficulty: .hard)
-        let countOfTask = easy + normal + hard
-        return "\(countOfTask)"
-    }
-    
+
     func setupUI() {
-        availableTasks.fetchAllAlvailableTasks()
-        availableTasks.fetchAllMaxTasks()
         skillPointButton.setTitle("Skill Points: \(skillPoints.fetchSkillPoints())", for: .normal)
         balance.text = "Balance: \(coins.fetchCoins())"
-        totalTasksLabel.text = "Total: \(countAvalableTasks())"
-        easyTaskLabel.text = "Easy: \(availableTasks.easyTasks)"
-        normalTaskLabel.text = "Normal: \(availableTasks.normalTasks)"
-        hardTaskLabel.text = "Hard: \(availableTasks.hardTasks)"
+
+        setupTaskLabels()
         proggressView.transform = CGAffineTransform(scaleX: 1, y: 2)
         
         configureDetailView(isHidden: true)
@@ -219,9 +207,19 @@ extension HomeScreenViewController {
         currentTasksTableView.dataSource = self
         currentTasksTableView.delegate = self
     }
+    func setupTaskLabels(){
+        let easy = availableTasks.fetchAvailableTasks(difficulty: .easy)
+        let normal = availableTasks.fetchAvailableTasks(difficulty: .normal)
+        let hard = availableTasks.fetchAvailableTasks(difficulty: .hard)
+        let countOfTask = easy + normal + hard
+        totalTasksLabel.text = "Total: \(countOfTask)"
+        availableTasks.updateLabel(kind: .easy, label: easyTaskLabel)
+        availableTasks.updateLabel(kind: .normal, label: normalTaskLabel)
+        availableTasks.updateLabel(kind: .hard, label: hardTaskLabel)
+    }
     
     func addGoalAction() {
-        availableTasks.areTasksEmpty() ? nil : viewModel.navigateToAddTaskViewController(delegate: self)
+        viewModel.navigateToAddTaskViewController(delegate: self)
     }
     func configureDetailView(isHidden: Bool) {
         detailTaskView.isHidden = isHidden
@@ -235,11 +233,11 @@ extension HomeScreenViewController {
         userDefaults.setValue(10, forKey: "experience")
         userDefaults.setValue(1, forKey: "currentLevel")
         userDefaults.setValue(100, forKey: "maxXp")
-        
-//        availableTasks.saveTasks(difficulty: .easy, amountLeft: 3)
-//        availableTasks.saveTasks(difficulty: .normal, amountLeft: 2)
-//        availableTasks.saveTasks(difficulty: .hard, amountLeft: 1)
-        
+//
+//        availableTasks.saveTasks(difficulty: .easy, amountLeft: 0)
+//        availableTasks.saveTasks(difficulty: .normal, amountLeft: 0)
+//        availableTasks.saveTasks(difficulty: .hard, amountLeft: 0)
+//
 //        availableTasks.setMaxAmountForTasks(difficulty: .easy ,maxAmount: 3)
 //        availableTasks.setMaxAmountForTasks(difficulty: .normal ,maxAmount: 2)
 //        availableTasks.setMaxAmountForTasks(difficulty: .hard ,maxAmount: 1)
@@ -424,18 +422,18 @@ extension HomeScreenViewController {
     
     func filterForDifficulty(index: IndexPath) {
         switch tasks[index.row].value(forKey: "difficulty") as? String {
-        case "easy": availableTasks.taskWasFinnished(difficulty: .easy)
-            updateViews(difficulty: .easy, view: easyTaskLabel, text: "Easy")
-            
-        case "normal": availableTasks.taskWasFinnished(difficulty: .normal)
-            updateViews(difficulty: .normal, view: normalTaskLabel, text: "Normal")
-            
-        case "hard": availableTasks.taskWasFinnished(difficulty: .hard)
-            updateViews(difficulty: .hard, view: hardTaskLabel, text: "Hard")
-            
+        case "easy":
+            availableTasks.taskWasRemoved(kind: .easy)
+            print("")
+        case "normal":
+            print("")
+            availableTasks.taskWasRemoved(kind: .normal)
+        case "hard":
+            print("")
+            availableTasks.taskWasRemoved(kind: .hard)
         default: print("Task does not exits, check saveCoreData()")
         }
-        totalTasksLabel.text = "Total: \(countAvalableTasks())"
+        setupTaskLabels()
     }
     
     func findSkill(index: IndexPath?) {
@@ -466,20 +464,8 @@ extension HomeScreenViewController {
 extension HomeScreenViewController: Updator {
     func updateData() {
         fetchDesiredStack(stack: .Task)
-        totalTasksLabel.text = "Total: \(countAvalableTasks())"
-        updateViews(difficulty: .easy, view: easyTaskLabel, text: "Easy")
-        updateViews(difficulty: .normal, view: normalTaskLabel, text: "Normal")
-        updateViews(difficulty: .hard, view: hardTaskLabel, text: "Hard")
+        setupTaskLabels()
         skillPointButton.setTitle("Skill points: \(skillPoints.fetchSkillPoints())", for: .normal)
-       
-     
-        if availableTasks.areTasksEmpty() {
-            testNotification()
-            setStartDate(starDate: Date())
-            startTimer()
-        } else {
-            print("task are available")
-        }
     }
 
     func testNotification(){
@@ -498,8 +484,4 @@ extension HomeScreenViewController: Updator {
               }
           }
     }
-    func updateViews(difficulty: Difficulty, view: UILabel,text: String) {
-        view.text = "\(text): \(availableTasks.fetchAvailableTasks(difficulty: difficulty))"
-    }
-    
 }
