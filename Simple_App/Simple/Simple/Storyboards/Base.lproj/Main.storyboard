@@ -986,6 +986,7 @@
                         </constraints>
                     </view>
                     <connections>
+                        <outlet property="addTaskButton" destination="uvv-hY-VUv" id="v6m-d0-hjq"/>
                         <outlet property="addViewButton" destination="uvv-hY-VUv" id="sIh-Eg-rdW"/>
                         <outlet property="balance" destination="exH-Kr-4Hl" id="WMo-zb-fCR"/>
                         <outlet property="balanceLabel" destination="exH-Kr-4Hl" id="RHm-8w-lX2"/>

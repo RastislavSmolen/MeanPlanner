@@ -9,13 +9,13 @@ import UIKit
 import CoreData
 import NotificationCenter
 
+
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate,UNUserNotificationCenterDelegate{
     
     var window: UIWindow?
     
     var appCoordinator : AppCoordinator?
-    
     lazy var persistentContainer: NSPersistentContainer = {
          let container = NSPersistentContainer(name: "Simple")
          container.loadPersistentStores { description, error in
@@ -36,6 +36,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate,UNUserNotificationCenterDe
                 }
         setupCoordinator()
         return true
+    }
+    func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification, withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
+        completionHandler([.alert, .badge, .sound])
+    }
+    
+    func userNotificationCenter(_ center: UNUserNotificationCenter, didReceive response: UNNotificationResponse, withCompletionHandler completionHandler: @escaping () -> Void) {
+        print("Usrinfo associated with notification == \(response.notification.request.content.userInfo)")
+
+        completionHandler()
     }
     
 }

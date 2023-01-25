@@ -36,7 +36,7 @@ final class HomeScreenViewController: UIViewController {
     @IBOutlet weak var normalTaskLabel: UILabel!
     @IBOutlet weak var hardTaskLabel: UILabel!
     
-
+    
     @IBOutlet weak var balanceLabel: UILabel!
     @IBOutlet weak var skillPointButton: UIButton!
     // MARK: - Variables
@@ -61,6 +61,11 @@ final class HomeScreenViewController: UIViewController {
 #warning("move all user defaults to same place for better management")
     let userDefaults = UserDefaults.standard
     
+    var startDate: Date?
+    var endDate: Date?
+    var isRunning: Bool?
+    var timer: Timer?
+    
     //MARK: Animation variables and constants
     var displayLink: CADisplayLink?
     let animationDuration: Double = 0.3
@@ -80,9 +85,11 @@ final class HomeScreenViewController: UIViewController {
         setupXp()
         fetchDesiredStack(stack: .Task)
         setupUI()
-      
-       
+        isRunning = userDefaults.bool(forKey: "isRunning")
+        startDate = userDefaults.object(forKey: "startDate") as? Date
+        startTimer()
     }
+   
     func addObserver(){
         NotificationCenter.default.addObserver(forName: notification, object: nil, queue: .main) { [weak self]  notification in
             guard let balance = self?.coins.fetchCoins(),let skill = self?.skillPoints.fetchSkillPoints() else { return }
@@ -106,18 +113,70 @@ final class HomeScreenViewController: UIViewController {
                 }
             }
     }
-    func set24HrTimer() {
-        let currentDate = NSDate()
-        let newDate = NSDate(timeInterval: 60, since: currentDate as Date)
 
-        UserDefaults.standard.setValue(newDate, forKey: "waitingDate")
-        print("24 hours started")
-
-        addTaskButton.isEnabled = false
-    }
     @IBAction func addTaskAction(_ sender: Any) {
+        setStartDate(starDate: Date())
+        isRunning  ?? false ? nil : startTimer()
         addGoalAction()
     }
+    func setStartDate(starDate: Date?) {
+        startDate = starDate
+        userDefaults.setValue(Date(), forKey: "startDate")
+        userDefaults.setValue(true, forKey: "isRunning")
+    }
+    func checkIfTheTimerIsRunning(){
+        if isRunning ?? false {
+            let diff = Date().timeIntervalSince(startDate ?? Date())
+            print(diff)
+            setTimeLabel(Int(diff))
+        } else {
+            timer?.invalidate()
+            print("no timer running")
+        }
+        
+    }
+    func calculateEndDate(){
+        
+    }
+        func setTimeLabel(_ val: Int)
+        {
+            let time = secondsToHoursMinutesSeconds(val)
+            print(time)
+            if time.1 >= 1 {
+                print("TimerIsDone")
+                userDefaults.set(false, forKey: "isRunning")
+                addTaskButton.isEnabled = true
+                timer?.invalidate()
+            } else {
+                addTaskButton.isEnabled = false
+            }
+          // let timeString = makeTimeString(hour: time.0, min: time.1, sec: time.2)
+          //  timeLabel.text = timeString
+        }
+    @objc func fireTimer(){
+        checkIfTheTimerIsRunning()
+    }
+    func startTimer(){
+        timer = Timer.scheduledTimer(timeInterval: 0.1, target: self, selector: #selector(fireTimer), userInfo: nil, repeats: true)
+    }
+        func secondsToHoursMinutesSeconds(_ ms: Int) -> (Int, Int, Int)
+        {
+            let hour = ms / 3600
+            let min = (ms % 3600) / 60
+            let sec = (ms % 3600) % 60
+            return (hour, min, sec)
+        }
+        
+//        func makeTimeString(hour: Int, min: Int, sec: Int) -> String
+//        {
+//            var timeString = ""
+//            timeString += String(format: "%02d", hour)
+//            timeString += ":"
+//            timeString += String(format: "%02d", min)
+//            timeString += ":"
+//            timeString += String(format: "%02d", sec)
+//            return timeString
+//        }
     @IBAction func didTapCloseDetailViewButton(_ sender: Any) {
         configureDetailView(isHidden: true)
     }
@@ -177,13 +236,13 @@ extension HomeScreenViewController {
         userDefaults.setValue(1, forKey: "currentLevel")
         userDefaults.setValue(100, forKey: "maxXp")
         
-        availableTasks.saveTasks(difficulty: .easy, amountLeft: 3)
-        availableTasks.saveTasks(difficulty: .normal, amountLeft: 2)
-        availableTasks.saveTasks(difficulty: .hard, amountLeft: 1)
+//        availableTasks.saveTasks(difficulty: .easy, amountLeft: 3)
+//        availableTasks.saveTasks(difficulty: .normal, amountLeft: 2)
+//        availableTasks.saveTasks(difficulty: .hard, amountLeft: 1)
         
-        availableTasks.setMaxAmountForTasks(difficulty: .easy ,maxAmount: 3)
-        availableTasks.setMaxAmountForTasks(difficulty: .normal ,maxAmount: 2)
-        availableTasks.setMaxAmountForTasks(difficulty: .hard ,maxAmount: 1)
+//        availableTasks.setMaxAmountForTasks(difficulty: .easy ,maxAmount: 3)
+//        availableTasks.setMaxAmountForTasks(difficulty: .normal ,maxAmount: 2)
+//        availableTasks.setMaxAmountForTasks(difficulty: .hard ,maxAmount: 1)
         skillPoints.saveSkillPoints(point: 10)
         coins.saveCoins(coins: 0 )
     }
@@ -405,7 +464,6 @@ extension HomeScreenViewController {
 }
 // MARK: - Delegate
 extension HomeScreenViewController: Updator {
-    
     func updateData() {
         fetchDesiredStack(stack: .Task)
         totalTasksLabel.text = "Total: \(countAvalableTasks())"
@@ -413,25 +471,25 @@ extension HomeScreenViewController: Updator {
         updateViews(difficulty: .normal, view: normalTaskLabel, text: "Normal")
         updateViews(difficulty: .hard, view: hardTaskLabel, text: "Hard")
         skillPointButton.setTitle("Skill points: \(skillPoints.fetchSkillPoints())", for: .normal)
-        addTaskButton.isEnabled = availableTasks.areTasksEmpty() ? false : true
+       
+     
+        if availableTasks.areTasksEmpty() {
+            testNotification()
+            setStartDate(starDate: Date())
+            startTimer()
+        } else {
+            print("task are available")
+        }
+    }
 
-        availableTasks.areTasksEmpty() ? setTimer() : nil
-    }
-    func setTimer() {
-         testNotification()
-         Timer.scheduledTimer(timeInterval: 5.0, target: self, selector: #selector(fireTimer), userInfo: nil, repeats: true)
-    }
-    @objc func fireTimer() {
-        addTaskButton.isEnabled = true
-    }
     func testNotification(){
           let center = UNUserNotificationCenter.current()
           let content = UNMutableNotificationContent()
-          content.title = "Notifiaction on a certain date"
-          content.body = "This is a local notification on certain date"
+          content.title = "Great new you can add new tasks"
+          content.body = "Timer runned out"
           content.sound = .default
           content.userInfo = ["value": "Data with local notification"]
-          let fireDate = Calendar.current.dateComponents([.day, .month, .year, .hour, .minute, .second], from: Date().addingTimeInterval(5))
+          let fireDate = Calendar.current.dateComponents([.day, .month, .year, .hour, .minute, .second], from: Date().addingTimeInterval(60))
           let trigger = UNCalendarNotificationTrigger(dateMatching: fireDate, repeats: false)
           let request = UNNotificationRequest(identifier: "reminder", content: content, trigger: trigger)
           center.add(request) { (error) in
