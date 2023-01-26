@@ -87,17 +87,6 @@ final class HomeScreenViewController: UIViewController {
             configureDetailView(isHidden: true)
         }
     }
-    func blockAddTaskButton() {
-        if let waitingDate:NSDate = UserDefaults.standard.value(forKey: "waitingDate") as? NSDate {
-            if (todaysDate.compare(waitingDate as Date) == ComparisonResult.orderedDescending) {
-                addTaskButton.isEnabled = true
-            }
-            else {
-                addTaskButton.isEnabled = false
-            }
-        }
-    }
-    
     func resetEverything() {
 //        userDefaults.setValue(10, forKey: "experience")
 //        userDefaults.setValue(1, forKey: "currentLevel")
@@ -133,17 +122,29 @@ final class HomeScreenViewController: UIViewController {
 extension HomeScreenViewController {
     
     func setupUI() {
-        skillPointButton.setTitle("Skill Points: \(skillPoints.fetchSkillPoints())", for: .normal)
-        balance.text = "Balance: \(coins.fetchCoins())"
+        setupUiButton()
+        balance.text = fetchBalance()
         
         setupTaskLabels()
         proggressView.transform = CGAffineTransform(scaleX: 1, y: 2)
         
         configureDetailView(isHidden: true)
         
-        userImageView.layer.cornerRadius = 100
+     //   userImageView.layer.cornerRadius = 100
         currentTasksTableView.dataSource = self
         currentTasksTableView.delegate = self
+    }
+    func setupUiButton(){
+        let skillPoint = "Skill Points: \(skillPoints.fetchSkillPoints())"
+        skillPointButton.setTitle(skillPoint, for: .normal)
+        skillPointButton.layer.borderWidth = 1
+        skillPointButton.layer.borderColor = UIColor(hex: "ae29d3").cgColor
+        skillPointButton.layer.cornerRadius = 10
+     //   skillPointButton.layer.backgroundColor =
+        skillPointButton.backgroundColor = UIColor(hex: "121212")
+        self.view.bringSubviewToFront(skillPointButton)
+        
+        
     }
     func setupTaskLabels(){
         let easy = availableTasks.fetchAvailableTasks(difficulty: .easy)
@@ -320,18 +321,21 @@ extension HomeScreenViewController {
     }
     
     private func handleMarkAsDone(index: IndexPath) {
+        balance.text = fetchBalance()
+        setupUiButton()
         saveXp(index: index)
         filterForDifficulty(index: index)
-#warning("Bug here, it will always pick 1 cell if not specified otherwise")
         findSkill(index: index)
         deleteDesiredStack(indexPath: index, entityName: .Task, dataStack: tasks)
-        guard let readyToLevelUp = levelUp.readyToLevelUp else { return }
-        //        readyToLevelUp ? levelUp.playSound(soundName: "fanfare"): levelUp.playSound(soundName: "success")
-        //        readyToLevelUp ? fireworkAnimation() : nil
         xpCounterAnimation()
         configureDetailView(isHidden: true)
-        balance.text = "Balance: \(coins.fetchCoins())"
-        skillPointButton.setTitle("Skill points: \(skillPoints.fetchSkillPoints())", for: .normal)
+        // playSound()
+    }
+    
+    private func playSound(){
+          guard let readyToLevelUp = levelUp.readyToLevelUp else { return }
+                 readyToLevelUp ? levelUp.playSound(soundName: "fanfare"): levelUp.playSound(soundName: "success")
+                 readyToLevelUp ? fireworkAnimation() : nil
     }
     
     private func handleMoveToTrash(index: IndexPath) {
@@ -339,7 +343,7 @@ extension HomeScreenViewController {
         alert.showTrashAlert(controller: self, completion: {
             if  self.coins.checkIfAbleToBuy(cost: 500) {
                 self.coins.spend(cost: 500)
-                self.balance.text = "Balance: \(self.coins.fetchCoins())"
+                self.balance.text = self.fetchBalance()
                 self.filterForDifficulty(index: index)
                 self.deleteDesiredStack(indexPath: index, entityName: .Task, dataStack: self.tasks)
             } else {
@@ -352,12 +356,9 @@ extension HomeScreenViewController {
         switch tasks[index.row].value(forKey: "difficulty") as? String {
         case "easy":
             availableTasks.taskWasRemoved(kind: .easy)
-            print("")
         case "normal":
-            print("")
             availableTasks.taskWasRemoved(kind: .normal)
         case "hard":
-            print("")
             availableTasks.taskWasRemoved(kind: .hard)
         default: print("Task does not exits, check saveCoreData()")
         }
@@ -368,13 +369,16 @@ extension HomeScreenViewController {
         guard let index = index else { return }
         
         guard let skillIndex = tasks[index.row].value(forKey: "indexPath") as? Int,let xp = tasks[index.row].value(forKey: "reward") as? Float else { return }
-        fetchDesiredStack(stack: .Skill)
-        
-        let skillPosition = skills[skillIndex]
-        guard let skillName = skillPosition.value(forKey: "skillName") as? String, let skillXp = skillPosition.value(forKey: "skillCurrentXP") as? Float, let skillMaxXp = skillPosition.value(forKey: "skillMaxXP") as? Float, let skillLevel =  skillPosition.value(forKey: "skillLevel") as? Int else { return }
-        let xpToProccess = xp + skillXp
-        levelUpSkill.processXP(skillName: skillName ,maxXP: skillMaxXp, currentXP: xpToProccess, currentLevel: skillLevel,index: skillIndex)
-        print(skillName, skillMaxXp, xpToProccess, skillLevel)
+      
+        if tasks[index.row].value(forKey: "isSkillSelected") as? Bool ?? false {
+            fetchDesiredStack(stack: .Skill)
+            
+                let skillPosition = skills[skillIndex]
+                guard let skillName = skillPosition.value(forKey: "skillName") as? String, let skillXp = skillPosition.value(forKey: "skillCurrentXP") as? Float, let skillMaxXp = skillPosition.value(forKey: "skillMaxXP") as? Float, let skillLevel =  skillPosition.value(forKey: "skillLevel") as? Int else { return }
+                let xpToProccess = xp + skillXp
+                levelUpSkill.processXP(skillName: skillName ,maxXP: skillMaxXp, currentXP: xpToProccess, currentLevel: skillLevel,index: skillIndex)
+                print(skillName, skillMaxXp, xpToProccess, skillLevel)
+        }
     }
     
     func fetchSkillFromCoreData() {
@@ -391,15 +395,15 @@ extension HomeScreenViewController {
 // MARK: - Delegate
 extension HomeScreenViewController: Updator, ShopDelegate {
     func update() {
-        let coins = coins.fetchCoins() 
-        balance.text = "Balance: \(coins)"
-        skillPointButton.setTitle("Skill points: \(skillPoints.fetchSkillPoints())", for: .normal)
+        balance.text = fetchBalance()
+        setupUiButton()
     }
-    
     func updateData() {
         fetchDesiredStack(stack: .Task)
         setupTaskLabels()
-        skillPointButton.setTitle("Skill points: \(skillPoints.fetchSkillPoints())", for: .normal)
-
+        setupUiButton()
+    }
+    func fetchBalance()-> String {
+        "\(coins.fetchCoins())"
     }
 }

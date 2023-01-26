@@ -55,11 +55,8 @@ extension SkillTreeViewController : UITableViewDelegate, UITableViewDataSource  
     
      func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
 
-     
              coreDataDelegate?.passData(data: skills[indexPath.row],indexPath: indexPath)
              self.dismiss(animated: true)
-           
-                //index = indexPath
     }
     
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {

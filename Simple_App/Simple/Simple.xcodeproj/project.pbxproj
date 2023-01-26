@@ -24,6 +24,9 @@
 		9119C579297EABE800CC5AD5 /* LevelUpSkill.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9119C578297EABE800CC5AD5 /* LevelUpSkill.swift */; };
 		9119C57B297EBCF900CC5AD5 /* CoreDataSystem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9119C57A297EBCF900CC5AD5 /* CoreDataSystem.swift */; };
 		9119C57E297EDF8B00CC5AD5 /* GlobalLevelUpSystem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9119C57D297EDF8A00CC5AD5 /* GlobalLevelUpSystem.swift */; };
+		9119C58029817D8800CC5AD5 /* NotificationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9119C57F29817D8800CC5AD5 /* NotificationManager.swift */; };
+		9119C5822981846200CC5AD5 /* TimerSystem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9119C5812981846200CC5AD5 /* TimerSystem.swift */; };
+		9119C58429818F1A00CC5AD5 /* AlerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9119C58329818F1A00CC5AD5 /* AlerView.swift */; };
 		911EFB32297AF192004E40B2 /* ShopScreenViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 911EFB31297AF192004E40B2 /* ShopScreenViewController.swift */; };
 		911EFB34297AF1A1004E40B2 /* ShopViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 911EFB33297AF1A1004E40B2 /* ShopViewModel.swift */; };
 		9131FEEE29707A3F00DF140F /* HomeScreenViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9131FEED29707A3F00DF140F /* HomeScreenViewControllerTests.swift */; };
@@ -91,6 +94,9 @@
 		9119C578297EABE800CC5AD5 /* LevelUpSkill.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LevelUpSkill.swift; sourceTree = "<group>"; };
 		9119C57A297EBCF900CC5AD5 /* CoreDataSystem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataSystem.swift; sourceTree = "<group>"; };
 		9119C57D297EDF8A00CC5AD5 /* GlobalLevelUpSystem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlobalLevelUpSystem.swift; sourceTree = "<group>"; };
+		9119C57F29817D8800CC5AD5 /* NotificationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationManager.swift; sourceTree = "<group>"; };
+		9119C5812981846200CC5AD5 /* TimerSystem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimerSystem.swift; sourceTree = "<group>"; };
+		9119C58329818F1A00CC5AD5 /* AlerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlerView.swift; sourceTree = "<group>"; };
 		911EFB31297AF192004E40B2 /* ShopScreenViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShopScreenViewController.swift; sourceTree = "<group>"; };
 		911EFB33297AF1A1004E40B2 /* ShopViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShopViewModel.swift; sourceTree = "<group>"; };
 		9131FEED29707A3F00DF140F /* HomeScreenViewControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeScreenViewControllerTests.swift; sourceTree = "<group>"; };
@@ -278,6 +284,7 @@
 				9119C571297B011100CC5AD5 /* Item.swift */,
 				9119C578297EABE800CC5AD5 /* LevelUpSkill.swift */,
 				9119C57D297EDF8A00CC5AD5 /* GlobalLevelUpSystem.swift */,
+				9119C5812981846200CC5AD5 /* TimerSystem.swift */,
 			);
 			path = LevelUpSystem;
 			sourceTree = "<group>";
@@ -307,6 +314,8 @@
 				91BC9D0228A3B57600E6EE26 /* Protocols */,
 				9141118C28B3EA0B00D3E26A /* UIColorHexer.swift */,
 				9165491228B90AE10088D307 /* ColorPainter.swift */,
+				9119C57F29817D8800CC5AD5 /* NotificationManager.swift */,
+				9119C58329818F1A00CC5AD5 /* AlerView.swift */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";
@@ -547,6 +556,7 @@
 				9119C570297AFF1F00CC5AD5 /* Coins.swift in Sources */,
 				9119C579297EABE800CC5AD5 /* LevelUpSkill.swift in Sources */,
 				9119C57E297EDF8B00CC5AD5 /* GlobalLevelUpSystem.swift in Sources */,
+				9119C5822981846200CC5AD5 /* TimerSystem.swift in Sources */,
 				6363A4CF289EC00300DA2356 /* HomeScreenViewController.swift in Sources */,
 				91D4ABC9297AA95F00424531 /* RoudedView.swift in Sources */,
 				91D4ABCC297AB81B00424531 /* SkillPoints.swift in Sources */,
@@ -554,6 +564,7 @@
 				9165491628B915070088D307 /* TaskCell.swift in Sources */,
 				9119C572297B011100CC5AD5 /* Item.swift in Sources */,
 				6363A4D5289EC00300DA2356 /* Simple.xcdatamodeld in Sources */,
+				9119C58029817D8800CC5AD5 /* NotificationManager.swift in Sources */,
 				911EFB32297AF192004E40B2 /* ShopScreenViewController.swift in Sources */,
 				91FF10AB28A1A15F006339AC /* CoordinatorProtocol.swift in Sources */,
 				9131FEF82975B6AF00DF140F /* FireworkAnimation.swift in Sources */,
@@ -568,6 +579,7 @@
 				911EFB34297AF1A1004E40B2 /* ShopViewModel.swift in Sources */,
 				91D4ABD1297ABD6F00424531 /* SkillTreeViewModel.swift in Sources */,
 				91D4ABD5297AD77E00424531 /* SkillCell.swift in Sources */,
+				9119C58429818F1A00CC5AD5 /* AlerView.swift in Sources */,
 				6363A50128A0586600DA2356 /* HomeScreenViewModel.swift in Sources */,
 				9165491328B90AE10088D307 /* ColorPainter.swift in Sources */,
 				91AF1E112979BD1C00D90A15 /* Gradient.swift in Sources */,
@@ -759,6 +771,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = C849J6K43N;
 				INFOPLIST_FILE = "$(SRCROOT)/SimpleTests/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -778,6 +791,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = C849J6K43N;
 				INFOPLIST_FILE = "$(SRCROOT)/SimpleTests/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",

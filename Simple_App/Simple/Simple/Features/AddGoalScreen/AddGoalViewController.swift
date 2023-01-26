@@ -55,6 +55,8 @@ class AddGoalViewController : UIViewController {
     let timerSystem = TimerSystem()
     let alert = Alert()
     
+    var isSkillSelected: Bool = false
+    
     let userDefaults = UserDefaults.standard
     
     private var startTime = 0.0
@@ -91,7 +93,12 @@ class AddGoalViewController : UIViewController {
     
     @IBAction func createTaskButton(_ sender: Any) {
         guard let taskName = taskNameTextField.text, let taskDetail = detailsTextField.text else { return }
-        coreData.saveTaskToCoreData(name: taskName, detail: taskDetail, reward: generatedXp, color: colorToSave ?? "#32ADE6", difficulty: difficultyToSave, skillName: skillName,skillIndex: skillIndex)
+        if skillName.isEmpty {
+            coreData.saveTaskToCoreData(name: taskName, detail: taskDetail, reward: generatedXp, color: colorToSave ?? "#32ADE6", difficulty: difficultyToSave, skillName: skillName,skillIndex: skillIndex, isSkillSelected: false)
+        } else {
+            coreData.saveTaskToCoreData(name: taskName, detail: taskDetail, reward: generatedXp, color: colorToSave ?? "#32ADE6", difficulty: difficultyToSave, skillName: skillName,skillIndex: skillIndex, isSkillSelected: true)
+        }
+        
         delegate?.updateData()
         self.navigationController?.popViewController(animated: true)
     }
