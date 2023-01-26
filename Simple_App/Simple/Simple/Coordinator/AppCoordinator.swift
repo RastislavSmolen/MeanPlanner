@@ -128,7 +128,7 @@ extension AppCoordinator {
         // Set the ViewModel to ViewController
         shopViewController.viewModel = shopViewModel
         // Push it.
-       // testViewController.delegate = delegate
+        shopViewController.delegate = delegate
         navigationController.present(shopViewController, animated: true)
     }
     func dissmissShopViewController() {

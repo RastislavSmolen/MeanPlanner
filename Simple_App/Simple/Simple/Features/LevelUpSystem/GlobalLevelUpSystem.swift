@@ -20,18 +20,22 @@ enum ElementKind {
     case string
     case integer
 }
+enum Action {
+    case save
+    case delete
+    case fetch
+}
 
 class GlobalLevelUpSystem {
     let userDefaults = UserDefaults.standard
     
     func fetchUserData(kind: ElementKind, forkey: LevelData) -> Any {
-        switch kind {
-        case .double: return userDefaults.double(forKey: forkey.toString()) as Double
-        case .float: return userDefaults.float(forKey: forkey.toString()) as Float
-        case .integer: return userDefaults.integer(forKey: forkey.toString()) as Int
-        case .string:  return (userDefaults.string(forKey: forkey.toString()) ?? "") as String
-        }
-        
+            switch kind {
+            case .double: return userDefaults.double(forKey: forkey.toString()) as Double
+            case .float: return userDefaults.float(forKey: forkey.toString()) as Float
+            case .integer: return userDefaults.integer(forKey: forkey.toString()) as Int
+            case .string:  return (userDefaults.string(forKey: forkey.toString()) ?? "") as String
+            }
     }
     func save(){}
     

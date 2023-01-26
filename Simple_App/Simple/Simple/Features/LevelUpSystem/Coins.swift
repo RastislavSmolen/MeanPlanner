@@ -8,8 +8,10 @@
 import Foundation
 
 class Coins {
-    let userDefaults = UserDefaults.standard
+    var userDefaults = UserDefaults.standard
     let skillPoints = SkillPoints()
+    var aler: Alert?
+    var notEnoughtCoins: Bool?
     func saveCoins(coins: Int){
         userDefaults.setValue(coins, forKey: "coins")
     }
@@ -28,6 +30,16 @@ class Coins {
             print("not able to buy, not enoug coins")
         }
     }
+    
+    func spend(cost: Int){
+        if checkIfAbleToBuy(cost: cost) {
+            saveCoins(coins: fetchCoins() - cost)
+            notEnoughtCoins = false
+        } else {
+            notEnoughtCoins = true
+        }
+    }
+  
     func addCoins(amount: Int) {
         let coins =  fetchCoins()
         saveCoins(coins: coins + amount)

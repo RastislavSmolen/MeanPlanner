@@ -52,6 +52,11 @@ class AddGoalViewController : UIViewController {
     var skillName = String()
     var skillIndex = Int()
     let coreData = CoreDataSystem()
+    let timerSystem = TimerSystem()
+    let alert = Alert()
+    
+    let userDefaults = UserDefaults.standard
+    
     private var startTime = 0.0
     
     override func viewDidLoad() {
@@ -59,7 +64,9 @@ class AddGoalViewController : UIViewController {
         setup()
         let skill = skillName == "" ? "" : skillName
         skillNameLabel.text = skill
+    
     }
+  
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         let skill = skillName == "" ? "" : skillName
@@ -72,14 +79,14 @@ class AddGoalViewController : UIViewController {
   
     }
     @IBAction func easyTaskButtonAction(_ sender: Any) {
-        handleButtonBehaviour(difficulty: .easy)
+            availableTasks.reachedMaxTask(difficulty: .easy) ? hideAndShowAlert(false, button: easyButton, difficulty: .easy):
+           handleButtonBehaviour(difficulty: .easy)
     }
- 
     @IBAction func normalTaskButtonAction(_ sender: Any) {
-        handleButtonBehaviour(difficulty: .normal)
+        availableTasks.reachedMaxTask(difficulty: .normal) ? hideAndShowAlert(false, button: normalButton, difficulty: .normal): handleButtonBehaviour(difficulty: .normal)
     }
     @IBAction func hardActionButton(_ sender: Any) {
-        handleButtonBehaviour(difficulty: .hard)
+        availableTasks.reachedMaxTask(difficulty: .hard) ? hideAndShowAlert(false, button: hardButton, difficulty: .hard) : handleButtonBehaviour(difficulty: .hard)
     }
     
     @IBAction func createTaskButton(_ sender: Any) {
@@ -121,7 +128,10 @@ extension AddGoalViewController {
         xpCounterAnimation()
 
     }
-    
+    func hideAndShowAlert(_ bool: Bool, button: UIButton,difficulty: Difficulty) {
+        button.isEnabled = bool
+        alert.showMaxCapacityReachedAlert(forTask: difficulty.toString(), controller: self)
+    }
     func isButtonEnabled(_ bool: Bool, button: UIButton) {
         button.isEnabled = bool
     }

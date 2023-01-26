@@ -21,6 +21,7 @@ class ShopViewController: UIViewController {
 
     var viewModel: ShopViewModel!
     let coins = Coins()
+    let alert = Alert()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -34,10 +35,28 @@ class ShopViewController: UIViewController {
     }
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-        #warning("remove notification center and move it with delegate")
-        NotificationCenter.default.post(name: Notification.Name("Leaving.Shop"), object: nil)
     }
     @IBAction func skillItemButton(_ sender: Any) {
-        coins.buy(cost: 549, item: .skill)
+        alert.buyItemAlert(controller: self, itemName: "Skill", cost: 549, completion: {
+            if self.coins.checkIfAbleToBuy(cost: 549) {
+                self.coins.buy(cost: 549, item: .skill)
+                self.alert.itemPurchasedAlert(controller: self, itemName: "Skill", cost: 549, completion: {
+                    self.dismiss(animated: true)
+                })
+            } else {
+                self.alert.notEnougCoinsAlert(controller: self)
+            }
+        })
+//        alert.showTrashAlert(controller: self, completion: {
+//            if  self.coins.checkIfAbleToBuy(cost: 500) {
+//                self.coins.spend(cost: 500)
+//                self.balance.text = "Balance: \(self.coins.fetchCoins())"
+//                self.filterForDifficulty(index: index)
+//                self.deleteDesiredStack(indexPath: index, entityName: .Task, dataStack: self.tasks)
+//            } else {
+//                self.alert.notEnougCoinsAlert(controller: self)
+//            }
+//        })
+//        coins.buy(cost: 549, item: .skill)
     }
 }

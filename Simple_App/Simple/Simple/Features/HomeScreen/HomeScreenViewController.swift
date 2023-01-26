@@ -50,7 +50,9 @@ final class HomeScreenViewController: UIViewController {
     let skillPoints = SkillPoints()
     let coins = Coins()
     let coreData = CoreDataSystem()
+    let alert = Alert()
     let todaysDate = NSDate()
+    
     
     var isEmpty :  Bool {
         return tasks.count == 0 ? true : false
@@ -61,10 +63,6 @@ final class HomeScreenViewController: UIViewController {
 #warning("move all user defaults to same place for better management")
     let userDefaults = UserDefaults.standard
     
-    var startDate: Date?
-    var endDate: Date?
-    var isRunning: Bool?
-    var timer: Timer?
     
     //MARK: Animation variables and constants
     var displayLink: CADisplayLink?
@@ -75,29 +73,15 @@ final class HomeScreenViewController: UIViewController {
     private var startTime = 0.0
     var index = IndexPath()
     
-    let notification = Notification.Name("Leaving.Shop")
-
     
     override func viewDidLoad() {
         super.viewDidLoad()
         resetEverything()
-        addObserver()
         setupXp()
         fetchDesiredStack(stack: .Task)
         setupUI()
-        isRunning = userDefaults.bool(forKey: "isRunning")
-        startDate = userDefaults.object(forKey: "startDate") as? Date
-        startTimer()
     }
-   
-    func addObserver(){
-        NotificationCenter.default.addObserver(forName: notification, object: nil, queue: .main) { [weak self]  notification in
-            guard let balance = self?.coins.fetchCoins(),let skill = self?.skillPoints.fetchSkillPoints() else { return }
-            self?.balance.text = "Balance: \(balance)"
-            self?.skillPointButton.setTitle("Skill Points: \(skill)", for: .normal)
-        }
-    }
-//MARK: - IBActions
+    //MARK: - IBActions
     @IBAction func didTapClosingSection(_ sender: Any) {
         if !detailTaskView.isHidden {
             configureDetailView(isHidden: true)
@@ -105,78 +89,32 @@ final class HomeScreenViewController: UIViewController {
     }
     func blockAddTaskButton() {
         if let waitingDate:NSDate = UserDefaults.standard.value(forKey: "waitingDate") as? NSDate {
-                if (todaysDate.compare(waitingDate as Date) == ComparisonResult.orderedDescending) {
-                    addTaskButton.isEnabled = true
-                }
-                else {
-                    addTaskButton.isEnabled = false
-                }
-            }
-    }
-
-    @IBAction func addTaskAction(_ sender: Any) {
-        setStartDate(starDate: Date())
-        isRunning  ?? false ? nil : startTimer()
-        addGoalAction()
-    }
-    func setStartDate(starDate: Date?) {
-        startDate = starDate
-        userDefaults.setValue(Date(), forKey: "startDate")
-        userDefaults.setValue(true, forKey: "isRunning")
-    }
-    func checkIfTheTimerIsRunning(){
-        if isRunning ?? false {
-            let diff = Date().timeIntervalSince(startDate ?? Date())
-            print(diff)
-            setTimeLabel(Int(diff))
-        } else {
-            timer?.invalidate()
-            print("no timer running")
-        }
-        
-    }
-    func calculateEndDate(){
-        
-    }
-        func setTimeLabel(_ val: Int)
-        {
-            let time = secondsToHoursMinutesSeconds(val)
-            print(time)
-            if time.1 >= 1 {
-                print("TimerIsDone")
-                userDefaults.set(false, forKey: "isRunning")
+            if (todaysDate.compare(waitingDate as Date) == ComparisonResult.orderedDescending) {
                 addTaskButton.isEnabled = true
-                timer?.invalidate()
-            } else {
+            }
+            else {
                 addTaskButton.isEnabled = false
             }
-          // let timeString = makeTimeString(hour: time.0, min: time.1, sec: time.2)
-          //  timeLabel.text = timeString
         }
-    @objc func fireTimer(){
-        checkIfTheTimerIsRunning()
     }
-    func startTimer(){
-        timer = Timer.scheduledTimer(timeInterval: 0.1, target: self, selector: #selector(fireTimer), userInfo: nil, repeats: true)
+    
+    func resetEverything() {
+//        userDefaults.setValue(10, forKey: "experience")
+//        userDefaults.setValue(1, forKey: "currentLevel")
+//        userDefaults.setValue(100, forKey: "maxXp")
+//
+//        availableTasks.saveTasks(difficulty: .easy, amountLeft: 0)
+//        availableTasks.saveTasks(difficulty: .normal, amountLeft: 0)
+//        availableTasks.saveTasks(difficulty: .hard, amountLeft: 0)
+
+        skillPoints.saveSkillPoints(point: 0)
+        coins.saveCoins(coins: 3000)
     }
-        func secondsToHoursMinutesSeconds(_ ms: Int) -> (Int, Int, Int)
-        {
-            let hour = ms / 3600
-            let min = (ms % 3600) / 60
-            let sec = (ms % 3600) % 60
-            return (hour, min, sec)
-        }
-        
-//        func makeTimeString(hour: Int, min: Int, sec: Int) -> String
-//        {
-//            var timeString = ""
-//            timeString += String(format: "%02d", hour)
-//            timeString += ":"
-//            timeString += String(format: "%02d", min)
-//            timeString += ":"
-//            timeString += String(format: "%02d", sec)
-//            return timeString
-//        }
+    
+    @IBAction func addTaskAction(_ sender: Any) {
+        addGoalAction()
+    }
+  
     @IBAction func didTapCloseDetailViewButton(_ sender: Any) {
         configureDetailView(isHidden: true)
     }
@@ -193,11 +131,11 @@ final class HomeScreenViewController: UIViewController {
 
 //MARK: SETUP
 extension HomeScreenViewController {
-
+    
     func setupUI() {
         skillPointButton.setTitle("Skill Points: \(skillPoints.fetchSkillPoints())", for: .normal)
         balance.text = "Balance: \(coins.fetchCoins())"
-
+        
         setupTaskLabels()
         proggressView.transform = CGAffineTransform(scaleX: 1, y: 2)
         
@@ -227,24 +165,6 @@ extension HomeScreenViewController {
     }
     
 }
-// MARK: - RESETER
-extension HomeScreenViewController {
-    func resetEverything(){
-        userDefaults.setValue(10, forKey: "experience")
-        userDefaults.setValue(1, forKey: "currentLevel")
-        userDefaults.setValue(100, forKey: "maxXp")
-//
-//        availableTasks.saveTasks(difficulty: .easy, amountLeft: 0)
-//        availableTasks.saveTasks(difficulty: .normal, amountLeft: 0)
-//        availableTasks.saveTasks(difficulty: .hard, amountLeft: 0)
-//
-//        availableTasks.setMaxAmountForTasks(difficulty: .easy ,maxAmount: 3)
-//        availableTasks.setMaxAmountForTasks(difficulty: .normal ,maxAmount: 2)
-//        availableTasks.setMaxAmountForTasks(difficulty: .hard ,maxAmount: 1)
-        skillPoints.saveSkillPoints(point: 10)
-        coins.saveCoins(coins: 0 )
-    }
-}
 // MARK: - CORE DATA
 extension HomeScreenViewController: CoreDataFetcher {
     
@@ -271,15 +191,14 @@ extension HomeScreenViewController  {
         if elapsedTime > animationDuration {
             stopDisplayLink()
         } else {
-           guard let newXp = levelUp.fetchUserData(kind: .float, forkey: .experience) as? Float,
-                 let maxValue = levelUp.fetchUserData(kind: .float, forkey: .maxXp) as? Float else { return }
+            guard let newXp = levelUp.fetchUserData(kind: .float, forkey: .experience) as? Float,
+                  let maxValue = levelUp.fetchUserData(kind: .float, forkey: .maxXp) as? Float else { return }
             let percentage = elapsedTime / animationDuration
             let value = oldXp + Float(percentage) * (newXp - oldXp)
             self.proggresViewLabel.text = ("\(Int(value)) / \(Int(maxValue))")
         }
         
     }
-    
     func xpCounterAnimation() {
         let now = Date()
         elapsedTime = now.timeIntervalSince(animationStartDate)
@@ -403,12 +322,12 @@ extension HomeScreenViewController {
     private func handleMarkAsDone(index: IndexPath) {
         saveXp(index: index)
         filterForDifficulty(index: index)
-        #warning("Bug here, it will always pick 1 cell if not specified otherwise")
+#warning("Bug here, it will always pick 1 cell if not specified otherwise")
         findSkill(index: index)
         deleteDesiredStack(indexPath: index, entityName: .Task, dataStack: tasks)
         guard let readyToLevelUp = levelUp.readyToLevelUp else { return }
-//        readyToLevelUp ? levelUp.playSound(soundName: "fanfare"): levelUp.playSound(soundName: "success")
-//        readyToLevelUp ? fireworkAnimation() : nil
+        //        readyToLevelUp ? levelUp.playSound(soundName: "fanfare"): levelUp.playSound(soundName: "success")
+        //        readyToLevelUp ? fireworkAnimation() : nil
         xpCounterAnimation()
         configureDetailView(isHidden: true)
         balance.text = "Balance: \(coins.fetchCoins())"
@@ -416,8 +335,17 @@ extension HomeScreenViewController {
     }
     
     private func handleMoveToTrash(index: IndexPath) {
-        filterForDifficulty(index: index)
-        deleteDesiredStack(indexPath: index, entityName: .Task, dataStack: tasks)
+     
+        alert.showTrashAlert(controller: self, completion: {
+            if  self.coins.checkIfAbleToBuy(cost: 500) {
+                self.coins.spend(cost: 500)
+                self.balance.text = "Balance: \(self.coins.fetchCoins())"
+                self.filterForDifficulty(index: index)
+                self.deleteDesiredStack(indexPath: index, entityName: .Task, dataStack: self.tasks)
+            } else {
+                self.alert.notEnougCoinsAlert(controller: self)
+            }
+        })
     }
     
     func filterForDifficulty(index: IndexPath) {
@@ -461,27 +389,17 @@ extension HomeScreenViewController {
     }
 }
 // MARK: - Delegate
-extension HomeScreenViewController: Updator {
+extension HomeScreenViewController: Updator, ShopDelegate {
+    func update() {
+        let coins = coins.fetchCoins() 
+        balance.text = "Balance: \(coins)"
+        skillPointButton.setTitle("Skill points: \(skillPoints.fetchSkillPoints())", for: .normal)
+    }
+    
     func updateData() {
         fetchDesiredStack(stack: .Task)
         setupTaskLabels()
         skillPointButton.setTitle("Skill points: \(skillPoints.fetchSkillPoints())", for: .normal)
-    }
 
-    func testNotification(){
-          let center = UNUserNotificationCenter.current()
-          let content = UNMutableNotificationContent()
-          content.title = "Great new you can add new tasks"
-          content.body = "Timer runned out"
-          content.sound = .default
-          content.userInfo = ["value": "Data with local notification"]
-          let fireDate = Calendar.current.dateComponents([.day, .month, .year, .hour, .minute, .second], from: Date().addingTimeInterval(60))
-          let trigger = UNCalendarNotificationTrigger(dateMatching: fireDate, repeats: false)
-          let request = UNNotificationRequest(identifier: "reminder", content: content, trigger: trigger)
-          center.add(request) { (error) in
-              if error != nil {
-                  print("Error = \(error?.localizedDescription ?? "error local notification")")
-              }
-          }
     }
 }

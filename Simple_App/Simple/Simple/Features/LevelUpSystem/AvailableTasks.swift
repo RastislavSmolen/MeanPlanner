@@ -29,11 +29,17 @@ class AvailableTask {
         hardTasks = fetchAvailableTasks(difficulty: .hard)
     }
     
-    func saveTasks(difficulty: Difficulty,amountLeft: Int ) {
+    func saveTasks(difficulty: Difficulty,amountLeft: Int) {
+       userDefaults.setValue(amountLeft, forKey: difficulty.toString())
+    }
+    func fetchTask(difficulty: Difficulty) -> Int {
+        userDefaults.integer(forKey: difficulty.toString())
+    }
+    func reachedMaxTask(difficulty:Difficulty)-> Bool {
         switch difficulty {
-        case .easy: userDefaults.setValue(amountLeft, forKey: "easy")
-        case .normal: userDefaults.setValue(amountLeft, forKey: "normal")
-        case .hard: userDefaults.setValue(amountLeft, forKey: "hard")
+        case .easy: return fetchTask(difficulty: difficulty) == 3 ? true : false
+        case .normal: return fetchTask(difficulty: difficulty) == 2 ? true : false
+        case .hard: return fetchTask(difficulty: difficulty) == 1 ? true : false
         }
     }
     

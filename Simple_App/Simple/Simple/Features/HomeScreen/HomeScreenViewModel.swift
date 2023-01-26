@@ -8,7 +8,7 @@
 import Foundation
 
 class HomeScreenViewModel {
-    
+
     weak var coordinator: AppCoordinator!
     
     func navigateToAddTaskViewController(delegate: HomeScreenViewController) {
@@ -20,4 +20,5 @@ class HomeScreenViewModel {
     func navigateToShopViewController(delegate: HomeScreenViewController) {
         coordinator.navigateToShop(delegate: delegate)
     }
+
 }
