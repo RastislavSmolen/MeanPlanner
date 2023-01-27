@@ -36,6 +36,7 @@ extension AppCoordinator {
         homeViewModel.coordinator = self
         // Set the ViewModel to ViewController
         homeViewController.viewModel = homeViewModel
+        navigationController.navigationBar.isHidden = true
         // Push it.
         navigationController.pushViewController(homeViewController, animated: true)
     }

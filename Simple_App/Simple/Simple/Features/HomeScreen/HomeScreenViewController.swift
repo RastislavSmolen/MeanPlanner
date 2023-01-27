@@ -88,13 +88,13 @@ final class HomeScreenViewController: UIViewController {
         }
     }
     func resetEverything() {
-//        userDefaults.setValue(10, forKey: "experience")
-//        userDefaults.setValue(1, forKey: "currentLevel")
-//        userDefaults.setValue(100, forKey: "maxXp")
-//
-//        availableTasks.saveTasks(difficulty: .easy, amountLeft: 0)
-//        availableTasks.saveTasks(difficulty: .normal, amountLeft: 0)
-//        availableTasks.saveTasks(difficulty: .hard, amountLeft: 0)
+        userDefaults.setValue(10, forKey: "experience")
+        userDefaults.setValue(1, forKey: "currentLevel")
+        userDefaults.setValue(100, forKey: "maxXp")
+
+        availableTasks.saveTasks(difficulty: .easy, amountLeft: 0)
+        availableTasks.saveTasks(difficulty: .normal, amountLeft: 0)
+        availableTasks.saveTasks(difficulty: .hard, amountLeft: 0)
 
         skillPoints.saveSkillPoints(point: 0)
         coins.saveCoins(coins: 3000)
@@ -130,7 +130,6 @@ extension HomeScreenViewController {
         
         configureDetailView(isHidden: true)
         
-     //   userImageView.layer.cornerRadius = 100
         currentTasksTableView.dataSource = self
         currentTasksTableView.delegate = self
     }
@@ -140,7 +139,6 @@ extension HomeScreenViewController {
         skillPointButton.layer.borderWidth = 1
         skillPointButton.layer.borderColor = UIColor(hex: "ae29d3").cgColor
         skillPointButton.layer.cornerRadius = 10
-     //   skillPointButton.layer.backgroundColor =
         skillPointButton.backgroundColor = UIColor(hex: "121212")
         self.view.bringSubviewToFront(skillPointButton)
         

@@ -753,7 +753,7 @@
                                 <rect key="frame" x="0.0" y="303" width="414" height="505"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <prototypes>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="TaskCell" rowHeight="100" id="8ig-Z7-Tw0" userLabel="CurrentTaksCell" customClass="TaskCell" customModule="Simple" customModuleProvider="target">
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="none" indentationWidth="10" reuseIdentifier="TaskCell" rowHeight="100" id="8ig-Z7-Tw0" userLabel="CurrentTaksCell" customClass="TaskCell" customModule="Simple" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="50" width="414" height="100"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="8ig-Z7-Tw0" id="I0Z-gV-3ti">
@@ -777,17 +777,23 @@
                                                             <nil key="highlightedColor"/>
                                                         </label>
                                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" usesAttributedText="YES" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="0WK-rM-PfP">
-                                                            <rect key="frame" x="25" y="29" width="94.5" height="21"/>
+                                                            <rect key="frame" x="25" y="29" width="344" height="21"/>
                                                             <attributedString key="attributedText">
                                                                 <fragment content="Task name">
                                                                     <attributes>
                                                                         <color key="NSColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                                                                         <font key="NSFont" size="20" name="Avenir-Medium"/>
+                                                                        <paragraphStyle key="NSParagraphStyle" alignment="center" lineBreakMode="wordWrapping" baseWritingDirection="natural" tighteningFactorForTruncation="0.0"/>
                                                                     </attributes>
                                                                 </fragment>
                                                             </attributedString>
                                                             <nil key="highlightedColor"/>
                                                         </label>
+                                                        <view contentMode="scaleToFill" id="mk4-Sl-h45">
+                                                            <rect key="frame" x="8" y="25" width="17" height="31"/>
+                                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                            <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                                        </view>
                                                     </subviews>
                                                     <color key="backgroundColor" systemColor="systemCyanColor"/>
                                                     <constraints>
@@ -812,7 +818,11 @@
                                             </constraints>
                                         </tableViewCellContentView>
                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <constraints>
+                                            <constraint firstItem="0WK-rM-PfP" firstAttribute="centerX" secondItem="8ig-Z7-Tw0" secondAttribute="centerX" id="Sb9-N5-vpl"/>
+                                        </constraints>
                                         <connections>
+                                            <outlet property="difficultyIndicatorView" destination="mk4-Sl-h45" id="4Cx-tu-FgT"/>
                                             <outlet property="rewardLabel" destination="JE3-qh-JWh" id="i43-94-zYN"/>
                                             <outlet property="taskCellBackground" destination="otK-XT-6Pc" id="484-mU-K0H"/>
                                             <outlet property="taskInfo" destination="I0Z-gV-3ti" id="wGe-Vs-2iH"/>
@@ -823,7 +833,7 @@
                             </tableView>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="uvv-hY-VUv" userLabel="AddTaskButton" customClass="KButton" customModule="Simple" customModuleProvider="target">
                                 <rect key="frame" x="177" y="802" width="60" height="60"/>
-                                <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <color key="backgroundColor" red="0.49019610879999997" green="0.2352941036" blue="0.71764707569999997" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="60" id="CY9-OL-sFL"/>
                                     <constraint firstAttribute="width" constant="60" id="QeH-9m-AvB"/>

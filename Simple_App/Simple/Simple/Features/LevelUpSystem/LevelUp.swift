@@ -19,9 +19,7 @@ class LevelUp: GlobalLevelUpSystem {
     var player: AVAudioPlayer?
     var readyToLevelUp : Bool?
     let skillPoint = SkillPoints()
-    //MARK: constants
-    //let userDefaults = UserDefaults.standard
-    
+
     let coins = Coins()
     
     //MARK: Bussiness Logic

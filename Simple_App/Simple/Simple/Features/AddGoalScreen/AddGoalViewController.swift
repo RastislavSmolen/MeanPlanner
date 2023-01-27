@@ -71,6 +71,7 @@ class AddGoalViewController : UIViewController {
   
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        navigationController?.navigationBar.isHidden = false
         let skill = skillName == "" ? "" : skillName
         skillNameLabel.text = skill
     }
