@@ -4,7 +4,6 @@
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21505"/>
-        <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -673,28 +672,40 @@
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="OVc-1P-eXX" userLabel="Skill">
-                                <rect key="frame" x="51" y="111" width="134" height="128"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="OVc-1P-eXX" userLabel="Skill">
+                                <rect key="frame" x="34" y="156" width="134" height="128"/>
                                 <subviews>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Skill" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="fUu-XR-BSi">
-                                        <rect key="frame" x="52" y="8" width="31" height="21"/>
-                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                        <nil key="textColor"/>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" usesAttributedText="YES" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="fUu-XR-BSi">
+                                        <rect key="frame" x="51.5" y="8" width="31" height="24"/>
+                                        <attributedString key="attributedText">
+                                            <fragment content="Skill">
+                                                <attributes>
+                                                    <color key="NSColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                                                    <font key="NSFont" size="17" name="Avenir-Roman"/>
+                                                </attributes>
+                                            </fragment>
+                                        </attributedString>
                                         <nil key="highlightedColor"/>
                                     </label>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="You will gain 1 skill point" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="0MC-Tg-xhZ">
-                                        <rect key="frame" x="4" y="37" width="127" height="14"/>
-                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                        <fontDescription key="fontDescription" type="system" pointSize="11"/>
-                                        <nil key="textColor"/>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" usesAttributedText="YES" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="0MC-Tg-xhZ">
+                                        <rect key="frame" x="4" y="37" width="120" height="16"/>
+                                        <attributedString key="attributedText">
+                                            <fragment content="You will gain 1 skill point">
+                                                <attributes>
+                                                    <color key="NSColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                                                    <font key="NSFont" size="11" name="Avenir-Book"/>
+                                                </attributes>
+                                            </fragment>
+                                        </attributedString>
                                         <nil key="highlightedColor"/>
                                     </label>
-                                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="rol-XN-XgW">
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="rol-XN-XgW">
                                         <rect key="frame" x="41" y="85" width="54" height="35"/>
-                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                        <color key="backgroundColor" name="AccentColor"/>
+                                        <color key="backgroundColor" red="0.68235301969999995" green="0.1607843041" blue="0.82745099070000006" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" constant="54" id="aVc-hn-UE7"/>
+                                            <constraint firstAttribute="height" constant="35" id="ePv-Uv-7f0"/>
+                                        </constraints>
                                         <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <state key="normal" title="Button"/>
                                         <buttonConfiguration key="configuration" style="plain" title="Buy"/>
@@ -702,21 +713,44 @@
                                             <action selector="skillItemButton:" destination="zZy-kC-jyl" eventType="touchUpInside" id="eed-pR-XDp"/>
                                         </connections>
                                     </button>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="549 coins" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="9qv-BU-tfL">
-                                        <rect key="frame" x="29" y="59" width="76" height="21"/>
-                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                        <nil key="textColor"/>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" usesAttributedText="YES" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="9qv-BU-tfL">
+                                        <rect key="frame" x="32" y="57" width="73" height="24"/>
+                                        <attributedString key="attributedText">
+                                            <fragment content="549 coins">
+                                                <attributes>
+                                                    <color key="NSColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                                                    <font key="NSFont" size="17" name="Avenir-Roman"/>
+                                                </attributes>
+                                            </fragment>
+                                        </attributedString>
                                         <nil key="highlightedColor"/>
                                     </label>
                                 </subviews>
-                                <color key="backgroundColor" systemColor="systemGrayColor"/>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <constraints>
+                                    <constraint firstItem="9qv-BU-tfL" firstAttribute="leading" secondItem="OVc-1P-eXX" secondAttribute="leading" constant="32" id="0if-k2-Seh"/>
+                                    <constraint firstAttribute="width" constant="134" id="BTo-OA-067"/>
+                                    <constraint firstItem="9qv-BU-tfL" firstAttribute="top" secondItem="0MC-Tg-xhZ" secondAttribute="bottom" constant="4" id="BgL-xb-fo1"/>
+                                    <constraint firstItem="rol-XN-XgW" firstAttribute="leading" secondItem="OVc-1P-eXX" secondAttribute="leading" constant="41" id="CiU-0P-JDM"/>
+                                    <constraint firstItem="fUu-XR-BSi" firstAttribute="top" secondItem="OVc-1P-eXX" secondAttribute="top" constant="8" id="Ow9-S6-uHu"/>
+                                    <constraint firstItem="rol-XN-XgW" firstAttribute="top" secondItem="9qv-BU-tfL" secondAttribute="bottom" constant="4" id="PLR-0E-PPC"/>
+                                    <constraint firstItem="0MC-Tg-xhZ" firstAttribute="top" secondItem="fUu-XR-BSi" secondAttribute="bottom" constant="5" id="TO2-Jf-Ig0"/>
+                                    <constraint firstAttribute="height" constant="128" id="cE1-84-LJN"/>
+                                    <constraint firstItem="fUu-XR-BSi" firstAttribute="leading" secondItem="OVc-1P-eXX" secondAttribute="leading" constant="51.5" id="pzb-6Y-9sM"/>
+                                    <constraint firstItem="0MC-Tg-xhZ" firstAttribute="leading" secondItem="OVc-1P-eXX" secondAttribute="leading" constant="4" id="sVA-U9-CXJ"/>
+                                </constraints>
                             </view>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="Cf6-Fs-HLx"/>
-                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <color key="backgroundColor" red="0.070588238540000001" green="0.070588238540000001" blue="0.070588238540000001" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                        <constraints>
+                            <constraint firstItem="OVc-1P-eXX" firstAttribute="leading" secondItem="Cf6-Fs-HLx" secondAttribute="leading" constant="34" id="p7d-fA-qAT"/>
+                            <constraint firstItem="Cf6-Fs-HLx" firstAttribute="bottom" secondItem="OVc-1P-eXX" secondAttribute="bottom" constant="578" id="vyc-oO-I8k"/>
+                        </constraints>
                     </view>
                     <connections>
+                        <outlet property="skillBuyButton" destination="rol-XN-XgW" id="Ufv-gH-nCz"/>
+                        <outlet property="skillContainerView" destination="OVc-1P-eXX" id="sQv-JC-39g"/>
                         <outlet property="skillItemCost" destination="9qv-BU-tfL" id="O9j-94-Os7"/>
                         <outlet property="skillItemDescription" destination="0MC-Tg-xhZ" id="knh-vl-iwU"/>
                     </connections>
@@ -1175,17 +1209,11 @@
         <image name="coin" width="1000" height="1000"/>
         <image name="plus" catalog="system" width="128" height="113"/>
         <image name="xmark.circle" catalog="system" width="128" height="123"/>
-        <namedColor name="AccentColor">
-            <color red="0.0" green="0.46000000000000002" blue="0.89000000000000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-        </namedColor>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>
         <systemColor name="systemCyanColor">
             <color red="0.19607843137254902" green="0.67843137254901964" blue="0.90196078431372551" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-        </systemColor>
-        <systemColor name="systemGrayColor">
-            <color red="0.55686274509803924" green="0.55686274509803924" blue="0.57647058823529407" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
         <systemColor name="systemGreenColor">
             <color red="0.20392156862745098" green="0.7803921568627451" blue="0.34901960784313724" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>

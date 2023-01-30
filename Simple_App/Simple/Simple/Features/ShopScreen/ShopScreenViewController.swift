@@ -16,6 +16,8 @@ class ShopViewController: UIViewController {
     @IBOutlet weak var skillItemLabel: UIView!
     @IBOutlet weak var skillItemDescription: UILabel!
     @IBOutlet weak var skillItemCost: UILabel!
+    @IBOutlet weak var skillContainerView: UIView!
+    @IBOutlet weak var skillBuyButton: UIButton!
     
     var delegate: ShopDelegate?
 
@@ -25,12 +27,15 @@ class ShopViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-      
+        skillContainerView.layer.borderColor = UIColor(hex: "ae29d3").cgColor
+        skillContainerView.layer.borderWidth = 2
+        skillContainerView.layer.cornerRadius = 10
+        skillBuyButton.layer.cornerRadius = 10
+        
     }
     
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
-        
         delegate?.update()
     }
     override func viewWillDisappear(_ animated: Bool) {
