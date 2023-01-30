@@ -26,11 +26,8 @@ class AddGoalViewController : UIViewController {
     // MARK: - Outlets
     @IBOutlet weak var taskNameTextField: UITextField!
     @IBOutlet weak var detailsTextField: UITextField!
-    
+    @IBOutlet weak var chooseSkillButton: UIButton!
     @IBOutlet weak var createButton: UIButton!
-    
-    @IBOutlet weak var colorView: UIView!
-    
     @IBOutlet weak var easyButton: UIButton!
     @IBOutlet weak var normalButton: UIButton!
     @IBOutlet weak var hardButton: UIButton!
@@ -72,6 +69,7 @@ class AddGoalViewController : UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         navigationController?.navigationBar.isHidden = false
+        navigationController?.navigationBar.tintColor = UIColor(hex: "ffffff")
         let skill = skillName == "" ? "" : skillName
         skillNameLabel.text = skill
     }
@@ -144,7 +142,6 @@ extension AddGoalViewController {
         button.isEnabled = bool
     }
     private func color(_ color: UIColor!, hex: String) {
-        colorView.backgroundColor = color
         createButton.tintColor =  color
         toolBar.tintColor = color
         colorToSave = hex
@@ -188,8 +185,28 @@ extension AddGoalViewController  {
     
     func setup() {
         configureTextField()
-        colorView.backgroundColor = UIColor(hex: ColorPaint.cyan.description)
+        setButtonStyle()
     }
+    func setButtonStyle() {
+        easyButton.layer.borderWidth = 1
+        easyButton.layer.borderColor = UIColor(hex: ColorPaint.green.description).cgColor
+        easyButton.layer.cornerRadius = 10
+        
+        normalButton.layer.borderWidth = 1
+        normalButton.layer.borderColor = UIColor(hex: ColorPaint.purple.description).cgColor
+        normalButton.layer.cornerRadius = 10
+        
+        hardButton.layer.borderWidth = 1
+        hardButton.layer.borderColor = UIColor(hex: ColorPaint.red.description).cgColor
+        hardButton.layer.cornerRadius = 10
+        
+        chooseSkillButton.layer.cornerRadius = 10
+        
+        createButton.backgroundColor = UIColor(hex: "ae29d3")
+        createButton.tintColor = UIColor(hex: "ae29d3")
+        createButton.layer.cornerRadius = 10
+    }
+    
     
 }
 //MARK: CORE DATA
@@ -207,9 +224,25 @@ extension AddGoalViewController : UITextFieldDelegate {
     
     
     private func configureTextField() {
-        taskNameTextField.delegate = self
-        detailsTextField.delegate = self
+    setStyleOfTextfields(textField: taskNameTextField)
+    setStyleOfTextfields(textField: detailsTextField)
         
+    }
+    func setStyleOfTextfields(textField: UITextField){
+        textField.delegate = self
+        textField.backgroundColor = UIColor(hex: "121212")
+        textField.layer.cornerRadius = 10
+        textField.layer.borderWidth = 2
+        textField.layer.borderColor = UIColor(hex: "ae29d3").cgColor
+        textField.textColor = .white
+        taskNameTextField.attributedPlaceholder = NSAttributedString(
+            string: "Play Tennis",
+            attributes: [NSAttributedString.Key.foregroundColor: UIColor.gray]
+        )
+        detailsTextField.attributedPlaceholder = NSAttributedString(
+            string: "Desctribe task max 150 characters",
+            attributes: [NSAttributedString.Key.foregroundColor: UIColor.gray]
+        )
     }
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {

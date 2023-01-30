@@ -53,7 +53,9 @@ final class HomeScreenViewController: UIViewController {
     let alert = Alert()
     let todaysDate = NSDate()
     
-    
+    let blurEffect = UIBlurEffect(style: UIBlurEffect.Style.systemUltraThinMaterialDark)
+    var blurEffectView = UIVisualEffectView()
+
     var isEmpty :  Bool {
         return tasks.count == 0 ? true : false
     }
@@ -80,6 +82,12 @@ final class HomeScreenViewController: UIViewController {
         setupXp()
         fetchDesiredStack(stack: .Task)
         setupUI()
+        navigationController?.navigationBar.isHidden = true
+    }
+
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        navigationController?.navigationBar.isHidden = true
     }
     //MARK: - IBActions
     @IBAction func didTapClosingSection(_ sender: Any) {
@@ -96,7 +104,7 @@ final class HomeScreenViewController: UIViewController {
         availableTasks.saveTasks(difficulty: .normal, amountLeft: 0)
         availableTasks.saveTasks(difficulty: .hard, amountLeft: 0)
 
-        skillPoints.saveSkillPoints(point: 0)
+        skillPoints.saveSkillPoints(point: 2)
         coins.saveCoins(coins: 3000)
     }
     
@@ -132,17 +140,25 @@ extension HomeScreenViewController {
         
         currentTasksTableView.dataSource = self
         currentTasksTableView.delegate = self
+        
+      
+        let tap = UITapGestureRecognizer(target: self, action: #selector(self.handleTap(_:)))
+        blurEffectView = UIVisualEffectView(effect: blurEffect)
+        blurEffectView.frame = closingButton.bounds
+        blurEffectView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+        blurEffectView.addGestureRecognizer(tap)
+        closingButton.addSubview(blurEffectView)
+    
+
     }
     func setupUiButton(){
         let skillPoint = "Skill Points: \(skillPoints.fetchSkillPoints())"
         skillPointButton.setTitle(skillPoint, for: .normal)
+        skillPointButton.titleLabel?.text = skillPoint
         skillPointButton.layer.borderWidth = 1
         skillPointButton.layer.borderColor = UIColor(hex: "ae29d3").cgColor
         skillPointButton.layer.cornerRadius = 10
         skillPointButton.backgroundColor = UIColor(hex: "121212")
-        self.view.bringSubviewToFront(skillPointButton)
-        
-        
     }
     func setupTaskLabels(){
         let easy = availableTasks.fetchAvailableTasks(difficulty: .easy)
@@ -221,6 +237,7 @@ extension HomeScreenViewController : UITableViewDelegate, UITableViewDataSource 
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         configureDetailView(isHidden: false)
+        blurEffectView.isHidden = false
         setupUIForDetailView(index: indexPath)
         index = indexPath
     }
@@ -230,11 +247,22 @@ extension HomeScreenViewController : UITableViewDelegate, UITableViewDataSource 
               let reward = tasks[index.row].value(forKey: "reward")as? Int,
               let info = tasks[index.row].value(forKey: "taskDetails") as? String
         else {return}
-        
-        detailTaskView.backgroundColor = UIColor(hex: colorHex)
+    
+        closeDetailViewButton.setTitle("", for: .normal)
+        finishTaskView.backgroundColor = UIColor(hex: "ae29d3")
+        finishTaskView.layer.cornerRadius = 10
+        detailTaskView.backgroundColor = UIColor(hex: "121212",alpha: 0)
+        detailTaskView.layer.cornerRadius = 20
+        detailTaskView.layer.borderWidth = 2
+        detailTaskView.layer.borderColor = UIColor(hex: "ae29d3").cgColor
         detailTaskXpLabel.text = "\(reward) xp "
         detailTaskNameLabel.text = name
         infoDetailViewLabel.text = info
+    }
+    @objc func handleTap(_ sender: UITapGestureRecognizer? = nil) {
+        detailTaskView.isHidden = true
+        closingButton.isHidden = true
+        blurEffectView.isHidden = true
     }
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         return 5

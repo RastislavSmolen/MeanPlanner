@@ -15,18 +15,29 @@ class SkillCell: UITableViewCell {
     @IBOutlet weak var skillName: UILabel!
     @IBOutlet weak var skillLevelLabel: UILabel!
     @IBOutlet weak var proggressionView: UIProgressView!
+    @IBOutlet weak var skillContainterView: UIView!
+    @IBOutlet weak var infoLabel: UILabel!
     let levelUp = LevelUp()
     override func layoutSubviews() {
         super.layoutSubviews()
     }
     
     func configureEmptyCell() {
-        skillLevelLabel.text = "No Skills available.Please create new skill"
+        skillLevelLabel.isHidden = true
         skillProggresionView.backgroundColor = .lightGray
         skillName.isHidden = true
         proggressionView.isHidden = true
         skillExperience.isHidden = true
         isUserInteractionEnabled = false
+        infoLabel.isHidden = false
+        infoLabel.text = "No Skill Available"
+        
+        skillContainterView.layer.cornerRadius = 20
+        skillContainterView.layer.borderWidth = 2
+        skillContainterView.layer.borderColor = UIColor(hex: "ae29d3").cgColor
+        self.backgroundColor = .clear
+        skillContainterView.backgroundColor = .clear
+        skillProggresionView.backgroundColor = .clear
     }
     
     func configureSkillCell(skill: NSManagedObject?) {
@@ -36,6 +47,7 @@ class SkillCell: UITableViewCell {
         proggressionView.isHidden = false
         skillExperience.isHidden = false
         isUserInteractionEnabled = true
+        infoLabel.isHidden = true
         guard let name = skill?.value(forKey: "skillName") as? String,
               let experience = skill?.value(forKey: "skillCurrentXP") as? Float,
               let maxSkillExperience = skill?.value(forKey: "skillMaxXP") as? Float,
@@ -49,6 +61,14 @@ class SkillCell: UITableViewCell {
         skillExperience.text = "\(skillXP) / \(skillMaxXP)"
         skillLevelLabel.text = "\(level)"
         proggressionView.progress = proggression
+        
+        skillContainterView.layer.cornerRadius = 20
+        skillContainterView.layer.borderWidth = 2
+        skillContainterView.layer.borderColor = UIColor(hex: "ae29d3").cgColor
+        self.backgroundColor = .clear
+        skillContainterView.backgroundColor = .clear
+        skillProggresionView.backgroundColor = .clear
+        
         
     }
 }

@@ -33,6 +33,9 @@ class SkillTreeViewController : UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        navigationController?.navigationBar.isHidden = false
+        navigationController?.navigationBar.tintColor = .white
+        
         skillPointAvailableLabel.text = "Skill points: \(skillPoint.fetchSkillPoints())"
         skillPoint.isSkillPointAvailable() ? hideButton(true): hideButton(false)
         fetchSkillFromCoreData()
@@ -99,6 +102,7 @@ extension SkillTreeViewController : UITableViewDelegate, UITableViewDataSource  
     
     private func handleMoveToTrash(index: IndexPath) {
         deleteSkillFromCoreData(indexPath: index)
+        tableView.reloadData()
     }
 }
 //MARK: - CoreData

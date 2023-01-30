@@ -20,10 +20,20 @@ class CreateSkillViewController : UIViewController {
     let skillMaxXp = 100
     let skillPoint = SkillPoints()
     
+    @IBOutlet weak var createButton: UIButton!
     @IBOutlet weak var skillNameTextField: UITextField!
     
     override func  viewDidLoad() {
         super.viewDidLoad()
+        createButton.layer.cornerRadius = 10
+        skillNameTextField.backgroundColor = .clear
+        skillNameTextField.layer.cornerRadius = 10
+        skillNameTextField.layer.borderWidth = 2
+        skillNameTextField.layer.borderColor = UIColor(hex: "ae29d3").cgColor
+        skillNameTextField.attributedPlaceholder = NSAttributedString(
+            string: "Piano",
+            attributes: [NSAttributedString.Key.foregroundColor: UIColor.gray]
+        )
     }
 
     @IBAction func createSkillButtonAction(_ sender: Any) {

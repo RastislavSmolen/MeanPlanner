@@ -29,6 +29,10 @@ class TaskCell: UITableViewCell  {
         taskCellBackground.backgroundColor = .clear
         rewardLabel.isHidden = true
         isUserInteractionEnabled = false
+        difficultyIndicatorView.isHidden = true
+        taskCellBackground.layer.cornerRadius = 20
+        taskCellBackground.layer.borderWidth = 2
+        taskCellBackground.layer.borderColor = UIColor(hex: "ae29d3").cgColor
     }
     
     func configureTaskCell(task: NSManagedObject?) {
