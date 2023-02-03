@@ -18,7 +18,7 @@ class AddGoalViewController : UIViewController {
     var tasks : [NSManagedObject] = []
     var presistenContainer: NSPersistentContainer!
     var colorToSave: String!
-
+    
     // MARK: - Constants
     let picker = UIPickerView()
     let toolBar = UIToolbar()
@@ -32,6 +32,7 @@ class AddGoalViewController : UIViewController {
     @IBOutlet weak var normalButton: UIButton!
     @IBOutlet weak var hardButton: UIButton!
     @IBOutlet weak var xpLabel: UILabel!
+    @IBOutlet weak var segmenter: UISegmentedControl!
     
     @IBOutlet weak var skillNameLabel: UILabel!
     
@@ -51,6 +52,7 @@ class AddGoalViewController : UIViewController {
     let coreData = CoreDataSystem()
     let timerSystem = TimerSystem()
     let alert = Alert()
+    var balancerValue : Int = 0
     
     var isSkillSelected: Bool = false
     
@@ -63,9 +65,9 @@ class AddGoalViewController : UIViewController {
         setup()
         let skill = skillName == "" ? "" : skillName
         skillNameLabel.text = skill
-    
+        
     }
-  
+    
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         navigationController?.navigationBar.isHidden = false
@@ -75,13 +77,13 @@ class AddGoalViewController : UIViewController {
     }
     // MARK: - Storyboard Actions
     @IBAction func chooseSkillAction(_ sender: Any) {
-     
-            viewModel.navigateToSkillTree(delegate: self)
-  
+        
+        viewModel.navigateToSkillTree(delegate: self)
+        
     }
     @IBAction func easyTaskButtonAction(_ sender: Any) {
-            availableTasks.reachedMaxTask(difficulty: .easy) ? hideAndShowAlert(false, button: easyButton, difficulty: .easy):
-           handleButtonBehaviour(difficulty: .easy)
+        availableTasks.reachedMaxTask(difficulty: .easy) ? hideAndShowAlert(false, button: easyButton, difficulty: .easy):
+        handleButtonBehaviour(difficulty: .easy)
     }
     @IBAction func normalTaskButtonAction(_ sender: Any) {
         availableTasks.reachedMaxTask(difficulty: .normal) ? hideAndShowAlert(false, button: normalButton, difficulty: .normal): handleButtonBehaviour(difficulty: .normal)
@@ -90,23 +92,34 @@ class AddGoalViewController : UIViewController {
         availableTasks.reachedMaxTask(difficulty: .hard) ? hideAndShowAlert(false, button: hardButton, difficulty: .hard) : handleButtonBehaviour(difficulty: .hard)
     }
     
+    @IBAction func segmenterAction(_ sender: Any) {
+        switch segmenter.selectedSegmentIndex {
+        case 0: print("Mental")
+            balancerValue = 0
+        case 1: print("Physical")
+            balancerValue = 1
+        case 2: print("Neither")
+            balancerValue = 2
+        default: break
+        }
+    }
     @IBAction func createTaskButton(_ sender: Any) {
         guard let taskName = taskNameTextField.text, let taskDetail = detailsTextField.text else { return }
         if skillName.isEmpty {
-            coreData.saveTaskToCoreData(name: taskName, detail: taskDetail, reward: generatedXp, color: colorToSave ?? "#32ADE6", difficulty: difficultyToSave, skillName: skillName,skillIndex: skillIndex, isSkillSelected: false)
+            coreData.saveTaskToCoreData(name: taskName, detail: taskDetail, reward: generatedXp, color: colorToSave ?? "#32ADE6", difficulty: difficultyToSave, skillName: skillName,skillIndex: skillIndex, isSkillSelected: false, balancerValue: balancerValue)
         } else {
-            coreData.saveTaskToCoreData(name: taskName, detail: taskDetail, reward: generatedXp, color: colorToSave ?? "#32ADE6", difficulty: difficultyToSave, skillName: skillName,skillIndex: skillIndex, isSkillSelected: true)
+            coreData.saveTaskToCoreData(name: taskName, detail: taskDetail, reward: generatedXp, color: colorToSave ?? "#32ADE6", difficulty: difficultyToSave, skillName: skillName,skillIndex: skillIndex, isSkillSelected: true, balancerValue: balancerValue)
         }
         
         delegate?.updateData()
         self.navigationController?.popViewController(animated: true)
     }
     
-
+    
 }
 //MARK: - Difficulty
 extension AddGoalViewController {
-
+    
     func handleButtonBehaviour(difficulty: Difficulty) {
         switch difficulty {
         case .easy:
@@ -132,7 +145,7 @@ extension AddGoalViewController {
             color(UIColor(hex: ColorPaint.red.description), hex: ColorPaint.red.description)
         }
         xpCounterAnimation()
-
+        
     }
     func hideAndShowAlert(_ bool: Bool, button: UIButton,difficulty: Difficulty) {
         button.isEnabled = bool
@@ -186,6 +199,7 @@ extension AddGoalViewController  {
     func setup() {
         configureTextField()
         setButtonStyle()
+        setupSegmenter()
     }
     func setButtonStyle() {
         easyButton.layer.borderWidth = 1
@@ -206,6 +220,12 @@ extension AddGoalViewController  {
         createButton.tintColor = UIColor(hex: "ae29d3")
         createButton.layer.cornerRadius = 10
     }
+    func setupSegmenter(){
+        let selectedTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.white]
+        let unselectedTextAtributes = [NSAttributedString.Key.foregroundColor: UIColor(hex: "808080",alpha: 0.5)]
+        segmenter.setTitleTextAttributes(unselectedTextAtributes, for: .normal)
+        segmenter.setTitleTextAttributes(selectedTextAttributes, for: .selected)
+    }
     
     
 }
@@ -224,8 +244,8 @@ extension AddGoalViewController : UITextFieldDelegate {
     
     
     private func configureTextField() {
-    setStyleOfTextfields(textField: taskNameTextField)
-    setStyleOfTextfields(textField: detailsTextField)
+        setStyleOfTextfields(textField: taskNameTextField)
+        setStyleOfTextfields(textField: detailsTextField)
         
     }
     func setStyleOfTextfields(textField: UITextField){

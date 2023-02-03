@@ -10,6 +10,7 @@ import UIKit
 class StatisticsViewController : UIViewController {
     var delegate : Updator?
     var viewModel : StatisticsViewModel!
+    let globalUserDataSystem = GlobalLevelUpSystem()
 
     @IBOutlet weak var physicalPercentageLabel: UILabel!
     @IBOutlet weak var balancerProggresView: UIProgressView!
@@ -22,7 +23,9 @@ class StatisticsViewController : UIViewController {
         setupBalancer()
     }
     func setupBalancer(){
-        let numbers = viewModel.calculateBarValue(mental: 150, physical: 60)
+       let physicalValue = globalUserDataSystem.fetchUserData(kind: .integer, forkey: .physical) as! Int
+       let mentalValue = globalUserDataSystem.fetchUserData(kind: .integer, forkey: .mental) as! Int
+        let numbers = viewModel.calculateBarValue(mental: Double(mentalValue), physical: Double(physicalValue))
         mentalPercentageLabel.text = "\(numbers.0)%"
         physicalPercentageLabel.text = "\(numbers.1)%"
         balancerProggresView.progress = Float(numbers.0 / 100)

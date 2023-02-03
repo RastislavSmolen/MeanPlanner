@@ -53,6 +53,7 @@ final class HomeScreenViewController: UIViewController {
     let coreData = CoreDataSystem()
     let alert = Alert()
     let todaysDate = NSDate()
+    let globalUserDataSystem = GlobalLevelUpSystem()
     
     let blurEffect = UIBlurEffect(style: UIBlurEffect.Style.systemUltraThinMaterialDark)
     var blurEffectView = UIVisualEffectView()
@@ -105,6 +106,8 @@ final class HomeScreenViewController: UIViewController {
         availableTasks.saveTasks(difficulty: .normal, amountLeft: 0)
         availableTasks.saveTasks(difficulty: .hard, amountLeft: 0)
 
+        globalUserDataSystem.saveUserData(forkey: .mental, itemToSave: 0)
+        globalUserDataSystem.saveUserData(forkey: .physical, itemToSave: 0)
         skillPoints.saveSkillPoints(point: 2)
         coins.saveCoins(coins: 3000)
     }
@@ -357,6 +360,7 @@ extension HomeScreenViewController {
         saveXp(index: index)
         filterForDifficulty(index: index)
         findSkill(index: index)
+        filterForBalancerValues(index: index)
         deleteDesiredStack(indexPath: index, entityName: .Task, dataStack: tasks)
         xpCounterAnimation()
         configureDetailView(isHidden: true)
@@ -383,6 +387,22 @@ extension HomeScreenViewController {
         })
     }
     
+    func filterForBalancerValues(index: IndexPath) {
+        var mentalValue = globalUserDataSystem.fetchUserData(kind: .integer, forkey: .mental) as! Int
+        var physicalValue = globalUserDataSystem.fetchUserData(kind: .integer, forkey: .physical) as! Int
+        switch tasks[index.row].value(forKey: "balancerValue") as? Int {
+        case 0:
+            mentalValue += 1
+            globalUserDataSystem.saveUserData(forkey: .mental, itemToSave: mentalValue)
+        case 1:
+            physicalValue += 1
+            globalUserDataSystem.saveUserData(forkey: .physical, itemToSave: physicalValue)
+        case 2:
+            print("task is neihter")
+        default: print("Value does not exits, check saveCoreData() in CoreData class")
+        }
+        setupTaskLabels()
+    }
     func filterForDifficulty(index: IndexPath) {
         switch tasks[index.row].value(forKey: "difficulty") as? String {
         case "easy":

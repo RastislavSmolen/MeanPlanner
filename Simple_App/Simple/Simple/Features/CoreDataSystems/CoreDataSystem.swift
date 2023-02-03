@@ -92,7 +92,7 @@ class CoreDataSystem {
             }
         }
     
-    func saveTaskToCoreData(name: String, detail: String,reward: Int,color: String,difficulty: String,skillName: String?,skillIndex: Int,isSkillSelected: Bool) {
+    func saveTaskToCoreData(name: String, detail: String,reward: Int,color: String,difficulty: String,skillName: String?,skillIndex: Int,isSkillSelected: Bool,balancerValue: Int) {
       
       guard let appDelegate = UIApplication.shared.delegate as? AppDelegate, let skillName = skillName else { return }
     
@@ -100,6 +100,7 @@ class CoreDataSystem {
       let entity = NSEntityDescription.entity(forEntityName: "Task",in: managedContext)!
       let task = NSManagedObject(entity: entity, insertInto: managedContext)
       
+        task.setValue(balancerValue, forKey: "balancerValue")
         task.setValue(isSkillSelected, forKey: "isSkillSelected")
         task.setValue(name, forKeyPath: "taskName")
         task.setValue(false, forKeyPath: "isFinnished")

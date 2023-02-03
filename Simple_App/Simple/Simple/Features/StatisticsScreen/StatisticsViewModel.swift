@@ -7,6 +7,8 @@
 
 import Foundation
 class StatisticsViewModel {
+    let userDefaults = UserDefaults.standard
+    let globalSystem = GlobalLevelUpSystem()
     weak var coordinator :  AppCoordinator!
     
     func calculateBarValue(mental: Double, physical: Double) -> (Double,Double) {
@@ -21,6 +23,9 @@ class StatisticsViewModel {
         physicalValue = physicalValue.rounded(toPlaces: 2)
         
         return (mentalValue,physicalValue)
+    }
+    func saveBalancerValues(value:Double,forKey: LevelData) {
+        globalSystem.saveUserData(forkey: forKey, itemToSave: value)
     }
 }
 
