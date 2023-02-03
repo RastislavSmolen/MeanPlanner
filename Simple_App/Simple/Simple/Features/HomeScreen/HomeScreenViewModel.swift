@@ -20,5 +20,8 @@ class HomeScreenViewModel {
     func navigateToShopViewController(delegate: HomeScreenViewController) {
         coordinator.navigateToShop(delegate: delegate)
     }
+    func navigateToStatistics(delegate: HomeScreenViewController) {
+        coordinator.toStatistics(delegate: delegate)
+    }
 
 }

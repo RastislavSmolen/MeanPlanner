@@ -35,10 +35,13 @@
 		9131FEF52971A3A900DF140F /* fanfare.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 9131FEF32971A3A900DF140F /* fanfare.mp3 */; };
 		9131FEF82975B6AF00DF140F /* FireworkAnimation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9131FEF72975B6AF00DF140F /* FireworkAnimation.swift */; };
 		9141118D28B3EA0B00D3E26A /* UIColorHexer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9141118C28B3EA0B00D3E26A /* UIColorHexer.swift */; };
+		9153CDC329896E7700DBC473 /* StatisticsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9153CDC229896E7700DBC473 /* StatisticsViewController.swift */; };
+		9153CDC529896EFA00DBC473 /* StatisticsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9153CDC429896EFA00DBC473 /* StatisticsViewModel.swift */; };
 		915641EE2976AEAE00684385 /* Updator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 915641ED2976AEAE00684385 /* Updator.swift */; };
 		9165491328B90AE10088D307 /* ColorPainter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9165491228B90AE10088D307 /* ColorPainter.swift */; };
 		9165491628B915070088D307 /* TaskCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9165491528B915070088D307 /* TaskCell.swift */; };
 		9193FC9528E86B3F00D651E9 /* LevelUp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9193FC9428E86B3F00D651E9 /* LevelUp.swift */; };
+		91A9EA22298978AD00591307 /* StatisticsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91A9EA21298978AD00591307 /* StatisticsTests.swift */; };
 		91AF1E112979BD1C00D90A15 /* Gradient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91AF1E102979BD1C00D90A15 /* Gradient.swift */; };
 		91BC9CFE28A3AC4300E6EE26 /* AddGoalViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91BC9CFD28A3AC4300E6EE26 /* AddGoalViewController.swift */; };
 		91BC9D0028A3B51A00E6EE26 /* AddGoalViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91BC9CFF28A3B51A00E6EE26 /* AddGoalViewModel.swift */; };
@@ -105,10 +108,13 @@
 		9131FEF32971A3A900DF140F /* fanfare.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; name = fanfare.mp3; path = ../../../../../Downloads/fanfare.mp3; sourceTree = "<group>"; };
 		9131FEF72975B6AF00DF140F /* FireworkAnimation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FireworkAnimation.swift; sourceTree = "<group>"; };
 		9141118C28B3EA0B00D3E26A /* UIColorHexer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIColorHexer.swift; sourceTree = "<group>"; };
+		9153CDC229896E7700DBC473 /* StatisticsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatisticsViewController.swift; sourceTree = "<group>"; };
+		9153CDC429896EFA00DBC473 /* StatisticsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatisticsViewModel.swift; sourceTree = "<group>"; };
 		915641ED2976AEAE00684385 /* Updator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Updator.swift; sourceTree = "<group>"; };
 		9165491228B90AE10088D307 /* ColorPainter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorPainter.swift; sourceTree = "<group>"; };
 		9165491528B915070088D307 /* TaskCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskCell.swift; sourceTree = "<group>"; };
 		9193FC9428E86B3F00D651E9 /* LevelUp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LevelUp.swift; sourceTree = "<group>"; };
+		91A9EA21298978AD00591307 /* StatisticsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatisticsTests.swift; sourceTree = "<group>"; };
 		91AF1E102979BD1C00D90A15 /* Gradient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Gradient.swift; sourceTree = "<group>"; };
 		91BC9CFD28A3AC4300E6EE26 /* AddGoalViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddGoalViewController.swift; sourceTree = "<group>"; };
 		91BC9CFF28A3B51A00E6EE26 /* AddGoalViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddGoalViewModel.swift; sourceTree = "<group>"; };
@@ -192,6 +198,7 @@
 				6363A4E4289EC00400DA2356 /* LevelUpTests.swift */,
 				9131FEED29707A3F00DF140F /* HomeScreenViewControllerTests.swift */,
 				6363A4E6289EC00400DA2356 /* Info.plist */,
+				91A9EA21298978AD00591307 /* StatisticsTests.swift */,
 			);
 			path = SimpleTests;
 			sourceTree = "<group>";
@@ -256,6 +263,15 @@
 				9131FEF72975B6AF00DF140F /* FireworkAnimation.swift */,
 			);
 			path = AnimationsSystem;
+			sourceTree = "<group>";
+		};
+		9153CDC129896E5900DBC473 /* StatisticsScreen */ = {
+			isa = PBXGroup;
+			children = (
+				9153CDC229896E7700DBC473 /* StatisticsViewController.swift */,
+				9153CDC429896EFA00DBC473 /* StatisticsViewModel.swift */,
+			);
+			path = StatisticsScreen;
 			sourceTree = "<group>";
 		};
 		9165490F28B90A6A0088D307 /* DataStructures */ = {
@@ -351,6 +367,7 @@
 		91FF10A728A1A0F8006339AC /* Features */ = {
 			isa = PBXGroup;
 			children = (
+				9153CDC129896E5900DBC473 /* StatisticsScreen */,
 				9119C57C297EBD0000CC5AD5 /* CoreDataSystems */,
 				9119C573297D8B0200CC5AD5 /* CreateSkillScreen */,
 				911EFB30297AF17E004E40B2 /* ShopScreen */,
@@ -556,6 +573,7 @@
 				9119C570297AFF1F00CC5AD5 /* Coins.swift in Sources */,
 				9119C579297EABE800CC5AD5 /* LevelUpSkill.swift in Sources */,
 				9119C57E297EDF8B00CC5AD5 /* GlobalLevelUpSystem.swift in Sources */,
+				9153CDC529896EFA00DBC473 /* StatisticsViewModel.swift in Sources */,
 				9119C5822981846200CC5AD5 /* TimerSystem.swift in Sources */,
 				6363A4CF289EC00300DA2356 /* HomeScreenViewController.swift in Sources */,
 				91D4ABC9297AA95F00424531 /* RoudedView.swift in Sources */,
@@ -563,6 +581,7 @@
 				91D4ABD3297AC28A00424531 /* Skills.swift in Sources */,
 				9165491628B915070088D307 /* TaskCell.swift in Sources */,
 				9119C572297B011100CC5AD5 /* Item.swift in Sources */,
+				9153CDC329896E7700DBC473 /* StatisticsViewController.swift in Sources */,
 				6363A4D5289EC00300DA2356 /* Simple.xcdatamodeld in Sources */,
 				9119C58029817D8800CC5AD5 /* NotificationManager.swift in Sources */,
 				911EFB32297AF192004E40B2 /* ShopScreenViewController.swift in Sources */,
@@ -591,6 +610,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				6363A4E5289EC00400DA2356 /* LevelUpTests.swift in Sources */,
+				91A9EA22298978AD00591307 /* StatisticsTests.swift in Sources */,
 				9131FEEE29707A3F00DF140F /* HomeScreenViewControllerTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

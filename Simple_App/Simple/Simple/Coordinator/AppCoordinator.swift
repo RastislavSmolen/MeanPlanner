@@ -189,6 +189,22 @@ extension AppCoordinator {
         navigationController.present(addGoalViewController, animated: true)
         
     }
+    func toStatistics(delegate: HomeScreenViewController) {
+        // Instantiate LoginViewController
+        let statisticsViewController = storyboard.instantiateViewController(withIdentifier: "StatisticsViewController") as! StatisticsViewController
+        // Instantiate LoginViewModel
+        let statisticsViewModel = StatisticsViewModel.init()
+        // Set the Coordinator to the ViewModel
+        statisticsViewModel.coordinator = self
+        // Set the ViewModel to ViewController
+        statisticsViewController.viewModel = statisticsViewModel
+        
+        statisticsViewController.delegate = delegate
+
+        
+        navigationController.pushViewController(statisticsViewController, animated: true)
+        
+    }
 //    func dissmissCreateSkillViewController() {
 //        // Instantiate LoginViewController
 //        let shopViewController = storyboard.instantiateViewController(withIdentifier: "ShopViewController") as! ShopViewController

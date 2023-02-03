@@ -36,6 +36,7 @@ final class HomeScreenViewController: UIViewController {
     @IBOutlet weak var normalTaskLabel: UILabel!
     @IBOutlet weak var hardTaskLabel: UILabel!
     
+    @IBOutlet weak var statisticsButton: UIButton!
     
     @IBOutlet weak var balanceLabel: UILabel!
     @IBOutlet weak var skillPointButton: UIButton!
@@ -124,6 +125,9 @@ final class HomeScreenViewController: UIViewController {
     @IBAction func shopButtonAction(_ sender: Any) {
         viewModel.navigateToShopViewController(delegate: self)
     }
+    @IBAction func statisticsButtonAction(_ sender: Any) {
+        viewModel.navigateToStatistics(delegate: self)
+    }
 }
 
 //MARK: SETUP
@@ -131,6 +135,7 @@ extension HomeScreenViewController {
     
     func setupUI() {
         setupUiButton()
+        statisticsButton.setTitle("", for: .normal)
         balance.text = fetchBalance()
         
         setupTaskLabels()
