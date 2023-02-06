@@ -40,7 +40,7 @@ extension AppCoordinator {
         // Push it.
         navigationController.pushViewController(homeViewController, animated: true)
     }
-
+    
     func navigateToAddGoalViewController () {
         // Instantiate LoginViewController
         let addGoalViewController = storyboard.instantiateViewController(withIdentifier: "AddGoalViewController") as! AddGoalViewController
@@ -116,7 +116,7 @@ extension AppCoordinator {
         // Set the ViewModel to ViewController
         skillTreeViewController.viewModel = skillTreeViewModel
         // Push it.
-       // testViewController.delegate = delegate
+        // testViewController.delegate = delegate
         navigationController.dismiss(animated: true)
     }
     func navigateToShop(delegate: HomeScreenViewController) {
@@ -142,7 +142,7 @@ extension AppCoordinator {
         // Set the ViewModel to ViewController
         shopViewController.viewModel = shopViewModel
         // Push it.
-       // testViewController.delegate = delegate
+        // testViewController.delegate = delegate
         navigationController.dismiss(animated: true)
     }
     func navigateToCreateSkill(delegate: SkillTreeViewController) {
@@ -184,7 +184,7 @@ extension AppCoordinator {
         // Set the ViewModel to ViewController
         addGoalViewController.viewModel = addGoalViewModel
         // Push it.
-         addGoalViewController.delegate = delegate
+        addGoalViewController.delegate = delegate
         
         navigationController.present(addGoalViewController, animated: true)
         
@@ -201,21 +201,22 @@ extension AppCoordinator {
         
         statisticsViewController.delegate = delegate
 
-        
         navigationController.pushViewController(statisticsViewController, animated: true)
         
     }
-//    func dissmissCreateSkillViewController() {
-//        // Instantiate LoginViewController
-//        let shopViewController = storyboard.instantiateViewController(withIdentifier: "ShopViewController") as! ShopViewController
-//        // Instantiate LoginViewModel
-//        let shopViewModel = ShopViewModel.init()
-//        // Set the Coordinator to the ViewModel
-//        shopViewModel.coordinator = self
-//        // Set the ViewModel to ViewController
-//        shopViewController.viewModel = shopViewModel
-//        // Push it.
-//       // testViewController.delegate = delegate
-//        navigationController.dismiss(animated: true)
-//    }
+    func toSettings(delegate: HomeScreenViewController) {
+        // Instantiate LoginViewController
+        let settingsViewController = storyboard.instantiateViewController(withIdentifier: "SettingsViewController") as! SettingsViewController
+        // Instantiate LoginViewModel
+        let settingsViewModel = SettingsViewModel.init()
+        // Set the Coordinator to the ViewModel
+        settingsViewModel.coordinator = self
+        // Set the ViewModel to ViewController
+        settingsViewController.viewModel = settingsViewModel
+        
+        settingsViewController.delegate = delegate
+
+        navigationController.pushViewController(settingsViewController, animated: true)
+        
+    }
 }

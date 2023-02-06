@@ -73,5 +73,34 @@ class Alert {
         }))
         controller.present(alert, animated: true, completion: .none)
     }
+    func tryAgainAlert(controller: UIViewController,itemName:String,cost: Int,completion: @escaping ()-> Void) {
+        let alert = UIAlertController(title: "Try again", message: "You can try to spin xp again for \(cost) coins", preferredStyle: UIAlertController.Style.alert)
+
+        alert.addAction(UIAlertAction(title: "Cancel",
+                                      style: UIAlertAction.Style.default,
+                                      handler: {(_: UIAlertAction!) in
+        }))
+        alert.addAction(UIAlertAction(title: "Try Again",
+                                      style: UIAlertAction.Style.default,
+                                      handler: {(_: UIAlertAction!) in
+            completion()
+        }))
+        controller.present(alert, animated: true, completion: .none)
+    }
+    func generatingXpAlert(controller: UIViewController,completion: @escaping ()-> Void) {
+        
+        let alert = UIAlertController(title: "Do you want to try to generate reward again?", message: "It will cost you 500 coins ", preferredStyle: UIAlertController.Style.alert)
+
+        alert.addAction(UIAlertAction(title: "Cancel",
+                                      style: UIAlertAction.Style.default,
+                                      handler: {(_: UIAlertAction!) in
+        }))
+        alert.addAction(UIAlertAction(title: "Try Again",
+                                      style: UIAlertAction.Style.default,
+                                      handler: {(_: UIAlertAction!) in
+            completion()
+        }))
+        controller.present(alert, animated: true, completion: .none)
+    }
 }
 

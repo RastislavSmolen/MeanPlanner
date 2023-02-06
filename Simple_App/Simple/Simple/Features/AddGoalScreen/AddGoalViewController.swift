@@ -34,6 +34,7 @@ class AddGoalViewController : UIViewController {
     @IBOutlet weak var xpLabel: UILabel!
     @IBOutlet weak var segmenter: UISegmentedControl!
     
+    @IBOutlet weak var balanceLabel: UILabel!
     @IBOutlet weak var skillNameLabel: UILabel!
     
     let availableTasks = AvailableTask()
@@ -53,6 +54,8 @@ class AddGoalViewController : UIViewController {
     let timerSystem = TimerSystem()
     let alert = Alert()
     var balancerValue : Int = 0
+    var didTapButton = false
+    let coins = Coins()
     
     var isSkillSelected: Bool = false
     
@@ -65,6 +68,7 @@ class AddGoalViewController : UIViewController {
         setup()
         let skill = skillName == "" ? "" : skillName
         skillNameLabel.text = skill
+        balanceLabel.text = self.fetchBalance()
         
     }
     
@@ -82,14 +86,58 @@ class AddGoalViewController : UIViewController {
         
     }
     @IBAction func easyTaskButtonAction(_ sender: Any) {
-        availableTasks.reachedMaxTask(difficulty: .easy) ? hideAndShowAlert(false, button: easyButton, difficulty: .easy):
-        handleButtonBehaviour(difficulty: .easy)
+        if didTapButton {
+            alert.generatingXpAlert(controller: self) {
+               
+                if self.coins.checkIfAbleToBuy(cost: 500){
+                    self.coins.spend(cost: 500)
+                    self.handleButtonBehaviour(difficulty: .easy)
+                    self.balanceLabel.text = self.fetchBalance()
+                } else {
+                    self.alert.notEnougCoinsAlert(controller: self)
+                }
+            }
+        } else {
+            handleButtonBehaviour(difficulty: .easy)
+            didTapButton = true
+        }
+    }
+    func fetchBalance()-> String {
+        "\(coins.fetchCoins())"
     }
     @IBAction func normalTaskButtonAction(_ sender: Any) {
-        availableTasks.reachedMaxTask(difficulty: .normal) ? hideAndShowAlert(false, button: normalButton, difficulty: .normal): handleButtonBehaviour(difficulty: .normal)
+        if didTapButton {
+            alert.generatingXpAlert(controller: self) {
+               
+                if self.coins.checkIfAbleToBuy(cost: 650){
+                    self.coins.spend(cost: 650)
+                    self.handleButtonBehaviour(difficulty: .normal)
+                    self.balanceLabel.text = self.fetchBalance()
+                } else {
+                    self.alert.notEnougCoinsAlert(controller: self)
+                }
+            }
+        } else {
+            handleButtonBehaviour(difficulty: .easy)
+            didTapButton = true
+        }
     }
     @IBAction func hardActionButton(_ sender: Any) {
-        availableTasks.reachedMaxTask(difficulty: .hard) ? hideAndShowAlert(false, button: hardButton, difficulty: .hard) : handleButtonBehaviour(difficulty: .hard)
+        if didTapButton {
+            alert.generatingXpAlert(controller: self) {
+               
+                if self.coins.checkIfAbleToBuy(cost: 750){
+                    self.coins.spend(cost: 750)
+                    self.handleButtonBehaviour(difficulty: .easy)
+                    self.balanceLabel.text = self.fetchBalance()
+                } else {
+                    self.alert.notEnougCoinsAlert(controller: self)
+                }
+            }
+        } else {
+            handleButtonBehaviour(difficulty: .easy)
+            didTapButton = true
+        }
     }
     
     @IBAction func segmenterAction(_ sender: Any) {
@@ -129,6 +177,8 @@ extension AddGoalViewController {
             isButtonEnabled(false, button: normalButton)
             difficultyToSave = "easy"
             color(UIColor(hex: ColorPaint.green.description), hex: ColorPaint.green.description)
+            xpCounterAnimation()
+
         case .normal:
             generatedXp = Int.random(in: 55...105)
             availableTasks.taskWasAdded(kind: .normal)
@@ -136,6 +186,8 @@ extension AddGoalViewController {
             isButtonEnabled(false, button: hardButton)
             difficultyToSave = "normal"
             color(UIColor(hex: ColorPaint.purple.description), hex: ColorPaint.purple.description)
+            xpCounterAnimation()
+
         case .hard:
             generatedXp = Int.random(in: 105...155)
             availableTasks.taskWasAdded(kind: .hard)
@@ -143,8 +195,9 @@ extension AddGoalViewController {
             isButtonEnabled(false, button: normalButton)
             difficultyToSave = "hard"
             color(UIColor(hex: ColorPaint.red.description), hex: ColorPaint.red.description)
+            xpCounterAnimation()
+
         }
-        xpCounterAnimation()
         
     }
     func hideAndShowAlert(_ bool: Bool, button: UIButton,difficulty: Difficulty) {
@@ -232,9 +285,11 @@ extension AddGoalViewController  {
 //MARK: CORE DATA
 extension AddGoalViewController: CoreDataPasser {
     func passData(data: NSManagedObject,indexPath: IndexPath) {
-        guard let skill = data.value(forKey: "skillName") as? String else { return }
+        guard let skill = data.value(forKey: "skillName") as? String,
+              let skillLevel = data.value(forKey: "skillLevel") as? Int else
+        { return }
         skillName = skill
-        skillNameLabel.text = skillName
+        skillNameLabel.text = "\(skillLevel).lvl \(skillName)"
         skillIndex = indexPath.row
     }
     

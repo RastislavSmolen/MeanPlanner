@@ -19,7 +19,7 @@ class Coins {
         return userDefaults.integer(forKey: "coins")
     }
     func checkIfAbleToBuy(cost: Int) -> Bool {
-        return fetchCoins() > cost ? true : false
+        return fetchCoins() >= cost ? true : false
     }
     func buy(cost: Int, item: Item){
         

@@ -23,5 +23,7 @@ class HomeScreenViewModel {
     func navigateToStatistics(delegate: HomeScreenViewController) {
         coordinator.toStatistics(delegate: delegate)
     }
-
+    func navigateToSettings(delegate: HomeScreenViewController) {
+        coordinator.toSettings(delegate: delegate)
+    }
 }

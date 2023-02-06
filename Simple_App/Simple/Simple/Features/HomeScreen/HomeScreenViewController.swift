@@ -36,6 +36,7 @@ final class HomeScreenViewController: UIViewController {
     @IBOutlet weak var normalTaskLabel: UILabel!
     @IBOutlet weak var hardTaskLabel: UILabel!
     
+    @IBOutlet weak var menuButton: UIButton!
     @IBOutlet weak var statisticsButton: UIButton!
     
     @IBOutlet weak var balanceLabel: UILabel!
@@ -54,10 +55,9 @@ final class HomeScreenViewController: UIViewController {
     let alert = Alert()
     let todaysDate = NSDate()
     let globalUserDataSystem = GlobalLevelUpSystem()
-    
     let blurEffect = UIBlurEffect(style: UIBlurEffect.Style.systemUltraThinMaterialDark)
     var blurEffectView = UIVisualEffectView()
-
+    
     var isEmpty :  Bool {
         return tasks.count == 0 ? true : false
     }
@@ -77,6 +77,18 @@ final class HomeScreenViewController: UIViewController {
     private var startTime = 0.0
     var index = IndexPath()
     
+    private lazy var element1 = UIAction(title:"Settings",image: UIImage(named: "pencil.circle"),attributes: [],state: .off) { action in
+        self.toSettings()
+    }
+    private lazy var element2 = UIAction(title:"Option2",image: UIImage(named: "pencil.circle"),attributes: [],state: .off) { action in
+        print("I am working")
+    }
+    private lazy var element3 = UIAction(title:"Option3",image: UIImage(named: "pencil.circle"),attributes: [],state: .off) { action in
+        print("I am working")
+    }
+    
+    private lazy var element : [UIAction] = [element1,element2,element3]
+    private lazy var menu = UIMenu(title: "Menu", children: element)
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -85,27 +97,40 @@ final class HomeScreenViewController: UIViewController {
         fetchDesiredStack(stack: .Task)
         setupUI()
         navigationController?.navigationBar.isHidden = true
+        menuButton.setTitle("", for: .normal)
+        if #available(iOS 14.0, *) {
+            menuButton.showsMenuAsPrimaryAction = true
+            menuButton.menu = menu
+        } else {
+            // Fallback on earlier versions
+        }
     }
-
+  
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         navigationController?.navigationBar.isHidden = true
     }
+        
     //MARK: - IBActions
     @IBAction func didTapClosingSection(_ sender: Any) {
         if !detailTaskView.isHidden {
             configureDetailView(isHidden: true)
         }
     }
+        
+    func toSettings() {
+            viewModel.navigateToSettings(delegate: self)
+        }
+        
     func resetEverything() {
         userDefaults.setValue(10, forKey: "experience")
         userDefaults.setValue(1, forKey: "currentLevel")
         userDefaults.setValue(100, forKey: "maxXp")
-
+        
         availableTasks.saveTasks(difficulty: .easy, amountLeft: 0)
         availableTasks.saveTasks(difficulty: .normal, amountLeft: 0)
         availableTasks.saveTasks(difficulty: .hard, amountLeft: 0)
-
+        
         globalUserDataSystem.saveUserData(forkey: .mental, itemToSave: 0)
         globalUserDataSystem.saveUserData(forkey: .physical, itemToSave: 0)
         skillPoints.saveSkillPoints(point: 2)
@@ -115,7 +140,6 @@ final class HomeScreenViewController: UIViewController {
     @IBAction func addTaskAction(_ sender: Any) {
         addGoalAction()
     }
-  
     @IBAction func didTapCloseDetailViewButton(_ sender: Any) {
         configureDetailView(isHidden: true)
     }
@@ -132,7 +156,6 @@ final class HomeScreenViewController: UIViewController {
         viewModel.navigateToStatistics(delegate: self)
     }
 }
-
 //MARK: SETUP
 extension HomeScreenViewController {
     
@@ -148,15 +171,13 @@ extension HomeScreenViewController {
         
         currentTasksTableView.dataSource = self
         currentTasksTableView.delegate = self
-        
-      
+    
         let tap = UITapGestureRecognizer(target: self, action: #selector(self.handleTap(_:)))
         blurEffectView = UIVisualEffectView(effect: blurEffect)
         blurEffectView.frame = closingButton.bounds
         blurEffectView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
         blurEffectView.addGestureRecognizer(tap)
         closingButton.addSubview(blurEffectView)
-    
 
     }
     func setupUiButton(){
@@ -255,7 +276,7 @@ extension HomeScreenViewController : UITableViewDelegate, UITableViewDataSource 
               let reward = tasks[index.row].value(forKey: "reward")as? Int,
               let info = tasks[index.row].value(forKey: "taskDetails") as? String
         else {return}
-    
+        
         closeDetailViewButton.setTitle("", for: .normal)
         finishTaskView.backgroundColor = UIColor(hex: "ae29d3")
         finishTaskView.layer.cornerRadius = 10
@@ -368,13 +389,13 @@ extension HomeScreenViewController {
     }
     
     private func playSound(){
-          guard let readyToLevelUp = levelUp.readyToLevelUp else { return }
-                 readyToLevelUp ? levelUp.playSound(soundName: "fanfare"): levelUp.playSound(soundName: "success")
-                 readyToLevelUp ? fireworkAnimation() : nil
+        guard let readyToLevelUp = levelUp.readyToLevelUp else { return }
+        readyToLevelUp ? levelUp.playSound(soundName: "fanfare"): levelUp.playSound(soundName: "success")
+        readyToLevelUp ? fireworkAnimation() : nil
     }
     
     private func handleMoveToTrash(index: IndexPath) {
-     
+        
         alert.showTrashAlert(controller: self, completion: {
             if  self.coins.checkIfAbleToBuy(cost: 500) {
                 self.coins.spend(cost: 500)
@@ -420,15 +441,15 @@ extension HomeScreenViewController {
         guard let index = index else { return }
         
         guard let skillIndex = tasks[index.row].value(forKey: "indexPath") as? Int,let xp = tasks[index.row].value(forKey: "reward") as? Float else { return }
-      
+        
         if tasks[index.row].value(forKey: "isSkillSelected") as? Bool ?? false {
             fetchDesiredStack(stack: .Skill)
             
-                let skillPosition = skills[skillIndex]
-                guard let skillName = skillPosition.value(forKey: "skillName") as? String, let skillXp = skillPosition.value(forKey: "skillCurrentXP") as? Float, let skillMaxXp = skillPosition.value(forKey: "skillMaxXP") as? Float, let skillLevel =  skillPosition.value(forKey: "skillLevel") as? Int else { return }
-                let xpToProccess = xp + skillXp
-                levelUpSkill.processXP(skillName: skillName ,maxXP: skillMaxXp, currentXP: xpToProccess, currentLevel: skillLevel,index: skillIndex)
-                print(skillName, skillMaxXp, xpToProccess, skillLevel)
+            let skillPosition = skills[skillIndex]
+            guard let skillName = skillPosition.value(forKey: "skillName") as? String, let skillXp = skillPosition.value(forKey: "skillCurrentXP") as? Float, let skillMaxXp = skillPosition.value(forKey: "skillMaxXP") as? Float, let skillLevel =  skillPosition.value(forKey: "skillLevel") as? Int else { return }
+            let xpToProccess = xp + skillXp
+            levelUpSkill.processXP(skillName: skillName ,maxXP: skillMaxXp, currentXP: xpToProccess, currentLevel: skillLevel,index: skillIndex)
+            print(skillName, skillMaxXp, xpToProccess, skillLevel)
         }
     }
     
@@ -453,6 +474,8 @@ extension HomeScreenViewController: Updator, ShopDelegate {
         fetchDesiredStack(stack: .Task)
         setupTaskLabels()
         setupUiButton()
+        currentTasksTableView.reloadData()
+        self.balance.text = self.fetchBalance()
     }
     func fetchBalance()-> String {
         "\(coins.fetchCoins())"

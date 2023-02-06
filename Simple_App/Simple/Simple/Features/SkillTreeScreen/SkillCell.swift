@@ -59,7 +59,7 @@ class SkillCell: UITableViewCell {
         let proggression = levelUp.convertedXP(xp: Float(skillXP), maxXP: Float(skillMaxXP))
         skillName.text = name
         skillExperience.text = "\(skillXP) / \(skillMaxXP)"
-        skillLevelLabel.text = "\(level)"
+        skillLevelLabel.text = "\(level).lvl"
         proggressionView.progress = proggression
         
         skillContainterView.layer.cornerRadius = 20

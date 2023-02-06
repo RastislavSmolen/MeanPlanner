@@ -38,6 +38,9 @@
 		9153CDC329896E7700DBC473 /* StatisticsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9153CDC229896E7700DBC473 /* StatisticsViewController.swift */; };
 		9153CDC529896EFA00DBC473 /* StatisticsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9153CDC429896EFA00DBC473 /* StatisticsViewModel.swift */; };
 		915641EE2976AEAE00684385 /* Updator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 915641ED2976AEAE00684385 /* Updator.swift */; };
+		915CA3792991633E00279B62 /* CodeDump.swift in Sources */ = {isa = PBXBuildFile; fileRef = 915CA3782991633E00279B62 /* CodeDump.swift */; };
+		915CA37C29916FC600279B62 /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 915CA37B29916FC600279B62 /* SettingsViewController.swift */; };
+		915CA37E2991700300279B62 /* SettingsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 915CA37D2991700300279B62 /* SettingsViewModel.swift */; };
 		9165491328B90AE10088D307 /* ColorPainter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9165491228B90AE10088D307 /* ColorPainter.swift */; };
 		9165491628B915070088D307 /* TaskCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9165491528B915070088D307 /* TaskCell.swift */; };
 		9193FC9528E86B3F00D651E9 /* LevelUp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9193FC9428E86B3F00D651E9 /* LevelUp.swift */; };
@@ -111,6 +114,9 @@
 		9153CDC229896E7700DBC473 /* StatisticsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatisticsViewController.swift; sourceTree = "<group>"; };
 		9153CDC429896EFA00DBC473 /* StatisticsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatisticsViewModel.swift; sourceTree = "<group>"; };
 		915641ED2976AEAE00684385 /* Updator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Updator.swift; sourceTree = "<group>"; };
+		915CA3782991633E00279B62 /* CodeDump.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CodeDump.swift; sourceTree = "<group>"; };
+		915CA37B29916FC600279B62 /* SettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
+		915CA37D2991700300279B62 /* SettingsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewModel.swift; sourceTree = "<group>"; };
 		9165491228B90AE10088D307 /* ColorPainter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorPainter.swift; sourceTree = "<group>"; };
 		9165491528B915070088D307 /* TaskCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskCell.swift; sourceTree = "<group>"; };
 		9193FC9428E86B3F00D651E9 /* LevelUp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LevelUp.swift; sourceTree = "<group>"; };
@@ -274,6 +280,15 @@
 			path = StatisticsScreen;
 			sourceTree = "<group>";
 		};
+		915CA37A29916FA900279B62 /* SettingsScreen */ = {
+			isa = PBXGroup;
+			children = (
+				915CA37B29916FC600279B62 /* SettingsViewController.swift */,
+				915CA37D2991700300279B62 /* SettingsViewModel.swift */,
+			);
+			path = SettingsScreen;
+			sourceTree = "<group>";
+		};
 		9165490F28B90A6A0088D307 /* DataStructures */ = {
 			isa = PBXGroup;
 			children = (
@@ -332,6 +347,7 @@
 				9165491228B90AE10088D307 /* ColorPainter.swift */,
 				9119C57F29817D8800CC5AD5 /* NotificationManager.swift */,
 				9119C58329818F1A00CC5AD5 /* AlerView.swift */,
+				915CA3782991633E00279B62 /* CodeDump.swift */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";
@@ -367,6 +383,7 @@
 		91FF10A728A1A0F8006339AC /* Features */ = {
 			isa = PBXGroup;
 			children = (
+				915CA37A29916FA900279B62 /* SettingsScreen */,
 				9153CDC129896E5900DBC473 /* StatisticsScreen */,
 				9119C57C297EBD0000CC5AD5 /* CoreDataSystems */,
 				9119C573297D8B0200CC5AD5 /* CreateSkillScreen */,
@@ -580,6 +597,7 @@
 				91D4ABCC297AB81B00424531 /* SkillPoints.swift in Sources */,
 				91D4ABD3297AC28A00424531 /* Skills.swift in Sources */,
 				9165491628B915070088D307 /* TaskCell.swift in Sources */,
+				915CA37E2991700300279B62 /* SettingsViewModel.swift in Sources */,
 				9119C572297B011100CC5AD5 /* Item.swift in Sources */,
 				9153CDC329896E7700DBC473 /* StatisticsViewController.swift in Sources */,
 				6363A4D5289EC00300DA2356 /* Simple.xcdatamodeld in Sources */,
@@ -588,6 +606,7 @@
 				91FF10AB28A1A15F006339AC /* CoordinatorProtocol.swift in Sources */,
 				9131FEF82975B6AF00DF140F /* FireworkAnimation.swift in Sources */,
 				9141118D28B3EA0B00D3E26A /* UIColorHexer.swift in Sources */,
+				915CA37C29916FC600279B62 /* SettingsViewController.swift in Sources */,
 				9119C575297D8B1A00CC5AD5 /* CreateSkillViewController.swift in Sources */,
 				91E28BC429781B1C00AFD046 /* AvailableTasks.swift in Sources */,
 				6363A4FF289F0E4300DA2356 /* AppCoordinator.swift in Sources */,
@@ -595,6 +614,7 @@
 				915641EE2976AEAE00684385 /* Updator.swift in Sources */,
 				9119C577297D8B3D00CC5AD5 /* CreateSkillViewModel.swift in Sources */,
 				6363A4CB289EC00300DA2356 /* AppDelegate.swift in Sources */,
+				915CA3792991633E00279B62 /* CodeDump.swift in Sources */,
 				911EFB34297AF1A1004E40B2 /* ShopViewModel.swift in Sources */,
 				91D4ABD1297ABD6F00424531 /* SkillTreeViewModel.swift in Sources */,
 				91D4ABD5297AD77E00424531 /* SkillCell.swift in Sources */,
