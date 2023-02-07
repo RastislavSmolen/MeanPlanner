@@ -18,6 +18,7 @@ final class HomeScreenViewController: UIViewController {
     @IBOutlet weak var proggressView: UIProgressView!
     @IBOutlet weak var userImageView: UIImageView!
     @IBOutlet weak var currentTasksTableView: UITableView!
+    @IBOutlet weak var levelButton: UIButton!
     @IBOutlet weak var proggresViewLabel: UILabel!
     @IBOutlet weak var levelLabel: UILabel!
     @IBOutlet weak var detailTaskView: UIView!
@@ -92,7 +93,7 @@ final class HomeScreenViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        resetEverything()
+        viewModel.resetEverything()
         setupXp()
         fetchDesiredStack(stack: .Task)
         setupUI()
@@ -105,38 +106,27 @@ final class HomeScreenViewController: UIViewController {
             // Fallback on earlier versions
         }
     }
-  
+    
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         navigationController?.navigationBar.isHidden = true
+        balance.text = fetchBalance()
+        levelButton.setTitle("", for: .normal)
     }
-        
+    
     //MARK: - IBActions
     @IBAction func didTapClosingSection(_ sender: Any) {
         if !detailTaskView.isHidden {
             configureDetailView(isHidden: true)
         }
     }
-        
+    
     func toSettings() {
-            viewModel.navigateToSettings(delegate: self)
-        }
-        
-    func resetEverything() {
-        userDefaults.setValue(10, forKey: "experience")
-        userDefaults.setValue(1, forKey: "currentLevel")
-        userDefaults.setValue(100, forKey: "maxXp")
-        
-        availableTasks.saveTasks(difficulty: .easy, amountLeft: 0)
-        availableTasks.saveTasks(difficulty: .normal, amountLeft: 0)
-        availableTasks.saveTasks(difficulty: .hard, amountLeft: 0)
-        
-        globalUserDataSystem.saveUserData(forkey: .mental, itemToSave: 0)
-        globalUserDataSystem.saveUserData(forkey: .physical, itemToSave: 0)
-        skillPoints.saveSkillPoints(point: 2)
-        coins.saveCoins(coins: 3000)
+        viewModel.navigateToSettings(delegate: self)
     }
     
+    @IBAction func levelButtonAction(_ sender: Any) {
+    }
     @IBAction func addTaskAction(_ sender: Any) {
         addGoalAction()
     }
@@ -171,14 +161,14 @@ extension HomeScreenViewController {
         
         currentTasksTableView.dataSource = self
         currentTasksTableView.delegate = self
-    
+        
         let tap = UITapGestureRecognizer(target: self, action: #selector(self.handleTap(_:)))
         blurEffectView = UIVisualEffectView(effect: blurEffect)
         blurEffectView.frame = closingButton.bounds
         blurEffectView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
         blurEffectView.addGestureRecognizer(tap)
         closingButton.addSubview(blurEffectView)
-
+        
     }
     func setupUiButton(){
         let skillPoint = "Skill Points: \(skillPoints.fetchSkillPoints())"
@@ -385,7 +375,7 @@ extension HomeScreenViewController {
         deleteDesiredStack(indexPath: index, entityName: .Task, dataStack: tasks)
         xpCounterAnimation()
         configureDetailView(isHidden: true)
-        // playSound()
+        playSound()
     }
     
     private func playSound(){
